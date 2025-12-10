@@ -8,6 +8,22 @@ const SalesProspectsList = () => {
   const [selectedProspect, setSelectedProspect] = useState(null);
   const [pitchVersion, setPitchVersion] = useState(0);
   const [editingProspect, setEditingProspect] = useState(null);
+  const [showAddProspect, setShowAddProspect] = useState(false);
+  const [newProspect, setNewProspect] = useState({
+    name: '',
+    contact: '',
+    title: '',
+    email: '',
+    contact2: '',
+    title2: '',
+    email2: '',
+    contact3: '',
+    title3: '',
+    email3: '',
+    vertical: 'Public Sector',
+    contacted: false,
+    notes: ''
+  });
 
   const [prospectsK12, setProspectsK12] = useState(() => {
     const saved = localStorage.getItem('prospectsK12');
@@ -116,6 +132,21 @@ const SalesProspectsList = () => {
     }
   };
 
+  const addProspect = (prospectData) => {
+    const newProspectWithId = {
+      ...prospectData,
+      id: Date.now()
+    };
+
+    if (prospectData.vertical === 'K-12') {
+      setProspectsK12(prev => [...prev, newProspectWithId]);
+    } else if (prospectData.vertical === 'Higher Education') {
+      setProspectsHigherEd(prev => [...prev, newProspectWithId]);
+    } else {
+      setProspectsCities(prev => [...prev, newProspectWithId]);
+    }
+  };
+
   const deleteProspect = (id, vertical) => {
     if (window.confirm('Are you sure you want to delete this prospect?')) {
       if (vertical === 'K-12') {
@@ -130,11 +161,34 @@ const SalesProspectsList = () => {
     }
   };
 
+  const handleAddProspect = () => {
+    if (newProspect.name && newProspect.contact && newProspect.email) {
+      addProspect(newProspect);
+      setNewProspect({
+        name: '',
+        contact: '',
+        title: '',
+        email: '',
+        contact2: '',
+        title2: '',
+        email2: '',
+        contact3: '',
+        title3: '',
+        email3: '',
+        vertical: 'Public Sector',
+        contacted: false,
+        notes: ''
+      });
+      setShowAddProspect(false);
+    } else {
+      alert('Please fill in at least Organization Name, Contact Name, and Email');
+    }
+  };
+
   const startEdit = (prospect) => {
     setEditingProspect(prospect.id);
     setExpandedProspect(null);
     
-    // Set initial values using refs after a short delay to ensure inputs are rendered
     setTimeout(() => {
       if (nameRef.current) nameRef.current.value = prospect.name || '';
       if (contactRef.current) contactRef.current.value = prospect.contact || '';
@@ -812,8 +866,133 @@ const SalesProspectsList = () => {
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
-            <div className="mb-3 bg-blue-900/30 rounded-lg p-3 border border-blue-700/50"><h2 className="text-xl font-bold text-white">Current Prospects</h2><p className="text-blue-300 text-sm">{totalProspects} active</p></div>
-            <div className="space-y-4 max-h-[calc(100vh-320px)] overflow-y-auto pr-2">
+            <div className="mb-3 bg-blue-900/30 rounded-lg p-3 border border-blue-700/50 flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-white">Current Prospects</h2>
+                <p className="text-blue-300 text-sm">{totalProspects} active</p>
+              </div>
+              <button
+                onClick={() => setShowAddProspect(true)}
+                className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all flex items-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Add Prospect
+              </button>
+            </div>
+
+            {showAddProspect && (
+              <div className="mb-4 bg-slate-800/50 rounded-lg border-2 border-green-500 p-4">
+                <h3 className="text-lg font-bold text-white mb-3">Add New Prospect</h3>
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-slate-400 text-xs mb-1 block">Organization Name *</label>
+                      <input
+                        type="text"
+                        value={newProspect.name}
+                        onChange={(e) => setNewProspect({ ...newProspect, name: e.target.value })}
+                        placeholder="Company/Organization"
+                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-slate-400 text-xs mb-1 block">Contact Name *</label>
+                      <input
+                        type="text"
+                        value={newProspect.contact}
+                        onChange={(e) => setNewProspect({ ...newProspect, contact: e.target.value })}
+                        placeholder="John Doe"
+                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-slate-400 text-xs mb-1 block">Title</label>
+                      <input
+                        type="text"
+                        value={newProspect.title}
+                        onChange={(e) => setNewProspect({ ...newProspect, title: e.target.value })}
+                        placeholder="Director of IT"
+                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-slate-400 text-xs mb-1 block">Email *</label>
+                      <input
+                        type="email"
+                        value={newProspect.email}
+                        onChange={(e) => setNewProspect({ ...newProspect, email: e.target.value })}
+                        placeholder="john@example.com"
+                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-slate-400 text-xs mb-1 block">Vertical</label>
+                    <select
+                      value={newProspect.vertical}
+                      onChange={(e) => setNewProspect({ ...newProspect, vertical: e.target.value })}
+                      className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                    >
+                      <option value="Public Sector">Public Sector</option>
+                      <option value="K-12">K-12 Education</option>
+                      <option value="Higher Education">Higher Education</option>
+                      <option value="Transit">Transit</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-slate-400 text-xs mb-1 block">Notes</label>
+                    <textarea
+                      value={newProspect.notes}
+                      onChange={(e) => setNewProspect({ ...newProspect, notes: e.target.value })}
+                      rows={2}
+                      placeholder="Additional notes..."
+                      className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleAddProspect}
+                      className="flex-1 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all"
+                    >
+                      Add Prospect
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowAddProspect(false);
+                        setNewProspect({
+                          name: '',
+                          contact: '',
+                          title: '',
+                          email: '',
+                          contact2: '',
+                          title2: '',
+                          email2: '',
+                          contact3: '',
+                          title3: '',
+                          email3: '',
+                          vertical: 'Public Sector',
+                          contacted: false,
+                          notes: ''
+                        });
+                      }}
+                      className="flex-1 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-4 max-h-[calc(100vh-420px)] overflow-y-auto pr-2">
               <div>
                 <h3 className="text-lg font-bold text-white mb-2 px-2 border-b border-slate-600 pb-1">Public Sector</h3>
                 <h4 className="text-sm font-semibold text-slate-300 mb-2 px-2 pl-3">K-12 Education</h4>
