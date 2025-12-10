@@ -11,6 +11,16 @@ const SalesProspectsList = () => {
       contacted: true,
       notes: "Attending Utilities Unite Event in Clearwater",
       vertical: "K-12"
+    },
+    { 
+      id: 20, 
+      name: "Sumter County Public Schools", 
+      contact: "Philip Martin",
+      title: "Director of Safety & Security",
+      email: "philip.martin@sumter.k12.fl.us",
+      contacted: false,
+      notes: "New prospect - need to make initial contact.",
+      vertical: "K-12"
     }
   ];
 
