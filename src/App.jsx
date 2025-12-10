@@ -5,15 +5,17 @@ const SalesProspectsList = () => {
     { 
       id: 1, 
       name: "Pinellas County School District", 
-      contact: "Sean Jowell",
-      email: "jowells@pcsb.org",
+      contact: "John Smith",
+      title: "Director of IT",
+      email: "jsmith@pcsb.org",
       contacted: true,
-      notes: "Attending Utilities Unite Event in Clearwater."
+      notes: "Interested in Q1 demo. Follow up next week."
     },
     { 
       id: 2, 
       name: "City of St. Petersburg", 
       contact: "Sarah Johnson",
+      title: "IT Manager",
       email: "sjohnson@stpete.org",
       contacted: false,
       notes: "Left voicemail on 12/5. Awaiting callback."
@@ -22,34 +24,25 @@ const SalesProspectsList = () => {
       id: 3, 
       name: "City of Dunedin", 
       contact: "Mike Williams",
+      title: "Technology Coordinator",
       email: "mwilliams@dunedinfl.gov",
       contacted: true,
       notes: "Meeting scheduled for 12/15 at 2pm."
     },
     { 
-      id: 4, 
-      name: "City of Largo", 
-      contact: "Hansel Roush",
-      title: "Director of IT"
-      email: "hroush@largo.com",
-      contact2: "Tim Clark",
-      email: "tclark@largo.com",
-      contacted: true,
-      notes: "Greg's customer, need to re connect with them"
-    },
-    { 
       id: 5, 
       name: "City of Gulfport", 
-      contact: "David Mather",
-      title: "Director of IT",
-      email: "dmather@mygulfport.us",
-      contacted: true,
-      notes: "visited in person and followed up with Email."
+      contact: "TBD",
+      title: "TBD",
+      email: "contact@gulfport.us",
+      contacted: false,
+      notes: "New prospect - need to identify contact."
     },
     { 
       id: 6, 
       name: "City of Treasure Island", 
       contact: "TBD",
+      title: "TBD",
       email: "contact@treasureislandfl.gov",
       contacted: false,
       notes: "New prospect - need to identify contact."
@@ -58,6 +51,7 @@ const SalesProspectsList = () => {
       id: 7, 
       name: "Belleair Beach City", 
       contact: "TBD",
+      title: "TBD",
       email: "contact@belleairbeach.com",
       contacted: false,
       notes: "New prospect - need to identify contact."
@@ -66,6 +60,7 @@ const SalesProspectsList = () => {
       id: 8, 
       name: "Belleair Bluffs City", 
       contact: "TBD",
+      title: "TBD",
       email: "contact@belleairbluffs.org",
       contacted: false,
       notes: "New prospect - need to identify contact."
@@ -74,6 +69,7 @@ const SalesProspectsList = () => {
       id: 9, 
       name: "City of Belleair", 
       contact: "TBD",
+      title: "TBD",
       email: "contact@belleair.net",
       contacted: false,
       notes: "New prospect - need to identify contact."
@@ -82,6 +78,7 @@ const SalesProspectsList = () => {
       id: 11, 
       name: "City of Oldsmar", 
       contact: "TBD",
+      title: "TBD",
       email: "contact@oldsmar.com",
       contacted: false,
       notes: "New prospect - need to identify contact."
@@ -90,6 +87,7 @@ const SalesProspectsList = () => {
       id: 12, 
       name: "City of Seminole", 
       contact: "TBD",
+      title: "TBD",
       email: "contact@seminoleflorida.com",
       contacted: false,
       notes: "New prospect - need to identify contact."
@@ -98,6 +96,7 @@ const SalesProspectsList = () => {
       id: 13, 
       name: "City of S. Pasadena", 
       contact: "TBD",
+      title: "TBD",
       email: "contact@spasadena.com",
       contacted: false,
       notes: "New prospect - need to identify contact."
@@ -106,6 +105,7 @@ const SalesProspectsList = () => {
       id: 14, 
       name: "City of St. Pete Beach", 
       contact: "TBD",
+      title: "TBD",
       email: "contact@stpetebeach.org",
       contacted: false,
       notes: "New prospect - need to identify contact."
@@ -114,6 +114,7 @@ const SalesProspectsList = () => {
       id: 15, 
       name: "City of Tarpon Springs", 
       contact: "TBD",
+      title: "TBD",
       email: "contact@tarponsprings.gov",
       contacted: false,
       notes: "New prospect - need to identify contact."
@@ -125,6 +126,7 @@ const SalesProspectsList = () => {
       id: 101,
       name: "PSTA - Pinellas Suncoast Transit Authority",
       contact: "TBD",
+      title: "TBD",
       email: "contact@psta.net",
       startDate: "2024-01-15",
       notes: "Current customer"
@@ -133,8 +135,18 @@ const SalesProspectsList = () => {
       id: 102,
       name: "Town of Indian Shores",
       contact: "TBD",
+      title: "TBD",
       email: "contact@myindianshores.com",
       startDate: "2024-06-10",
+      notes: "Current customer"
+    },
+    {
+      id: 103,
+      name: "City of Largo",
+      contact: "TBD",
+      title: "TBD",
+      email: "contact@largo.com",
+      startDate: "2024-03-20",
       notes: "Current customer"
     }
   ];
@@ -184,7 +196,7 @@ const SalesProspectsList = () => {
 
                     <div className="flex-1">
                       <h3 className="text-white font-semibold text-base">{prospect.name}</h3>
-                      <p className="text-slate-400 text-sm">{prospect.contact}</p>
+                      <p className="text-slate-400 text-sm">{prospect.contact} • {prospect.title}</p>
                     </div>
 
                     <div className="flex-shrink-0 text-slate-400">
@@ -201,6 +213,14 @@ const SalesProspectsList = () => {
 
                   {expandedProspect === prospect.id && (
                     <div className="px-4 pb-4 border-t border-slate-700 pt-4 space-y-2">
+                      <div className="text-slate-300">
+                        <span className="text-slate-500 text-sm">Contact:</span>
+                        <span className="ml-2">{prospect.contact}</span>
+                      </div>
+                      <div className="text-slate-300">
+                        <span className="text-slate-500 text-sm">Title:</span>
+                        <span className="ml-2">{prospect.title}</span>
+                      </div>
                       <div className="text-slate-300">
                         <span className="text-slate-500 text-sm">Email:</span>
                         <span className="ml-2">{prospect.email}</span>
@@ -247,7 +267,7 @@ const SalesProspectsList = () => {
 
                     <div className="flex-1">
                       <h3 className="text-white font-semibold text-base">{customer.name}</h3>
-                      <p className="text-slate-400 text-sm">{customer.contact}</p>
+                      <p className="text-slate-400 text-sm">{customer.contact} • {customer.title}</p>
                     </div>
 
                     <div className="flex-shrink-0 text-slate-400">
@@ -264,6 +284,14 @@ const SalesProspectsList = () => {
 
                   {expandedCustomer === customer.id && (
                     <div className="px-4 pb-4 border-t border-slate-700 pt-4 space-y-2">
+                      <div className="text-slate-300">
+                        <span className="text-slate-500 text-sm">Contact:</span>
+                        <span className="ml-2">{customer.contact}</span>
+                      </div>
+                      <div className="text-slate-300">
+                        <span className="text-slate-500 text-sm">Title:</span>
+                        <span className="ml-2">{customer.title}</span>
+                      </div>
                       <div className="text-slate-300">
                         <span className="text-slate-500 text-sm">Email:</span>
                         <span className="ml-2">{customer.email}</span>
