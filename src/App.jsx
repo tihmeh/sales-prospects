@@ -246,6 +246,9 @@ const SalesProspectsList = () => {
 
   const [expandedProspect, setExpandedProspect] = useState(null);
   const [expandedCustomer, setExpandedCustomer] = useState(null);
+  const [dailyActivity, setDailyActivity] = useState({ calls: 0, emails: 0, linkedin: 0 });
+  const [weeklyActivity, setWeeklyActivity] = useState({ calls: 0, emails: 0, linkedin: 0 });
+  const [monthlyActivity, setMonthlyActivity] = useState({ calls: 0, emails: 0, linkedin: 0 });
 
   const toggleProspect = (id) => {
     setExpandedProspect(expandedProspect === id ? null : id);
@@ -264,6 +267,17 @@ const SalesProspectsList = () => {
     }).format(amount);
   };
 
+  const handleActivityChange = (period, type, value) => {
+    const numValue = parseInt(value) || 0;
+    if (period === 'daily') {
+      setDailyActivity({ ...dailyActivity, [type]: numValue });
+    } else if (period === 'weekly') {
+      setWeeklyActivity({ ...weeklyActivity, [type]: numValue });
+    } else if (period === 'monthly') {
+      setMonthlyActivity({ ...monthlyActivity, [type]: numValue });
+    }
+  };
+
   const ProspectCard = ({ prospect, index }) => (
     <div
       key={prospect.id}
@@ -274,34 +288,24 @@ const SalesProspectsList = () => {
         <div className="flex-shrink-0 w-8 text-center">
           <span className="text-slate-400 font-semibold">{index + 1}</span>
         </div>
-        
         <div className="flex-shrink-0">
           <div className={`w-4 h-4 rounded-full ${prospect.contacted ? 'bg-green-500' : 'bg-red-500'}`}></div>
         </div>
-
         <div className="flex-1 min-w-0">
           <h3 className="text-white font-semibold text-base truncate">{prospect.name}</h3>
           <p className="text-slate-400 text-sm truncate">{prospect.contact} • {prospect.title}</p>
         </div>
-
         <div className="flex-shrink-0">
           <span className="text-xs font-medium text-blue-400 bg-blue-900/30 px-3 py-1 rounded-full">
             {prospect.vertical}
           </span>
         </div>
-
         <div className="flex-shrink-0 text-slate-400">
-          <svg 
-            className={`w-5 h-5 transition-transform ${expandedProspect === prospect.id ? 'rotate-180' : ''}`} 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
+          <svg className={`w-5 h-5 transition-transform ${expandedProspect === prospect.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </div>
       </div>
-
       {expandedProspect === prospect.id && (
         <div className="px-4 pb-4 border-t border-slate-700 pt-4 space-y-2">
           <div className="text-slate-300">
@@ -377,40 +381,29 @@ const SalesProspectsList = () => {
         <div className="flex-shrink-0 w-8 text-center">
           <span className="text-slate-400 font-semibold">{index + 1}</span>
         </div>
-        
         <div className="flex-shrink-0">
           <div className="w-4 h-4 rounded-full bg-green-500"></div>
         </div>
-
         <div className="flex-1 min-w-0">
           <h3 className="text-white font-semibold text-base truncate">{customer.name}</h3>
           <p className="text-slate-400 text-sm truncate">{customer.contact} • {customer.title}</p>
         </div>
-
         <div className="flex-shrink-0">
           <span className="text-xs font-medium text-green-400 bg-green-900/30 px-3 py-1 rounded-full">
             {customer.vertical}
           </span>
         </div>
-
         <div className="flex-shrink-0">
           <span className="text-sm font-semibold text-emerald-400">
             {formatCurrency(customer.bookingAmount)}
           </span>
         </div>
-
         <div className="flex-shrink-0 text-slate-400">
-          <svg 
-            className={`w-5 h-5 transition-transform ${expandedCustomer === customer.id ? 'rotate-180' : ''}`} 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
+          <svg className={`w-5 h-5 transition-transform ${expandedCustomer === customer.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </div>
       </div>
-
       {expandedCustomer === customer.id && (
         <div className="px-4 pb-4 border-t border-slate-700 pt-4 space-y-2">
           <div className="text-slate-300">
@@ -462,12 +455,57 @@ const SalesProspectsList = () => {
     </div>
   );
 
+  const ActivityCard = ({ title, goals, activity, period }) => {
+    const getPercentage = (current, goal) => Math.min((current / goal) * 100, 100);
+    return (
+      <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-4">
+        <h3 className="text-lg font-semibold text-white mb-4">{title}</h3>
+        <div className="space-y-4">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-slate-300 text-sm">Calls</span>
+              <div className="flex items-center gap-2">
+                <input type="number" value={activity.calls} onChange={(e) => handleActivityChange(period, 'calls', e.target.value)} className="w-16 px-2 py-1 bg-slate-700 border border-slate-600 rounded text-white text-sm text-center" onClick={(e) => e.stopPropagation()} />
+                <span className="text-slate-400 text-sm">/ {goals.calls}</span>
+              </div>
+            </div>
+            <div className="w-full bg-slate-700 rounded-full h-2">
+              <div className="bg-blue-500 h-2 rounded-full transition-all duration-300" style={{ width: `${getPercentage(activity.calls, goals.calls)}%` }} />
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-slate-300 text-sm">Emails</span>
+              <div className="flex items-center gap-2">
+                <input type="number" value={activity.emails} onChange={(e) => handleActivityChange(period, 'emails', e.target.value)} className="w-16 px-2 py-1 bg-slate-700 border border-slate-600 rounded text-white text-sm text-center" onClick={(e) => e.stopPropagation()} />
+                <span className="text-slate-400 text-sm">/ {goals.emails}</span>
+              </div>
+            </div>
+            <div className="w-full bg-slate-700 rounded-full h-2">
+              <div className="bg-purple-500 h-2 rounded-full transition-all duration-300" style={{ width: `${getPercentage(activity.emails, goals.emails)}%` }} />
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-slate-300 text-sm">LinkedIn Messages</span>
+              <div className="flex items-center gap-2">
+                <input type="number" value={activity.linkedin} onChange={(e) => handleActivityChange(period, 'linkedin', e.target.value)} className="w-16 px-2 py-1 bg-slate-700 border border-slate-600 rounded text-white text-sm text-center" onClick={(e) => e.stopPropagation()} />
+                <span className="text-slate-400 text-sm">/ {goals.linkedin}</span>
+              </div>
+            </div>
+            <div className="w-full bg-slate-700 rounded-full h-2">
+              <div className="bg-cyan-500 h-2 rounded-full transition-all duration-300" style={{ width: `${getPercentage(activity.linkedin, goals.linkedin)}%` }} />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const totalProspects = prospectsK12.length + prospectsCities.length + prospectsHigherEd.length;
   const totalCustomers = customersCities.length + customersTransit.length;
   const total2025Booking = 507775.82;
-  const salesGoal2026 = 1500000;
-
-  // Activity goals
+  const salesGoal2026 = 3000000;
   const activityGoals = {
     daily: { calls: 20, emails: 100, linkedin: 400 },
     weekly: { calls: 100, emails: 500, linkedin: 2000 },
@@ -487,81 +525,20 @@ const SalesProspectsList = () => {
             <div className="text-amber-400 text-2xl font-bold">{formatCurrency(salesGoal2026)}</div>
           </div>
         </div>
-
-        {/* Activity Goals Section */}
         <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Daily Goals */}
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-4">
-            <h3 className="text-lg font-semibold text-white mb-3">Daily Goals</h3>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-slate-300 text-sm">Calls</span>
-                <span className="text-blue-400 font-semibold">{activityGoals.daily.calls}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-300 text-sm">Emails</span>
-                <span className="text-purple-400 font-semibold">{activityGoals.daily.emails}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-300 text-sm">LinkedIn Messages</span>
-                <span className="text-cyan-400 font-semibold">{activityGoals.daily.linkedin}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Weekly Goals */}
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-4">
-            <h3 className="text-lg font-semibold text-white mb-3">Weekly Goals</h3>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-slate-300 text-sm">Calls</span>
-                <span className="text-blue-400 font-semibold">{activityGoals.weekly.calls}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-300 text-sm">Emails</span>
-                <span className="text-purple-400 font-semibold">{activityGoals.weekly.emails}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-300 text-sm">LinkedIn Messages</span>
-                <span className="text-cyan-400 font-semibold">{activityGoals.weekly.linkedin}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Monthly Goals */}
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-4">
-            <h3 className="text-lg font-semibold text-white mb-3">Monthly Goals</h3>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-slate-300 text-sm">Calls</span>
-                <span className="text-blue-400 font-semibold">{activityGoals.monthly.calls}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-300 text-sm">Emails</span>
-                <span className="text-purple-400 font-semibold">{activityGoals.monthly.emails}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-300 text-sm">LinkedIn Messages</span>
-                <span className="text-cyan-400 font-semibold">{activityGoals.monthly.linkedin}</span>
-              </div>
-            </div>
-          </div>
+          <ActivityCard title="Daily Goals" goals={activityGoals.daily} activity={dailyActivity} period="daily" />
+          <ActivityCard title="Weekly Goals" goals={activityGoals.weekly} activity={weeklyActivity} period="weekly" />
+          <ActivityCard title="Monthly Goals" goals={activityGoals.monthly} activity={monthlyActivity} period="monthly" />
         </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* PROSPECTS COLUMN */}
           <div>
             <div className="mb-4 bg-blue-900/30 rounded-lg p-4 border border-blue-700/50">
               <h2 className="text-2xl font-bold text-white mb-1">Current Prospects</h2>
               <p className="text-blue-300">{totalProspects} active prospects</p>
             </div>
-
             <div className="space-y-6 max-h-[calc(100vh-450px)] overflow-y-auto pr-2">
-              {/* PUBLIC SECTOR MAIN SECTION */}
               <div>
                 <h3 className="text-xl font-bold text-white mb-4 px-2 border-b border-slate-600 pb-2">Public Sector</h3>
-                
-                {/* K-12 SUBSECTION */}
                 <div className="mb-4">
                   <h4 className="text-md font-semibold text-slate-300 mb-3 px-2 pl-4">K-12 Education</h4>
                   <div className="space-y-3">
@@ -570,8 +547,6 @@ const SalesProspectsList = () => {
                     ))}
                   </div>
                 </div>
-
-                {/* CITIES/MUNICIPALITIES SUBSECTION */}
                 <div>
                   <h4 className="text-md font-semibold text-slate-300 mb-3 px-2 pl-4">Cities & Municipalities</h4>
                   <div className="space-y-3">
@@ -581,8 +556,6 @@ const SalesProspectsList = () => {
                   </div>
                 </div>
               </div>
-
-              {/* HIGHER EDUCATION SECTION */}
               <div>
                 <h3 className="text-xl font-bold text-white mb-4 px-2 border-b border-slate-600 pb-2">Higher Education</h3>
                 <div className="space-y-3">
@@ -593,8 +566,6 @@ const SalesProspectsList = () => {
               </div>
             </div>
           </div>
-
-          {/* CUSTOMERS COLUMN */}
           <div>
             <div className="mb-4 bg-green-900/30 rounded-lg p-4 border border-green-700/50">
               <div className="flex items-center justify-between">
@@ -608,13 +579,9 @@ const SalesProspectsList = () => {
                 </div>
               </div>
             </div>
-
             <div className="space-y-6 max-h-[calc(100vh-450px)] overflow-y-auto pr-2">
-              {/* PUBLIC SECTOR MAIN SECTION */}
               <div>
                 <h3 className="text-xl font-bold text-white mb-4 px-2 border-b border-slate-600 pb-2">Public Sector</h3>
-                
-                {/* TRANSIT SUBSECTION - NOW FIRST */}
                 <div className="mb-4">
                   <h4 className="text-md font-semibold text-slate-300 mb-3 px-2 pl-4">Transit</h4>
                   <div className="space-y-3">
@@ -623,8 +590,6 @@ const SalesProspectsList = () => {
                     ))}
                   </div>
                 </div>
-
-                {/* CITIES/MUNICIPALITIES SUBSECTION - NOW SECOND */}
                 <div>
                   <h4 className="text-md font-semibold text-slate-300 mb-3 px-2 pl-4">Cities & Municipalities</h4>
                   <div className="space-y-3">
