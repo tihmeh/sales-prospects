@@ -4,7 +4,7 @@ const SalesProspectsList = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [shake, setShake] = useState(false);
-  const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard' or 'map'
+  const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard', 'map', or 'email'
 
   const prospectsK12 = [
     { id: 1, name: "Pinellas County School District", contact: "Sean Jowell", title: "Director Safety & Security", email: "jowells@pcsb.org", contacted: true, notes: "Attending Utilities Unite Event in Clearwater", vertical: "K-12", address: "301 4th Street SW, Largo, FL 33770" },
@@ -48,6 +48,7 @@ const SalesProspectsList = () => {
     const saved = localStorage.getItem('weeklyContacts');
     return saved ? parseInt(saved) : 0;
   });
+  const [selectedEmails, setSelectedEmails] = useState([]);
 
   useEffect(() => {
     localStorage.setItem('weeklyContacts', weeklyContacts.toString());
@@ -72,6 +73,56 @@ const SalesProspectsList = () => {
   };
 
   const formatCurrency = (amount) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(amount);
+
+  // Collect all emails
+  const getAllEmails = () => {
+    const allProspects = [...prospectsK12, ...prospectsCities, ...prospectsHigherEd];
+    const emails = [];
+    
+    allProspects.forEach(prospect => {
+      if (prospect.email && !prospect.email.includes('contact@')) {
+        emails.push({ email: prospect.email, name: prospect.contact, org: prospect.name });
+      }
+      if (prospect.email2) {
+        emails.push({ email: prospect.email2, name: prospect.contact2, org: prospect.name });
+      }
+      if (prospect.email3) {
+        emails.push({ email: prospect.email3, name: prospect.contact3, org: prospect.name });
+      }
+    });
+    
+    return emails;
+  };
+
+  const handleEmailSelection = (email) => {
+    if (selectedEmails.includes(email)) {
+      setSelectedEmails(selectedEmails.filter(e => e !== email));
+    } else {
+      setSelectedEmails([...selectedEmails, email]);
+    }
+  };
+
+  const handleSelectAll = () => {
+    const allEmails = getAllEmails();
+    if (selectedEmails.length === allEmails.length) {
+      setSelectedEmails([]);
+    } else {
+      setSelectedEmails(allEmails.map(e => e.email));
+    }
+  };
+
+  const handleSendEmail = () => {
+    const bccList = selectedEmails.join(',');
+    const subject = encodeURIComponent('');
+    const body = encodeURIComponent('');
+    window.location.href = `mailto:?bcc=${bccList}&subject=${subject}&body=${body}`;
+  };
+
+  const handleCopyEmails = () => {
+    const emailList = selectedEmails.join('; ');
+    navigator.clipboard.writeText(emailList);
+    alert('Email addresses copied to clipboard!');
+  };
 
   const Card = ({ item, index, isCustomer, expanded, toggle }) => (
     <div className="bg-slate-800/50 rounded-lg border border-slate-700 hover:border-slate-600 transition-all cursor-pointer" onClick={() => toggle(item.id)}>
@@ -105,6 +156,7 @@ const SalesProspectsList = () => {
   const totalCustomers = customersCities.length + customersTransit.length;
   const allProspects = [...prospectsK12, ...prospectsCities, ...prospectsHigherEd];
   const allLocations = [...allProspects, ...customersCities, ...customersTransit];
+  const allEmails = getAllEmails();
 
   // Login Screen
   if (!isAuthenticated) {
@@ -138,6 +190,129 @@ const SalesProspectsList = () => {
             animation: shake 0.3s ease-in-out;
           }
         `}</style>
+      </div>
+    );
+  }
+
+  // Email Blast View
+  if (currentView === 'email') {
+    return (
+      <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-1">Email Blast</h1>
+              <p className="text-slate-300 text-sm">Send emails to multiple prospects at once</p>
+            </div>
+            <button
+              onClick={() => setCurrentView('dashboard')}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all"
+            >
+              Back to Dashboard
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Email List */}
+            <div className="lg:col-span-2">
+              <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold text-white">Select Recipients ({selectedEmails.length} selected)</h2>
+                  <button
+                    onClick={handleSelectAll}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm font-semibold transition-all"
+                  >
+                    {selectedEmails.length === allEmails.length ? 'Deselect All' : 'Select All'}
+                  </button>
+                </div>
+                
+                <div className="space-y-2 max-h-[calc(100vh-300px)] overflow-y-auto pr-2">
+                  {allEmails.map((item, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleEmailSelection(item.email)}
+                      className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                        selectedEmails.includes(item.email)
+                          ? 'bg-blue-900/30 border-blue-500'
+                          : 'bg-slate-800/50 border-slate-700 hover:border-slate-600'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                          selectedEmails.includes(item.email)
+                            ? 'bg-blue-600 border-blue-600'
+                            : 'border-slate-600'
+                        }`}>
+                          {selectedEmails.includes(item.email) && (
+                            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-white font-semibold text-sm">{item.name}</div>
+                          <div className="text-slate-400 text-xs">{item.org}</div>
+                          <div className="text-blue-400 text-xs">{item.email}</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Action Panel */}
+            <div className="lg:col-span-1">
+              <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4 sticky top-6">
+                <h2 className="text-xl font-bold text-white mb-4">Actions</h2>
+                
+                <div className="space-y-4">
+                  <div className="bg-slate-700/30 rounded-lg p-3 border border-slate-600">
+                    <div className="text-slate-400 text-sm mb-1">Total Recipients</div>
+                    <div className="text-white text-2xl font-bold">{selectedEmails.length}</div>
+                  </div>
+
+                  <button
+                    onClick={handleSendEmail}
+                    disabled={selectedEmails.length === 0}
+                    className={`w-full py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
+                      selectedEmails.length > 0
+                        ? 'bg-green-600 hover:bg-green-500 text-white'
+                        : 'bg-slate-700 text-slate-500 cursor-not-allowed'
+                    }`}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Open in Email Client
+                  </button>
+
+                  <button
+                    onClick={handleCopyEmails}
+                    disabled={selectedEmails.length === 0}
+                    className={`w-full py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
+                      selectedEmails.length > 0
+                        ? 'bg-blue-600 hover:bg-blue-500 text-white'
+                        : 'bg-slate-700 text-slate-500 cursor-not-allowed'
+                    }`}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    Copy Email List
+                  </button>
+
+                  <div className="bg-slate-700/30 rounded-lg p-3 border border-slate-600">
+                    <div className="text-slate-400 text-xs mb-2">Email Preview:</div>
+                    <div className="text-white text-xs font-mono bg-slate-900/50 p-2 rounded max-h-40 overflow-y-auto break-all">
+                      {selectedEmails.length > 0 ? selectedEmails.join('; ') : 'No emails selected'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -200,6 +375,15 @@ const SalesProspectsList = () => {
             <p className="text-slate-300 text-sm">Pipeline Overview</p>
           </div>
           <div className="flex gap-3 items-start">
+            <button
+              onClick={() => setCurrentView('email')}
+              className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition-all flex items-center gap-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              Email Blast
+            </button>
             <button
               onClick={() => setCurrentView('map')}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all flex items-center gap-2"
