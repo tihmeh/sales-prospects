@@ -8,12 +8,12 @@ const SalesProspectsList = () => {
   const [selectedProspect, setSelectedProspect] = useState(null);
   const [pitchVersion, setPitchVersion] = useState(0);
 
-  const prospectsK12 = [
+  const initialProspectsK12 = [
     { id: 1, name: "Pinellas County School District", contact: "Sean Jowell", title: "Director Safety & Security", email: "jowells@pcsb.org", contacted: true, notes: "Attending Utilities Unite Event in Clearwater", vertical: "K-12" },
     { id: 20, name: "Sumter County Public Schools", contact: "Philip Martin", title: "Director of Safety & Security", email: "philip.martin@sumter.k12.fl.us", contacted: false, notes: "New prospect - need to make initial contact.", vertical: "K-12" }
   ];
 
-  const prospectsCities = [
+  const initialProspectsCities = [
     { id: 2, name: "City of St. Petersburg", contact: "Sarah Johnson", title: "IT Manager", email: "sjohnson@stpete.org", contacted: false, notes: "Left voicemail on 12/5. Awaiting callback.", vertical: "Public Sector" },
     { id: 3, name: "City of Dunedin", contact: "Michael Nagy", title: "Director of IT", email: "mwilliams@dunedinfl.gov", contact2: "Ronbert Ignacio", title2: "IT Specialist", email2: "ronbert.ignacio@dunedin.gov", contacted: true, notes: "Reachout out through email, no response", vertical: "Public Sector" },
     { id: 5, name: "City of Gulfport", contact: "David Mather", title: "Director of IT", email: "dmather@mygulfport.us", contacted: true, notes: "Visited in person, followed up over email", vertical: "Public Sector" },
@@ -28,7 +28,7 @@ const SalesProspectsList = () => {
     { id: 15, name: "City of Tarpon Springs", contact: "Suzanne Linton", title: "Director of IT", email: "slinton@ctsfl.us", contacted: true, notes: "Connected on linked in. Preparing email to send this week 12/9/25", vertical: "Public Sector" }
   ];
 
-  const prospectsHigherEd = [
+  const initialProspectsHigherEd = [
     { id: 16, name: "Eckerd College", contact: "Jessica Cinney", title: "Director of Campus Safety & Security", email: "cinneyj@eckerd.edu", contact2: "Walter Moore", title2: "Director of IT", email2: "moorewr@eckerd.edu", contact3: "Tonya Womack", title3: "Risk Management & Safety", email3: "womacktm@eckerd.edu", contacted: true, notes: "Old customer that has bad experience with Convergint", vertical: "Higher Education" },
     { id: 17, name: "St. Petersburg College", contact: "TBD", title: "TBD", email: "contact@spcollege.edu", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Higher Education" },
     { id: 18, name: "St. Pete Technical College", contact: "TBD", title: "TBD", email: "contact@sptech.edu", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Higher Education" },
@@ -43,6 +43,21 @@ const SalesProspectsList = () => {
   const customersTransit = [
     { id: 101, name: "PSTA - Pinellas Suncoast Transit Authority", contact: "Missy Nevitt", title: "Superintendant of Facilities", email: "mnevitt@psta.net", startDate: "12/20/2024", notes: "Current customer", vertical: "Transit" }
   ];
+
+  const [prospectsK12, setProspectsK12] = useState(() => {
+    const saved = localStorage.getItem('prospectsK12');
+    return saved ? JSON.parse(saved) : initialProspectsK12;
+  });
+
+  const [prospectsCities, setProspectsCities] = useState(() => {
+    const saved = localStorage.getItem('prospectsCities');
+    return saved ? JSON.parse(saved) : initialProspectsCities;
+  });
+
+  const [prospectsHigherEd, setProspectsHigherEd] = useState(() => {
+    const saved = localStorage.getItem('prospectsHigherEd');
+    return saved ? JSON.parse(saved) : initialProspectsHigherEd;
+  });
 
   const [expandedProspect, setExpandedProspect] = useState(null);
   const [expandedCustomer, setExpandedCustomer] = useState(null);
@@ -80,6 +95,18 @@ const SalesProspectsList = () => {
   useEffect(() => {
     localStorage.setItem('manualContacts', JSON.stringify(manualContacts));
   }, [manualContacts]);
+
+  useEffect(() => {
+    localStorage.setItem('prospectsK12', JSON.stringify(prospectsK12));
+  }, [prospectsK12]);
+
+  useEffect(() => {
+    localStorage.setItem('prospectsCities', JSON.stringify(prospectsCities));
+  }, [prospectsCities]);
+
+  useEffect(() => {
+    localStorage.setItem('prospectsHigherEd', JSON.stringify(prospectsHigherEd));
+  }, [prospectsHigherEd]);
 
   const generateElevatorPitch = (prospect, version) => {
     if (!prospect) return "";
@@ -251,15 +278,30 @@ const SalesProspectsList = () => {
   };
 
   const handleSaveEdit = (prospectId) => {
-    const updatedContact = {
-      ...manualContacts.find(c => c.id === prospectId),
-      contact: editForm.contact,
-      title: editForm.title,
-      email: editForm.email,
-      notes: editForm.notes,
-      contacted: editForm.contacted
-    };
-    setManualContacts(manualContacts.map(c => c.id === prospectId ? updatedContact : c));
+    // Check which list the prospect is in
+    const k12Index = prospectsK12.findIndex(p => p.id === prospectId);
+    const citiesIndex = prospectsCities.findIndex(p => p.id === prospectId);
+    const higherEdIndex = prospectsHigherEd.findIndex(p => p.id === prospectId);
+    const manualIndex = manualContacts.findIndex(p => p.id === prospectId);
+
+    if (k12Index !== -1) {
+      const updated = [...prospectsK12];
+      updated[k12Index] = { ...updated[k12Index], ...editForm };
+      setProspectsK12(updated);
+    } else if (citiesIndex !== -1) {
+      const updated = [...prospectsCities];
+      updated[citiesIndex] = { ...updated[citiesIndex], ...editForm };
+      setProspectsCities(updated);
+    } else if (higherEdIndex !== -1) {
+      const updated = [...prospectsHigherEd];
+      updated[higherEdIndex] = { ...updated[higherEdIndex], ...editForm };
+      setProspectsHigherEd(updated);
+    } else if (manualIndex !== -1) {
+      const updated = [...manualContacts];
+      updated[manualIndex] = { ...updated[manualIndex], ...editForm };
+      setManualContacts(updated);
+    }
+
     setEditingProspect(null);
   };
 
@@ -276,7 +318,6 @@ const SalesProspectsList = () => {
 
   const Card = ({ item, index, isCustomer, expanded, toggle }) => {
     const isEditing = editingProspect === item.id;
-    const isManualContact = manualContacts.some(c => c.id === item.id);
     
     return (
       <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-gray-200 hover:border-blue-400 transition-all cursor-pointer shadow-sm">
@@ -288,7 +329,7 @@ const SalesProspectsList = () => {
             <p className="text-gray-500 text-xs truncate">{item.contact} • {item.title}</p>
           </div>
           <span className={`text-xs font-medium ${isCustomer ? 'text-green-600 bg-green-100' : 'text-blue-600 bg-blue-100'} px-2 py-1 rounded-full`}>{item.vertical}</span>
-          {isManualContact && !isEditing && (
+          {!isCustomer && !isEditing && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -503,6 +544,8 @@ const SalesProspectsList = () => {
     );
   }
 
+  // Continue with Joe Morone and Email views (keeping same as before, just updated allProspects reference)
+  
   if (currentView === 'joe') {
     return (
       <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
