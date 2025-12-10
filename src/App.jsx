@@ -104,10 +104,15 @@ const SalesProspectsList = () => {
         `${contactName}, are you discovering that aging infrastructure is limiting ${orgName}'s ability to maintain consistent service levels? Top-performing authorities are enhancing reliability by 40% through strategic upgrades - is this important to your team right now?`,
         `${contactName}, many superintendents like yourself are finding that traditional approaches create conflicts between cost control and service quality. The most competitive transit systems are resolving this through smart technology deployment - is this relevant to your situation?`,
         `${contactName}, I'm curious - is ${orgName} under pressure to improve both rider experience and operational efficiency with existing budget constraints? Leading authorities are achieving dramatic improvements through infrastructure modernization - does this align with your priorities?`
+      ],
+      "Manual": [
+        `${contactName}, I'm reaching out because many organizations like ${orgName} are discovering that their current approaches no longer meet today's competitive requirements. Leading companies are achieving significant improvements through strategic initiatives - is this something you're focused on right now?`,
+        `${contactName}, are you finding that ${orgName} faces pressure to improve efficiency while maintaining quality? Top-performing organizations are achieving both objectives through smart solutions - does this resonate with your current priorities?`,
+        `${contactName}, I'm curious - is ${orgName} looking to strengthen its competitive position in the market? Leading companies are achieving measurable improvements that drive real business value - is this relevant to your team?`
       ]
     };
     
-    const verticalPitches = pitches[vertical] || pitches["Public Sector"];
+    const verticalPitches = pitches[vertical] || pitches["Manual"];
     return verticalPitches[version % verticalPitches.length];
   };
 
@@ -180,7 +185,17 @@ const SalesProspectsList = () => {
 
   const handleAddContact = () => {
     if (newContact.name && newContact.email) {
-      setManualContacts([...manualContacts, { ...newContact, id: Date.now() }]);
+      const newContactWithDefaults = {
+        ...newContact,
+        id: Date.now(),
+        contact: newContact.name,
+        name: newContact.org || 'Manual Contact',
+        title: 'Manual Entry',
+        vertical: 'Manual',
+        contacted: false,
+        notes: 'Manually added contact'
+      };
+      setManualContacts([...manualContacts, newContactWithDefaults]);
       setNewContact({ name: '', org: '', email: '' });
       setShowAddContact(false);
     } else {
@@ -226,10 +241,10 @@ const SalesProspectsList = () => {
     </div>
   );
 
-  const totalProspects = prospectsK12.length + prospectsCities.length + prospectsHigherEd.length;
+  const totalProspects = prospectsK12.length + prospectsCities.length + prospectsHigherEd.length + manualContacts.length;
   const totalCustomers = customersCities.length + customersTransit.length;
   const allEmails = getAllEmails();
-  const allProspects = [...prospectsK12, ...prospectsCities, ...prospectsHigherEd];
+  const allProspects = [...prospectsK12, ...prospectsCities, ...prospectsHigherEd, ...manualContacts];
 
   if (!isAuthenticated) {
     return (
@@ -527,6 +542,12 @@ const SalesProspectsList = () => {
                 <h3 className="text-lg font-bold text-white mb-2 px-2 border-b border-slate-600 pb-1">Higher Education</h3>
                 <div className="space-y-2">{prospectsHigherEd.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}</div>
               </div>
+              {manualContacts.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-bold text-white mb-2 px-2 border-b border-slate-600 pb-1">Manual Contacts</h3>
+                  <div className="space-y-2">{manualContacts.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}</div>
+                </div>
+              )}
             </div>
           </div>
           <div>
