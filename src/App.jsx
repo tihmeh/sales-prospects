@@ -64,6 +64,14 @@ const SalesProspectsList = () => {
   });
   const [randomProspect, setRandomProspect] = useState(null);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [editingProspect, setEditingProspect] = useState(null);
+  const [editForm, setEditForm] = useState({
+    contact: '',
+    title: '',
+    email: '',
+    notes: '',
+    contacted: false
+  });
 
   useEffect(() => {
     localStorage.setItem('weeklyContacts', weeklyContacts.toString());
@@ -231,32 +239,152 @@ const SalesProspectsList = () => {
     }
   };
 
-  const Card = ({ item, index, isCustomer, expanded, toggle }) => (
-    <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-gray-200 hover:border-blue-400 transition-all cursor-pointer shadow-sm" onClick={() => toggle(item.id)}>
-      <div className="p-3 flex items-center gap-3">
-        <span className="text-gray-400 font-semibold text-sm w-6">{index + 1}</span>
-        <div className={`w-3 h-3 rounded-full ${isCustomer ? 'bg-green-500' : (item.contacted ? 'bg-green-500' : 'bg-red-500')}`}></div>
-        <div className="flex-1 min-w-0">
-          <h3 className="text-gray-900 font-semibold text-sm truncate">{item.name}</h3>
-          <p className="text-gray-500 text-xs truncate">{item.contact} • {item.title}</p>
+  const handleEditProspect = (prospect) => {
+    setEditingProspect(prospect.id);
+    setEditForm({
+      contact: prospect.contact,
+      title: prospect.title,
+      email: prospect.email,
+      notes: prospect.notes,
+      contacted: prospect.contacted
+    });
+  };
+
+  const handleSaveEdit = (prospectId) => {
+    const updatedContact = {
+      ...manualContacts.find(c => c.id === prospectId),
+      contact: editForm.contact,
+      title: editForm.title,
+      email: editForm.email,
+      notes: editForm.notes,
+      contacted: editForm.contacted
+    };
+    setManualContacts(manualContacts.map(c => c.id === prospectId ? updatedContact : c));
+    setEditingProspect(null);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingProspect(null);
+    setEditForm({
+      contact: '',
+      title: '',
+      email: '',
+      notes: '',
+      contacted: false
+    });
+  };
+
+  const Card = ({ item, index, isCustomer, expanded, toggle }) => {
+    const isEditing = editingProspect === item.id;
+    const isManualContact = manualContacts.some(c => c.id === item.id);
+    
+    return (
+      <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-gray-200 hover:border-blue-400 transition-all cursor-pointer shadow-sm">
+        <div className="p-3 flex items-center gap-3" onClick={() => !isEditing && toggle(item.id)}>
+          <span className="text-gray-400 font-semibold text-sm w-6">{index + 1}</span>
+          <div className={`w-3 h-3 rounded-full ${isCustomer ? 'bg-green-500' : (item.contacted ? 'bg-green-500' : 'bg-red-500')}`}></div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-gray-900 font-semibold text-sm truncate">{item.name}</h3>
+            <p className="text-gray-500 text-xs truncate">{item.contact} • {item.title}</p>
+          </div>
+          <span className={`text-xs font-medium ${isCustomer ? 'text-green-600 bg-green-100' : 'text-blue-600 bg-blue-100'} px-2 py-1 rounded-full`}>{item.vertical}</span>
+          {isManualContact && !isEditing && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEditProspect(item);
+              }}
+              className="p-1.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 rounded text-blue-600 transition-all"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+            </button>
+          )}
+          <svg className={`w-4 h-4 text-gray-400 transition-transform ${expanded === item.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
         </div>
-        <span className={`text-xs font-medium ${isCustomer ? 'text-green-600 bg-green-100' : 'text-blue-600 bg-blue-100'} px-2 py-1 rounded-full`}>{item.vertical}</span>
-        <svg className={`w-4 h-4 text-gray-400 transition-transform ${expanded === item.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+        {expanded === item.id && (
+          <div className="px-3 pb-3 border-t border-gray-200 pt-3 space-y-2 text-xs">
+            {isEditing ? (
+              <div className="space-y-3">
+                <div>
+                  <label className="text-gray-500 text-xs mb-1 block">Contact Name</label>
+                  <input
+                    type="text"
+                    value={editForm.contact}
+                    onChange={(e) => setEditForm({ ...editForm, contact: e.target.value })}
+                    className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-gray-500 text-xs mb-1 block">Title</label>
+                  <input
+                    type="text"
+                    value={editForm.title}
+                    onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                    className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-gray-500 text-xs mb-1 block">Email</label>
+                  <input
+                    type="email"
+                    value={editForm.email}
+                    onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                    className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-gray-500 text-xs mb-1 block">Notes</label>
+                  <textarea
+                    value={editForm.notes}
+                    onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
+                    rows={3}
+                    className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500 resize-none"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id={`contacted-${item.id}`}
+                    checked={editForm.contacted}
+                    onChange={(e) => setEditForm({ ...editForm, contacted: e.target.checked })}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <label htmlFor={`contacted-${item.id}`} className="text-gray-700 text-xs cursor-pointer">Mark as Contacted</label>
+                </div>
+                <div className="flex gap-2 pt-2">
+                  <button
+                    onClick={() => handleSaveEdit(item.id)}
+                    className="flex-1 py-1.5 bg-green-600 hover:bg-green-500 text-white rounded text-xs font-semibold transition-all"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={handleCancelEdit}
+                    className="flex-1 py-1.5 bg-gray-500 hover:bg-gray-400 text-white rounded text-xs font-semibold transition-all"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="text-gray-700"><span className="text-gray-500">Contact:</span> {item.contact}</div>
+                <div className="text-gray-700"><span className="text-gray-500">Title:</span> {item.title}</div>
+                <div className="text-gray-700"><span className="text-gray-500">Email:</span> {item.email}</div>
+                {item.contact2 && <><div className="text-gray-700 mt-2 pt-2 border-t border-gray-200"><span className="text-gray-500">Contact 2:</span> {item.contact2}</div><div className="text-gray-700"><span className="text-gray-500">Title:</span> {item.title2}</div><div className="text-gray-700"><span className="text-gray-500">Email:</span> {item.email2}</div></>}
+                {item.contact3 && <><div className="text-gray-700 mt-2 pt-2 border-t border-gray-200"><span className="text-gray-500">Contact 3:</span> {item.contact3}</div><div className="text-gray-700"><span className="text-gray-500">Title:</span> {item.title3}</div><div className="text-gray-700"><span className="text-gray-500">Email:</span> {item.email3}</div></>}
+                <div className="text-gray-700 mt-2 pt-2 border-t border-gray-200"><span className="text-gray-500">Vertical:</span> {item.vertical}</div>
+                {!isCustomer ? <><div className="text-gray-700"><span className="text-gray-500">Status:</span> <span className={item.contacted ? 'text-green-600' : 'text-red-600'}>{item.contacted ? 'Contacted' : 'Not Contacted'}</span></div></> : <><div className="text-gray-700"><span className="text-gray-500">Customer Since:</span> <span className="text-green-600">{item.startDate}</span></div></>}
+                <div className="text-gray-700"><span className="text-gray-500">Notes:</span> <span className="text-gray-600 italic">{item.notes}</span></div>
+              </>
+            )}
+          </div>
+        )}
       </div>
-      {expanded === item.id && (
-        <div className="px-3 pb-3 border-t border-gray-200 pt-3 space-y-1 text-xs">
-          <div className="text-gray-700"><span className="text-gray-500">Contact:</span> {item.contact}</div>
-          <div className="text-gray-700"><span className="text-gray-500">Title:</span> {item.title}</div>
-          <div className="text-gray-700"><span className="text-gray-500">Email:</span> {item.email}</div>
-          {item.contact2 && <><div className="text-gray-700 mt-2 pt-2 border-t border-gray-200"><span className="text-gray-500">Contact 2:</span> {item.contact2}</div><div className="text-gray-700"><span className="text-gray-500">Title:</span> {item.title2}</div><div className="text-gray-700"><span className="text-gray-500">Email:</span> {item.email2}</div></>}
-          {item.contact3 && <><div className="text-gray-700 mt-2 pt-2 border-t border-gray-200"><span className="text-gray-500">Contact 3:</span> {item.contact3}</div><div className="text-gray-700"><span className="text-gray-500">Title:</span> {item.title3}</div><div className="text-gray-700"><span className="text-gray-500">Email:</span> {item.email3}</div></>}
-          <div className="text-gray-700 mt-2 pt-2 border-t border-gray-200"><span className="text-gray-500">Vertical:</span> {item.vertical}</div>
-          {!isCustomer ? <><div className="text-gray-700"><span className="text-gray-500">Status:</span> <span className={item.contacted ? 'text-green-600' : 'text-red-600'}>{item.contacted ? 'Contacted' : 'Not Contacted'}</span></div></> : <><div className="text-gray-700"><span className="text-gray-500">Customer Since:</span> <span className="text-green-600">{item.startDate}</span></div></>}
-          <div className="text-gray-700"><span className="text-gray-500">Notes:</span> <span className="text-gray-600 italic">{item.notes}</span></div>
-        </div>
-      )}
-    </div>
-  );
+    );
+  };
 
   const totalProspects = prospectsK12.length + prospectsCities.length + prospectsHigherEd.length + manualContacts.length;
   const totalCustomers = customersCities.length + customersTransit.length;
