@@ -259,8 +259,8 @@ const SalesProspectsList = () => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     }).format(amount);
   };
 
@@ -464,6 +464,7 @@ const SalesProspectsList = () => {
 
   const totalProspects = prospectsK12.length + prospectsCities.length + prospectsHigherEd.length;
   const totalCustomers = customersCities.length + customersTransit.length;
+  const total2025Booking = 507775.82;
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8">
@@ -522,8 +523,16 @@ const SalesProspectsList = () => {
           {/* CUSTOMERS COLUMN */}
           <div>
             <div className="mb-4 bg-green-900/30 rounded-lg p-4 border border-green-700/50">
-              <h2 className="text-2xl font-bold text-white mb-1">Current Customers</h2>
-              <p className="text-green-300">{totalCustomers} active customers</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-1">Current Customers</h2>
+                  <p className="text-green-300">{totalCustomers} active customers</p>
+                </div>
+                <div className="bg-emerald-500/20 border border-emerald-500/50 rounded-lg px-4 py-2">
+                  <div className="text-emerald-300 text-xs font-medium mb-1">2025 Bookings</div>
+                  <div className="text-emerald-400 text-xl font-bold">{formatCurrency(total2025Booking)}</div>
+                </div>
+              </div>
             </div>
 
             <div className="space-y-6 max-h-[calc(100vh-250px)] overflow-y-auto pr-2">
