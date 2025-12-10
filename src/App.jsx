@@ -322,7 +322,7 @@ const SalesProspectsList = () => {
     return (
       <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-gray-200 hover:border-blue-400 transition-all shadow-sm">
         <div 
-          className="p-3 flex items-center gap-3 cursor-pointer" 
+          className={`p-3 flex items-center gap-3 ${!isEditing ? 'cursor-pointer' : ''}`}
           onClick={() => {
             if (!isEditing) {
               toggle(item.id);
