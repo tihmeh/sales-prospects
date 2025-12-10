@@ -437,10 +437,10 @@ const SalesProspectsList = () => {
 
     return (
       <div className="bg-slate-800/50 rounded-lg border border-slate-700 hover:border-slate-600 transition-all">
-        <div className="p-3 flex items-center gap-3 cursor-pointer" onClick={() => toggle(item.id)}>
+        <div className={`p-3 flex items-center gap-3 ${!isCustomer ? '' : 'cursor-pointer'}`} onClick={() => isCustomer && toggle(item.id)}>
           <span className="text-slate-400 font-semibold text-sm w-6">{index + 1}</span>
           <div className={`w-3 h-3 rounded-full ${isCustomer ? 'bg-green-500' : (item.contacted ? 'bg-green-500' : 'bg-red-500')}`}></div>
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0" onClick={() => !isCustomer && toggle(item.id)} style={{ cursor: !isCustomer ? 'pointer' : 'default' }}>
             <h3 className="text-white font-semibold text-sm truncate">{item.name}</h3>
             <p className="text-slate-400 text-xs truncate">{item.contact} • {item.title}</p>
           </div>
@@ -459,7 +459,7 @@ const SalesProspectsList = () => {
               </svg>
             </button>
           )}
-          <svg className={`w-4 h-4 text-slate-400 transition-transform ${expanded === item.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+          <svg className={`w-4 h-4 text-slate-400 transition-transform ${expanded === item.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" onClick={() => !isCustomer && toggle(item.id)} style={{ cursor: 'pointer' }}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
         </div>
         {expanded === item.id && (
           <div className="px-3 pb-3 border-t border-slate-700 pt-3 space-y-1 text-xs">
