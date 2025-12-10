@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const SalesProspectsList = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -132,6 +132,10 @@ const SalesProspectsList = () => {
     updateProspect(editForm.id, editForm.vertical, editForm);
     setEditingProspect(null);
     setEditForm({});
+  };
+
+  const updateEditFormField = (field, value) => {
+    setEditForm(prev => ({ ...prev, [field]: value }));
   };
 
   const generateElevatorPitch = (prospect, version) => {
@@ -277,170 +281,164 @@ const SalesProspectsList = () => {
     }
   };
 
+  const EditForm = ({ item }) => {
+    return (
+      <div className="bg-slate-800/50 rounded-lg border-2 border-blue-500 p-4">
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-slate-400 text-xs mb-1 block">Organization Name</label>
+              <input
+                type="text"
+                value={editForm.name || ''}
+                onChange={(e) => updateEditFormField('name', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label className="text-slate-400 text-xs mb-1 block">Contact Name</label>
+              <input
+                type="text"
+                value={editForm.contact || ''}
+                onChange={(e) => updateEditFormField('contact', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+              />
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-slate-400 text-xs mb-1 block">Title</label>
+              <input
+                type="text"
+                value={editForm.title || ''}
+                onChange={(e) => updateEditFormField('title', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label className="text-slate-400 text-xs mb-1 block">Email</label>
+              <input
+                type="email"
+                value={editForm.email || ''}
+                onChange={(e) => updateEditFormField('email', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700">
+            <div>
+              <label className="text-slate-400 text-xs mb-1 block">Contact 2 Name</label>
+              <input
+                type="text"
+                value={editForm.contact2 || ''}
+                onChange={(e) => updateEditFormField('contact2', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label className="text-slate-400 text-xs mb-1 block">Title 2</label>
+              <input
+                type="text"
+                value={editForm.title2 || ''}
+                onChange={(e) => updateEditFormField('title2', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div className="col-span-2">
+              <label className="text-slate-400 text-xs mb-1 block">Email 2</label>
+              <input
+                type="email"
+                value={editForm.email2 || ''}
+                onChange={(e) => updateEditFormField('email2', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700">
+            <div>
+              <label className="text-slate-400 text-xs mb-1 block">Contact 3 Name</label>
+              <input
+                type="text"
+                value={editForm.contact3 || ''}
+                onChange={(e) => updateEditFormField('contact3', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label className="text-slate-400 text-xs mb-1 block">Title 3</label>
+              <input
+                type="text"
+                value={editForm.title3 || ''}
+                onChange={(e) => updateEditFormField('title3', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div className="col-span-2">
+              <label className="text-slate-400 text-xs mb-1 block">Email 3</label>
+              <input
+                type="email"
+                value={editForm.email3 || ''}
+                onChange={(e) => updateEditFormField('email3', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+              />
+            </div>
+          </div>
+          
+          <div>
+            <label className="text-slate-400 text-xs mb-1 block">Contacted Status</label>
+            <select
+              value={editForm.contacted ? 'true' : 'false'}
+              onChange={(e) => updateEditFormField('contacted', e.target.value === 'true')}
+              className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+            >
+              <option value="false">Not Contacted</option>
+              <option value="true">Contacted</option>
+            </select>
+          </div>
+          
+          <div>
+            <label className="text-slate-400 text-xs mb-1 block">Notes</label>
+            <textarea
+              value={editForm.notes || ''}
+              onChange={(e) => updateEditFormField('notes', e.target.value)}
+              rows={3}
+              className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          
+          <div className="flex gap-2 pt-2">
+            <button
+              onClick={saveEdit}
+              className="flex-1 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all"
+            >
+              Save Changes
+            </button>
+            <button
+              onClick={cancelEdit}
+              className="flex-1 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg font-semibold transition-all"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => deleteProspect(item.id, item.vertical)}
+              className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg font-semibold transition-all"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const Card = ({ item, index, isCustomer, expanded, toggle }) => {
     const isEditing = editingProspect === item.id;
 
     if (isEditing && !isCustomer) {
-      return (
-        <div className="bg-slate-800/50 rounded-lg border-2 border-blue-500 p-4">
-          <div className="space-y-3">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-slate-400 text-xs mb-1 block">Organization Name</label>
-                <input
-                  type="text"
-                  value={editForm.name || ''}
-                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  autoComplete="off"
-                />
-              </div>
-              <div>
-                <label className="text-slate-400 text-xs mb-1 block">Contact Name</label>
-                <input
-                  type="text"
-                  value={editForm.contact || ''}
-                  onChange={(e) => setEditForm({ ...editForm, contact: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  autoComplete="off"
-                />
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-slate-400 text-xs mb-1 block">Title</label>
-                <input
-                  type="text"
-                  value={editForm.title || ''}
-                  onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  autoComplete="off"
-                />
-              </div>
-              <div>
-                <label className="text-slate-400 text-xs mb-1 block">Email</label>
-                <input
-                  type="email"
-                  value={editForm.email || ''}
-                  onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  autoComplete="off"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700">
-              <div>
-                <label className="text-slate-400 text-xs mb-1 block">Contact 2 Name</label>
-                <input
-                  type="text"
-                  value={editForm.contact2 || ''}
-                  onChange={(e) => setEditForm({ ...editForm, contact2: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  autoComplete="off"
-                />
-              </div>
-              <div>
-                <label className="text-slate-400 text-xs mb-1 block">Title 2</label>
-                <input
-                  type="text"
-                  value={editForm.title2 || ''}
-                  onChange={(e) => setEditForm({ ...editForm, title2: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  autoComplete="off"
-                />
-              </div>
-              <div className="col-span-2">
-                <label className="text-slate-400 text-xs mb-1 block">Email 2</label>
-                <input
-                  type="email"
-                  value={editForm.email2 || ''}
-                  onChange={(e) => setEditForm({ ...editForm, email2: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  autoComplete="off"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700">
-              <div>
-                <label className="text-slate-400 text-xs mb-1 block">Contact 3 Name</label>
-                <input
-                  type="text"
-                  value={editForm.contact3 || ''}
-                  onChange={(e) => setEditForm({ ...editForm, contact3: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  autoComplete="off"
-                />
-              </div>
-              <div>
-                <label className="text-slate-400 text-xs mb-1 block">Title 3</label>
-                <input
-                  type="text"
-                  value={editForm.title3 || ''}
-                  onChange={(e) => setEditForm({ ...editForm, title3: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  autoComplete="off"
-                />
-              </div>
-              <div className="col-span-2">
-                <label className="text-slate-400 text-xs mb-1 block">Email 3</label>
-                <input
-                  type="email"
-                  value={editForm.email3 || ''}
-                  onChange={(e) => setEditForm({ ...editForm, email3: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  autoComplete="off"
-                />
-              </div>
-            </div>
-            
-            <div>
-              <label className="text-slate-400 text-xs mb-1 block">Contacted Status</label>
-              <select
-                value={editForm.contacted ? 'true' : 'false'}
-                onChange={(e) => setEditForm({ ...editForm, contacted: e.target.value === 'true' })}
-                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-              >
-                <option value="false">Not Contacted</option>
-                <option value="true">Contacted</option>
-              </select>
-            </div>
-            
-            <div>
-              <label className="text-slate-400 text-xs mb-1 block">Notes</label>
-              <textarea
-                value={editForm.notes || ''}
-                onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
-                rows={3}
-                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-              />
-            </div>
-            
-            <div className="flex gap-2 pt-2">
-              <button
-                onClick={saveEdit}
-                className="flex-1 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all"
-              >
-                Save Changes
-              </button>
-              <button
-                onClick={cancelEdit}
-                className="flex-1 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg font-semibold transition-all"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => deleteProspect(item.id, item.vertical)}
-                className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg font-semibold transition-all"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      );
+      return <EditForm item={item} />;
     }
 
     return (
@@ -700,7 +698,7 @@ const SalesProspectsList = () => {
                         value={newContact.org}
                         onChange={(e) => setNewContact({ ...newContact, org: e.target.value })}
                         placeholder="Company Name"
-                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-sm text-white focus:outline-none focus:border-blue-500 transition-all"
+                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all"
                       />
                     </div>
                     <div>
