@@ -113,12 +113,14 @@ const SalesProspectsList = () => {
         setProspectsCities(prev => prev.filter(p => p.id !== id));
       }
       setEditingProspect(null);
+      setExpandedProspect(null);
     }
   };
 
   const startEdit = (prospect) => {
     setEditingProspect(prospect.id);
     setEditForm({ ...prospect });
+    setExpandedProspect(null);
   };
 
   const cancelEdit = () => {
@@ -290,6 +292,7 @@ const SalesProspectsList = () => {
                   value={editForm.name || ''}
                   onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                   className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  autoComplete="off"
                 />
               </div>
               <div>
@@ -299,6 +302,7 @@ const SalesProspectsList = () => {
                   value={editForm.contact || ''}
                   onChange={(e) => setEditForm({ ...editForm, contact: e.target.value })}
                   className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  autoComplete="off"
                 />
               </div>
             </div>
@@ -311,6 +315,7 @@ const SalesProspectsList = () => {
                   value={editForm.title || ''}
                   onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
                   className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  autoComplete="off"
                 />
               </div>
               <div>
@@ -320,73 +325,76 @@ const SalesProspectsList = () => {
                   value={editForm.email || ''}
                   onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
                   className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  autoComplete="off"
                 />
               </div>
             </div>
 
-            {(editForm.contact2 || editForm.email2) && (
-              <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700">
-                <div>
-                  <label className="text-slate-400 text-xs mb-1 block">Contact 2 Name</label>
-                  <input
-                    type="text"
-                    value={editForm.contact2 || ''}
-                    onChange={(e) => setEditForm({ ...editForm, contact2: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="text-slate-400 text-xs mb-1 block">Title 2</label>
-                  <input
-                    type="text"
-                    value={editForm.title2 || ''}
-                    onChange={(e) => setEditForm({ ...editForm, title2: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div className="col-span-2">
-                  <label className="text-slate-400 text-xs mb-1 block">Email 2</label>
-                  <input
-                    type="email"
-                    value={editForm.email2 || ''}
-                    onChange={(e) => setEditForm({ ...editForm, email2: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  />
-                </div>
+            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700">
+              <div>
+                <label className="text-slate-400 text-xs mb-1 block">Contact 2 Name</label>
+                <input
+                  type="text"
+                  value={editForm.contact2 || ''}
+                  onChange={(e) => setEditForm({ ...editForm, contact2: e.target.value })}
+                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  autoComplete="off"
+                />
               </div>
-            )}
+              <div>
+                <label className="text-slate-400 text-xs mb-1 block">Title 2</label>
+                <input
+                  type="text"
+                  value={editForm.title2 || ''}
+                  onChange={(e) => setEditForm({ ...editForm, title2: e.target.value })}
+                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  autoComplete="off"
+                />
+              </div>
+              <div className="col-span-2">
+                <label className="text-slate-400 text-xs mb-1 block">Email 2</label>
+                <input
+                  type="email"
+                  value={editForm.email2 || ''}
+                  onChange={(e) => setEditForm({ ...editForm, email2: e.target.value })}
+                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  autoComplete="off"
+                />
+              </div>
+            </div>
 
-            {(editForm.contact3 || editForm.email3) && (
-              <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700">
-                <div>
-                  <label className="text-slate-400 text-xs mb-1 block">Contact 3 Name</label>
-                  <input
-                    type="text"
-                    value={editForm.contact3 || ''}
-                    onChange={(e) => setEditForm({ ...editForm, contact3: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="text-slate-400 text-xs mb-1 block">Title 3</label>
-                  <input
-                    type="text"
-                    value={editForm.title3 || ''}
-                    onChange={(e) => setEditForm({ ...editForm, title3: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div className="col-span-2">
-                  <label className="text-slate-400 text-xs mb-1 block">Email 3</label>
-                  <input
-                    type="email"
-                    value={editForm.email3 || ''}
-                    onChange={(e) => setEditForm({ ...editForm, email3: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
-                  />
-                </div>
+            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700">
+              <div>
+                <label className="text-slate-400 text-xs mb-1 block">Contact 3 Name</label>
+                <input
+                  type="text"
+                  value={editForm.contact3 || ''}
+                  onChange={(e) => setEditForm({ ...editForm, contact3: e.target.value })}
+                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  autoComplete="off"
+                />
               </div>
-            )}
+              <div>
+                <label className="text-slate-400 text-xs mb-1 block">Title 3</label>
+                <input
+                  type="text"
+                  value={editForm.title3 || ''}
+                  onChange={(e) => setEditForm({ ...editForm, title3: e.target.value })}
+                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  autoComplete="off"
+                />
+              </div>
+              <div className="col-span-2">
+                <label className="text-slate-400 text-xs mb-1 block">Email 3</label>
+                <input
+                  type="email"
+                  value={editForm.email3 || ''}
+                  onChange={(e) => setEditForm({ ...editForm, email3: e.target.value })}
+                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  autoComplete="off"
+                />
+              </div>
+            </div>
             
             <div>
               <label className="text-slate-400 text-xs mb-1 block">Contacted Status</label>
@@ -437,10 +445,10 @@ const SalesProspectsList = () => {
 
     return (
       <div className="bg-slate-800/50 rounded-lg border border-slate-700 hover:border-slate-600 transition-all">
-        <div className={`p-3 flex items-center gap-3 ${!isCustomer ? '' : 'cursor-pointer'}`} onClick={() => isCustomer && toggle(item.id)}>
+        <div className="p-3 flex items-center gap-3">
           <span className="text-slate-400 font-semibold text-sm w-6">{index + 1}</span>
           <div className={`w-3 h-3 rounded-full ${isCustomer ? 'bg-green-500' : (item.contacted ? 'bg-green-500' : 'bg-red-500')}`}></div>
-          <div className="flex-1 min-w-0" onClick={() => !isCustomer && toggle(item.id)} style={{ cursor: !isCustomer ? 'pointer' : 'default' }}>
+          <div className="flex-1 min-w-0 cursor-pointer" onClick={() => toggle(item.id)}>
             <h3 className="text-white font-semibold text-sm truncate">{item.name}</h3>
             <p className="text-slate-400 text-xs truncate">{item.contact} • {item.title}</p>
           </div>
@@ -459,7 +467,15 @@ const SalesProspectsList = () => {
               </svg>
             </button>
           )}
-          <svg className={`w-4 h-4 text-slate-400 transition-transform ${expanded === item.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" onClick={() => !isCustomer && toggle(item.id)} style={{ cursor: 'pointer' }}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+          <svg 
+            className={`w-4 h-4 text-slate-400 transition-transform cursor-pointer ${expanded === item.id ? 'rotate-180' : ''}`} 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+            onClick={() => toggle(item.id)}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
         </div>
         {expanded === item.id && (
           <div className="px-3 pb-3 border-t border-slate-700 pt-3 space-y-1 text-xs">
@@ -684,7 +700,7 @@ const SalesProspectsList = () => {
                         value={newContact.org}
                         onChange={(e) => setNewContact({ ...newContact, org: e.target.value })}
                         placeholder="Company Name"
-                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all"
+                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-sm text-white focus:outline-none focus:border-blue-500 transition-all"
                       />
                     </div>
                     <div>
