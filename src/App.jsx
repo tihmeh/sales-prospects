@@ -465,13 +465,20 @@ const SalesProspectsList = () => {
   const totalProspects = prospectsK12.length + prospectsCities.length + prospectsHigherEd.length;
   const totalCustomers = customersCities.length + customersTransit.length;
   const total2025Booking = 507775.82;
+  const salesGoal2026 = 1500000;
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Sales Dashboard</h1>
-          <p className="text-slate-300">Pipeline Overview</p>
+        <div className="mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-white mb-2">Sales Dashboard</h1>
+            <p className="text-slate-300">Pipeline Overview</p>
+          </div>
+          <div className="bg-amber-500/20 border border-amber-500/50 rounded-lg px-5 py-3">
+            <div className="text-amber-300 text-xs font-medium mb-1">2026 Sales Goal</div>
+            <div className="text-amber-400 text-2xl font-bold">{formatCurrency(salesGoal2026)}</div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
