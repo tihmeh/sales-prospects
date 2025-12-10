@@ -42,6 +42,7 @@ const SalesProspectsList = () => {
   const [dailyActivity, setDailyActivity] = useState({ calls: 0, emails: 0, linkedin: 0 });
   const [weeklyActivity, setWeeklyActivity] = useState({ calls: 0, emails: 0, linkedin: 0 });
   const [monthlyActivity, setMonthlyActivity] = useState({ calls: 0, emails: 0, linkedin: 0 });
+  const [expandedActivity, setExpandedActivity] = useState({ daily: false, weekly: false, monthly: false });
 
   const formatCurrency = (amount) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(amount);
 
@@ -50,6 +51,10 @@ const SalesProspectsList = () => {
     if (period === 'daily') setDailyActivity({ ...dailyActivity, [type]: numValue });
     else if (period === 'weekly') setWeeklyActivity({ ...weeklyActivity, [type]: numValue });
     else if (period === 'monthly') setMonthlyActivity({ ...monthlyActivity, [type]: numValue });
+  };
+
+  const toggleActivity = (period) => {
+    setExpandedActivity({ ...expandedActivity, [period]: !expandedActivity[period] });
   };
 
   const Card = ({ item, index, isCustomer, expanded, toggle }) => (
@@ -80,27 +85,38 @@ const SalesProspectsList = () => {
     </div>
   );
 
-  const ActivityCard = ({ title, goals, activity, period }) => {
+  const ActivityCard = ({ title, goals, activity, period, isExpanded }) => {
     const getPercentage = (current, goal) => Math.min((current / goal) * 100, 100);
+    const totalCurrent = activity.calls + activity.emails + activity.linkedin;
+    const totalGoal = goals.calls + goals.emails + goals.linkedin;
+    
     return (
-      <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-3">
-        <h3 className="text-sm font-semibold text-white mb-2">{title}</h3>
-        <div className="space-y-2">
-          {['calls', 'emails', 'linkedin'].map((type, i) => (
-            <div key={type}>
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-slate-300 text-xs">{type === 'linkedin' ? 'LinkedIn' : type.charAt(0).toUpperCase() + type.slice(1)}</span>
-                <div className="flex items-center gap-1">
-                  <input type="number" value={activity[type]} onChange={(e) => handleActivityChange(period, type, e.target.value)} className="w-12 px-1 py-0.5 bg-slate-700 border border-slate-600 rounded text-white text-xs text-center" onClick={(e) => e.stopPropagation()} />
-                  <span className="text-slate-400 text-xs">/{goals[type]}</span>
+      <div className="bg-slate-800/50 rounded-lg border border-slate-700">
+        <div className="p-3 flex items-center justify-between cursor-pointer hover:bg-slate-700/30 transition-all" onClick={() => toggleActivity(period)}>
+          <div>
+            <h3 className="text-sm font-semibold text-white">{title} Goals</h3>
+            <p className="text-xs text-slate-400">{totalCurrent} / {totalGoal}</p>
+          </div>
+          <svg className={`w-4 h-4 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+        </div>
+        {isExpanded && (
+          <div className="px-3 pb-3 border-t border-slate-700 pt-3 space-y-2">
+            {['calls', 'emails', 'linkedin'].map((type, i) => (
+              <div key={type}>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-slate-300 text-xs">{type === 'linkedin' ? 'LinkedIn' : type.charAt(0).toUpperCase() + type.slice(1)}</span>
+                  <div className="flex items-center gap-1">
+                    <input type="number" value={activity[type]} onChange={(e) => handleActivityChange(period, type, e.target.value)} className="w-12 px-1 py-0.5 bg-slate-700 border border-slate-600 rounded text-white text-xs text-center" onClick={(e) => e.stopPropagation()} />
+                    <span className="text-slate-400 text-xs">/{goals[type]}</span>
+                  </div>
+                </div>
+                <div className="w-full bg-slate-700 rounded-full h-1.5">
+                  <div className={`h-1.5 rounded-full transition-all ${i === 0 ? 'bg-blue-500' : i === 1 ? 'bg-purple-500' : 'bg-cyan-500'}`} style={{ width: `${getPercentage(activity[type], goals[type])}%` }} />
                 </div>
               </div>
-              <div className="w-full bg-slate-700 rounded-full h-1.5">
-                <div className={`h-1.5 rounded-full transition-all ${i === 0 ? 'bg-blue-500' : i === 1 ? 'bg-purple-500' : 'bg-cyan-500'}`} style={{ width: `${getPercentage(activity[type], goals[type])}%` }} />
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     );
   };
@@ -116,9 +132,9 @@ const SalesProspectsList = () => {
           <div className="bg-amber-500/20 border border-amber-500/50 rounded-lg px-4 py-2"><div className="text-amber-300 text-xs font-medium">2026 Sales Goal</div><div className="text-amber-400 text-xl font-bold">{formatCurrency(3000000)}</div></div>
         </div>
         <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-          <ActivityCard title="Daily" goals={{ calls: 20, emails: 100, linkedin: 400 }} activity={dailyActivity} period="daily" />
-          <ActivityCard title="Weekly" goals={{ calls: 100, emails: 500, linkedin: 2000 }} activity={weeklyActivity} period="weekly" />
-          <ActivityCard title="Monthly" goals={{ calls: 400, emails: 2000, linkedin: 8000 }} activity={monthlyActivity} period="monthly" />
+          <ActivityCard title="Daily" goals={{ calls: 20, emails: 100, linkedin: 400 }} activity={dailyActivity} period="daily" isExpanded={expandedActivity.daily} />
+          <ActivityCard title="Weekly" goals={{ calls: 100, emails: 500, linkedin: 2000 }} activity={weeklyActivity} period="weekly" isExpanded={expandedActivity.weekly} />
+          <ActivityCard title="Monthly" goals={{ calls: 400, emails: 2000, linkedin: 8000 }} activity={monthlyActivity} period="monthly" isExpanded={expandedActivity.monthly} />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
@@ -126,7 +142,7 @@ const SalesProspectsList = () => {
               <h2 className="text-xl font-bold text-white">Current Prospects</h2>
               <p className="text-blue-300 text-sm">{totalProspects} active</p>
             </div>
-            <div className="space-y-4 max-h-[calc(100vh-380px)] overflow-y-auto pr-2">
+            <div className="space-y-4 max-h-[calc(100vh-320px)] overflow-y-auto pr-2">
               <div>
                 <h3 className="text-lg font-bold text-white mb-2 px-2 border-b border-slate-600 pb-1">Public Sector</h3>
                 <h4 className="text-sm font-semibold text-slate-300 mb-2 px-2 pl-3">K-12 Education</h4>
@@ -145,7 +161,7 @@ const SalesProspectsList = () => {
               <div><h2 className="text-xl font-bold text-white">Current Customers</h2><p className="text-green-300 text-sm">{totalCustomers} active</p></div>
               <div className="bg-emerald-500/20 border border-emerald-500/50 rounded-lg px-3 py-1.5"><div className="text-emerald-300 text-xs">2025 Bookings</div><div className="text-emerald-400 text-lg font-bold">{formatCurrency(507775.82)}</div></div>
             </div>
-            <div className="space-y-4 max-h-[calc(100vh-380px)] overflow-y-auto pr-2">
+            <div className="space-y-4 max-h-[calc(100vh-320px)] overflow-y-auto pr-2">
               <div>
                 <h3 className="text-lg font-bold text-white mb-2 px-2 border-b border-slate-600 pb-1">Public Sector</h3>
                 <h4 className="text-sm font-semibold text-slate-300 mb-2 px-2 pl-3">Transit</h4>
