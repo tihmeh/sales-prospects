@@ -61,6 +61,8 @@ const SalesProspectsList = () => {
     org: '',
     email: ''
   });
+  const [randomProspect, setRandomProspect] = useState(null);
+  const [isSpinning, setIsSpinning] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('weeklyContacts', weeklyContacts.toString());
@@ -181,6 +183,21 @@ const SalesProspectsList = () => {
 
   const handleEnhancePitch = () => {
     setPitchVersion(pitchVersion + 1);
+  };
+
+  const handleRandomizeProspect = () => {
+    const uncontactedProspects = allProspects.filter(p => !p.contacted);
+    if (uncontactedProspects.length === 0) {
+      alert('All prospects have been contacted!');
+      return;
+    }
+    
+    setIsSpinning(true);
+    setTimeout(() => {
+      const randomIndex = Math.floor(Math.random() * uncontactedProspects.length);
+      setRandomProspect(uncontactedProspects[randomIndex]);
+      setIsSpinning(false);
+    }, 1000);
   };
 
   const handleAddContact = () => {
@@ -511,6 +528,34 @@ const SalesProspectsList = () => {
                 <div className="text-amber-300 text-xs font-medium">2026 Sales Goal</div>
                 <div className="text-amber-400 text-xl font-bold">{formatCurrency(3000000)}</div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div className="mb-4 bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-lg border border-purple-700/50 p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-white mb-1">Contact Randomizer</h3>
+              <p className="text-sm text-slate-300">Let fate decide your next outreach</p>
+            </div>
+            <div className="flex items-center gap-4">
+              {randomProspect && (
+                <div className={`bg-slate-800/50 rounded-lg border border-slate-600 px-4 py-3 min-w-[300px] ${isSpinning ? 'animate-pulse' : ''}`}>
+                  <div className="text-xs text-slate-400 mb-1">Your Next Contact:</div>
+                  <div className="text-white font-bold text-lg">{randomProspect.contact}</div>
+                  <div className="text-slate-300 text-sm">{randomProspect.title}</div>
+                  <div className="text-blue-400 text-xs mt-1">{randomProspect.name}</div>
+                </div>
+              )}
+              <button 
+                onClick={handleRandomizeProspect} 
+                disabled={isSpinning}
+                className={`px-6 py-4 rounded-lg font-bold text-lg transition-all flex items-center gap-3 ${isSpinning ? 'bg-purple-800 cursor-not-allowed' : 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-lg shadow-purple-500/50'} text-white`}
+              >
+                <svg className={`w-6 h-6 ${isSpinning ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                {isSpinning ? 'Randomizing...' : 'Pick Random Contact'}
+              </button>
             </div>
           </div>
         </div>
