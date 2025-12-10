@@ -258,7 +258,16 @@ const SalesProspectsList = () => {
             <div className="text-red-300 text-xs font-medium">Reset Activity</div>
             <div className="text-red-400 text-sm font-semibold">Clear Counters</div>
           </button>
-          <div className="bg-amber-500/20 border border-amber-500/50 rounded-lg px-4 py-2"><div className="text-amber-300 text-xs font-medium">2026 Sales Goal</div><div className="text-amber-400 text-xl font-bold">{formatCurrency(3000000)}</div></div>
+          <div className="flex flex-col gap-2">
+            <div className="bg-slate-700/30 border border-slate-600/50 rounded-lg px-3 py-1 text-center">
+              <p className="text-slate-400 text-xs italic">"This is a new skill that requires training,</p>
+              <p className="text-slate-400 text-xs italic">practice and guidance." - Joe Morone</p>
+            </div>
+            <div className="bg-amber-500/20 border border-amber-500/50 rounded-lg px-4 py-2">
+              <div className="text-amber-300 text-xs font-medium">2026 Sales Goal</div>
+              <div className="text-amber-400 text-xl font-bold">{formatCurrency(3000000)}</div>
+            </div>
+          </div>
         </div>
         <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-3">
           <ActivityCard title="Daily" goals={{ calls: 20, emails: 100, linkedin: 400 }} activity={dailyActivity} period="daily" isExpanded={expandedActivity.daily} />
