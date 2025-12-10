@@ -163,25 +163,23 @@ const SalesProspectsList = () => {
 
   const Card = ({ item, index, isCustomer, expanded, toggle }) => (
     <div className="bg-slate-800/50 rounded-lg border border-slate-700 hover:border-slate-600 transition-all cursor-pointer" onClick={() => toggle(item.id)}>
-      <div className="p-3 flex items-center gap-3">
-        <span className="text-slate-400 font-semibold text-sm w-6">{index + 1}</span>
-        <div className={`w-3 h-3 rounded-full ${isCustomer ? 'bg-green-500' : (item.contacted ? 'bg-green-500' : 'bg-red-500')}`}></div>
+      <div className="p-4 flex items-center gap-3">
+        <span className="text-slate-400 font-semibold text-sm min-w-[24px]">{index + 1}</span>
+        <div className={`w-3 h-3 rounded-full flex-shrink-0 ${isCustomer ? 'bg-green-500' : (item.contacted ? 'bg-green-500' : 'bg-red-500')}`}></div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-white font-semibold text-sm truncate">{item.name}</h3>
-          <p className="text-slate-400 text-xs truncate">{item.contact} • {item.title}</p>
+          <h3 className="text-white font-semibold text-base truncate">{item.name}</h3>
+          <p className="text-slate-400 text-sm truncate">{item.contact} • {item.title}</p>
         </div>
-        <span className={`text-xs font-medium ${isCustomer ? 'text-green-400 bg-green-900/30' : 'text-blue-400 bg-blue-900/30'} px-2 py-1 rounded-full`}>{item.vertical}</span>
-        {isCustomer && <span className="text-xs font-semibold text-emerald-400">{formatCurrency(item.bookingAmount)}</span>}
-        <svg className={`w-4 h-4 text-slate-400 transition-transform ${expanded === item.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+        <svg className={`w-5 h-5 flex-shrink-0 text-slate-400 transition-transform ${expanded === item.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
       </div>
       {expanded === item.id && (
-        <div className="px-3 pb-3 border-t border-slate-700 pt-3 space-y-1 text-xs">
+        <div className="px-4 pb-4 border-t border-slate-700 pt-4 space-y-2 text-sm">
           <div className="text-slate-300"><span className="text-slate-500">Contact:</span> {item.contact}</div>
           <div className="text-slate-300"><span className="text-slate-500">Title:</span> {item.title}</div>
-          <div className="text-slate-300"><span className="text-slate-500">Email:</span> {item.email}</div>
-          {item.contact2 && <><div className="text-slate-300 mt-2 pt-2 border-t border-slate-700/50"><span className="text-slate-500">Contact 2:</span> {item.contact2}</div><div className="text-slate-300"><span className="text-slate-500">Title:</span> {item.title2}</div><div className="text-slate-300"><span className="text-slate-500">Email:</span> {item.email2}</div></>}
-          {item.contact3 && <><div className="text-slate-300 mt-2 pt-2 border-t border-slate-700/50"><span className="text-slate-500">Contact 3:</span> {item.contact3}</div><div className="text-slate-300"><span className="text-slate-500">Title:</span> {item.title3}</div><div className="text-slate-300"><span className="text-slate-500">Email:</span> {item.email3}</div></>}
-          <div className="text-slate-300 mt-2 pt-2 border-t border-slate-700/50"><span className="text-slate-500">Vertical:</span> {item.vertical}</div>
+          <div className="text-slate-300 break-all"><span className="text-slate-500">Email:</span> {item.email}</div>
+          {item.contact2 && <><div className="text-slate-300 mt-3 pt-3 border-t border-slate-700/50"><span className="text-slate-500">Contact 2:</span> {item.contact2}</div><div className="text-slate-300"><span className="text-slate-500">Title:</span> {item.title2}</div><div className="text-slate-300 break-all"><span className="text-slate-500">Email:</span> {item.email2}</div></>}
+          {item.contact3 && <><div className="text-slate-300 mt-3 pt-3 border-t border-slate-700/50"><span className="text-slate-500">Contact 3:</span> {item.contact3}</div><div className="text-slate-300"><span className="text-slate-500">Title:</span> {item.title3}</div><div className="text-slate-300 break-all"><span className="text-slate-500">Email:</span> {item.email3}</div></>}
+          <div className="text-slate-300 mt-3 pt-3 border-t border-slate-700/50"><span className="text-slate-500">Vertical:</span> {item.vertical}</div>
           {!isCustomer ? <><div className="text-slate-300"><span className="text-slate-500">Status:</span> <span className={item.contacted ? 'text-green-400' : 'text-red-400'}>{item.contacted ? 'Contacted' : 'Not Contacted'}</span></div></> : <><div className="text-slate-300"><span className="text-slate-500">Booking:</span> <span className="text-emerald-400">{formatCurrency(item.bookingAmount)}</span></div><div className="text-slate-300"><span className="text-slate-500">Customer Since:</span> <span className="text-green-400">{item.startDate}</span></div></>}
           <div className="text-slate-300"><span className="text-slate-500">Notes:</span> <span className="text-slate-400 italic">{item.notes}</span></div>
         </div>
@@ -196,11 +194,11 @@ const SalesProspectsList = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 flex items-center justify-center">
-        <form onSubmit={handleLogin} className={`flex flex-col items-center gap-4 bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl border border-slate-700 ${shake ? 'animate-shake' : ''}`}>
+      <div className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 flex items-center justify-center p-4">
+        <form onSubmit={handleLogin} className={`flex flex-col items-center gap-4 bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl border border-slate-700 w-full max-w-sm ${shake ? 'animate-shake' : ''}`}>
           <h1 className="text-3xl font-bold text-white mb-4">Sales Dashboard</h1>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter access code" className="px-6 py-3 bg-slate-900/50 border-2 border-blue-500/30 rounded-lg text-white text-center text-lg focus:outline-none focus:border-blue-400 transition-all w-64" autoFocus />
-          <button type="submit" className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg shadow-blue-500/50 w-64">Enter</button>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter access code" className="px-6 py-3 bg-slate-900/50 border-2 border-blue-500/30 rounded-lg text-white text-center text-lg focus:outline-none focus:border-blue-400 transition-all w-full" autoFocus />
+          <button type="submit" className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg shadow-blue-500/50 w-full">Enter</button>
         </form>
         <style jsx>{`@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } } .animate-shake { animation: shake 0.3s ease-in-out; }`}</style>
       </div>
@@ -209,81 +207,79 @@ const SalesProspectsList = () => {
 
   if (currentView === 'joe') {
     return (
-      <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
+      <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 md:p-6">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-6 flex items-center justify-between">
-            <div><h1 className="text-3xl font-bold text-white mb-1">Joe Morone's Smart Sales Method</h1><p className="text-slate-300 text-sm">SEL Model: Survival → Emotion → Logic</p></div>
-            <button onClick={() => { setCurrentView('dashboard'); setSelectedProspect(null); setPitchVersion(0); }} className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all">Back to Dashboard</button>
+          <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">Joe Morone's Smart Sales</h1>
+              <p className="text-slate-300 text-sm">SEL: Survival → Emotion → Logic</p>
+            </div>
+            <button onClick={() => { setCurrentView('dashboard'); setSelectedProspect(null); setPitchVersion(0); }} className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all w-full sm:w-auto">← Back</button>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4 mb-4">
-                <h2 className="text-xl font-bold text-white mb-3">Select a Prospect</h2>
-                <div className="space-y-2 max-h-[calc(100vh-400px)] overflow-y-auto pr-2">
-                  {allProspects.map((prospect) => (
-                    <div key={prospect.id} onClick={() => { setSelectedProspect(prospect); setPitchVersion(0); }} className={`p-3 rounded-lg border cursor-pointer transition-all ${selectedProspect?.id === prospect.id ? 'bg-orange-900/30 border-orange-500' : 'bg-slate-800/50 border-slate-700 hover:border-slate-600'}`}>
-                      <div className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded-full ${prospect.contacted ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                        <div className="flex-1">
-                          <div className="text-white font-semibold text-sm">{prospect.name}</div>
-                          <div className="text-slate-400 text-xs">{prospect.contact} • {prospect.title}</div>
-                          <div className="text-blue-400 text-xs">{prospect.vertical}</div>
-                        </div>
+          
+          {!selectedProspect ? (
+            <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4">
+              <h2 className="text-xl font-bold text-white mb-4">Select a Prospect</h2>
+              <div className="space-y-3">
+                {allProspects.map((prospect) => (
+                  <div key={prospect.id} onClick={() => { setSelectedProspect(prospect); setPitchVersion(0); }} className="p-4 bg-slate-800/50 border border-slate-700 hover:border-orange-500 rounded-lg cursor-pointer transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-3 h-3 rounded-full flex-shrink-0 ${prospect.contacted ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-white font-semibold text-base">{prospect.name}</div>
+                        <div className="text-slate-400 text-sm">{prospect.contact}</div>
+                        <div className="text-blue-400 text-xs mt-1">{prospect.vertical}</div>
                       </div>
                     </div>
-                  ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="bg-slate-700/30 rounded-lg p-4 border border-slate-600">
+                <div className="text-slate-400 text-xs mb-2">Selected Contact</div>
+                <div className="text-white font-semibold text-lg">{selectedProspect.contact}</div>
+                <div className="text-slate-300 text-sm">{selectedProspect.title}</div>
+                <div className="text-blue-400 text-sm mt-1">{selectedProspect.name}</div>
+              </div>
+              
+              <div className="bg-orange-900/20 border border-orange-500/50 rounded-lg p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                    <span className="text-orange-400 font-semibold">Elevator Pitch</span>
+                  </div>
+                  <span className="text-orange-300 text-sm">v{pitchVersion + 1}</span>
+                </div>
+                <p className="text-white text-base leading-relaxed">{generateElevatorPitch(selectedProspect, pitchVersion)}</p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <button onClick={handleEnhancePitch} className="py-4 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                  Enhance
+                </button>
+                <button onClick={() => handleCopyPitch(generateElevatorPitch(selectedProspect, pitchVersion))} className="py-4 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                  Copy
+                </button>
+              </div>
+              
+              <button onClick={() => setSelectedProspect(null)} className="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all">
+                ← Choose Different Prospect
+              </button>
+              
+              <div className="bg-slate-700/30 rounded-lg p-4 border border-slate-600">
+                <div className="text-slate-400 text-sm mb-3 font-semibold">Smart Sales Method (SEL)</div>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-start gap-2"><span className="text-blue-400 font-bold text-base">S:</span><span className="text-slate-300">Survival - Address business competitiveness</span></div>
+                  <div className="flex items-start gap-2"><span className="text-purple-400 font-bold text-base">E:</span><span className="text-slate-300">Emotion - Ask "Why? Why now?"</span></div>
+                  <div className="flex items-start gap-2"><span className="text-green-400 font-bold text-base">L:</span><span className="text-slate-300">Logic - Propose feasibility assessment</span></div>
                 </div>
               </div>
             </div>
-            <div className="lg:col-span-1">
-              <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4 sticky top-6">
-                <h2 className="text-xl font-bold text-white mb-4">Smart Sales Pitch</h2>
-                {selectedProspect ? (
-                  <div className="space-y-4">
-                    <div className="bg-slate-700/30 rounded-lg p-3 border border-slate-600">
-                      <div className="text-slate-400 text-xs mb-1">Selected Contact</div>
-                      <div className="text-white font-semibold">{selectedProspect.contact}</div>
-                      <div className="text-slate-300 text-sm">{selectedProspect.title}</div>
-                      <div className="text-blue-400 text-xs mt-1">{selectedProspect.name}</div>
-                    </div>
-                    <div className="bg-orange-900/20 border border-orange-500/50 rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-2">
-                          <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
-                          <span className="text-orange-400 font-semibold text-sm">Elevator Pitch</span>
-                        </div>
-                        <span className="text-orange-300 text-xs">v{pitchVersion + 1}</span>
-                      </div>
-                      <p className="text-white text-sm leading-relaxed">{generateElevatorPitch(selectedProspect, pitchVersion)}</p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button onClick={handleEnhancePitch} className="py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                        Enhance
-                      </button>
-                      <button onClick={() => handleCopyPitch(generateElevatorPitch(selectedProspect, pitchVersion))} className="py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                        Copy
-                      </button>
-                    </div>
-                    <div className="bg-slate-700/30 rounded-lg p-3 border border-slate-600">
-                      <div className="text-slate-400 text-xs mb-2">Smart Sales Method (SEL)</div>
-                      <div className="space-y-2 text-xs">
-                        <div className="flex items-start gap-2"><span className="text-blue-400 font-bold">S:</span><span className="text-slate-300">Survival - Address business competitiveness</span></div>
-                        <div className="flex items-start gap-2"><span className="text-purple-400 font-bold">E:</span><span className="text-slate-300">Emotion - Ask "Why? Why now?"</span></div>
-                        <div className="flex items-start gap-2"><span className="text-green-400 font-bold">L:</span><span className="text-slate-300">Logic - Propose feasibility assessment</span></div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center text-slate-400 py-8">
-                    <svg className="w-16 h-16 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                    <p className="text-sm">Select a prospect to generate a customized elevator pitch</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     );
@@ -291,56 +287,51 @@ const SalesProspectsList = () => {
 
   if (currentView === 'email') {
     return (
-      <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-6 flex items-center justify-between">
-            <div><h1 className="text-3xl font-bold text-white mb-1">Email Blast</h1><p className="text-slate-300 text-sm">Select and copy prospect email addresses</p></div>
-            <button onClick={() => setCurrentView('dashboard')} className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all">Back to Dashboard</button>
+      <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 md:p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">Email Blast</h1>
+              <p className="text-slate-300 text-sm">Select and copy emails</p>
+            </div>
+            <button onClick={() => setCurrentView('dashboard')} className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all w-full sm:w-auto">← Back</button>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-bold text-white">Select Recipients ({selectedEmails.length} selected)</h2>
-                  <button onClick={handleSelectAll} className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm font-semibold transition-all">{selectedEmails.length === allEmails.length ? 'Deselect All' : 'Select All'}</button>
-                </div>
-                <div className="space-y-2 max-h-[calc(100vh-300px)] overflow-y-auto pr-2">
-                  {allEmails.map((item, index) => (
-                    <div key={index} onClick={() => handleEmailSelection(item.email)} className={`p-3 rounded-lg border cursor-pointer transition-all ${selectedEmails.includes(item.email) ? 'bg-blue-900/30 border-blue-500' : 'bg-slate-800/50 border-slate-700 hover:border-slate-600'}`}>
-                      <div className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${selectedEmails.includes(item.email) ? 'bg-blue-600 border-blue-600' : 'border-slate-600'}`}>
-                          {selectedEmails.includes(item.email) && <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
-                        </div>
-                        <div className="flex-1">
-                          <div className="text-white font-semibold text-sm">{item.name}</div>
-                          <div className="text-slate-400 text-xs">{item.org}</div>
-                          <div className="text-blue-400 text-xs">{item.email}</div>
-                        </div>
+          
+          <div className="space-y-4">
+            <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-white">Recipients ({selectedEmails.length})</h2>
+                <button onClick={handleSelectAll} className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm font-semibold transition-all">{selectedEmails.length === allEmails.length ? 'Deselect' : 'Select All'}</button>
+              </div>
+              <div className="space-y-3 max-h-96 overflow-y-auto">
+                {allEmails.map((item, index) => (
+                  <div key={index} onClick={() => handleEmailSelection(item.email)} className={`p-4 rounded-lg border cursor-pointer transition-all ${selectedEmails.includes(item.email) ? 'bg-blue-900/30 border-blue-500' : 'bg-slate-800/50 border-slate-700'}`}>
+                    <div className="flex items-start gap-3">
+                      <div className={`w-5 h-5 mt-0.5 flex-shrink-0 rounded border-2 flex items-center justify-center ${selectedEmails.includes(item.email) ? 'bg-blue-600 border-blue-600' : 'border-slate-600'}`}>
+                        {selectedEmails.includes(item.email) && <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-white font-semibold text-base">{item.name}</div>
+                        <div className="text-slate-400 text-sm truncate">{item.org}</div>
+                        <div className="text-blue-400 text-sm break-all">{item.email}</div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="lg:col-span-1">
-              <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4 sticky top-6">
-                <h2 className="text-xl font-bold text-white mb-4">Actions</h2>
-                <div className="space-y-4">
-                  <div className="bg-slate-700/30 rounded-lg p-3 border border-slate-600">
-                    <div className="text-slate-400 text-sm mb-1">Total Recipients</div>
-                    <div className="text-white text-2xl font-bold">{selectedEmails.length}</div>
-                  </div>
-                  <button onClick={handleCopyEmails} disabled={selectedEmails.length === 0} className={`w-full py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${selectedEmails.length > 0 ? 'bg-green-600 hover:bg-green-500 text-white' : 'bg-slate-700 text-slate-500 cursor-not-allowed'}`}>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Copy Email List
-                  </button>
-                  <div className="bg-slate-700/30 rounded-lg p-3 border border-slate-600">
-                    <div className="text-slate-400 text-xs mb-2">Email Preview:</div>
-                    <div className="text-white text-xs font-mono bg-slate-900/50 p-2 rounded max-h-64 overflow-y-auto break-all">{selectedEmails.length > 0 ? selectedEmails.join('; ') : 'No emails selected'}</div>
-                  </div>
-                </div>
+            
+            <button onClick={handleCopyEmails} disabled={selectedEmails.length === 0} className={`w-full py-4 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${selectedEmails.length > 0 ? 'bg-green-600 hover:bg-green-500 text-white' : 'bg-slate-700 text-slate-500'}`}>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+              Copy Email List ({selectedEmails.length})
+            </button>
+            
+            {selectedEmails.length > 0 && (
+              <div className="bg-slate-700/30 rounded-lg p-4 border border-slate-600">
+                <div className="text-slate-400 text-sm mb-2">Preview:</div>
+                <div className="text-white text-sm font-mono bg-slate-900/50 p-3 rounded max-h-40 overflow-y-auto break-all">{selectedEmails.join('; ')}</div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -348,74 +339,84 @@ const SalesProspectsList = () => {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
+    <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-6 flex items-start justify-between">
-          <div><h1 className="text-3xl font-bold text-white mb-1">Sales Dashboard</h1><p className="text-slate-300 text-sm">Pipeline Overview</p></div>
-          <div className="flex gap-3 items-start">
-            <button onClick={() => setCurrentView('joe')} className="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-semibold transition-all flex items-center gap-2">
+        <div className="mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">Sales Dashboard</h1>
+              <p className="text-slate-300 text-sm">Pipeline Overview</p>
+            </div>
+            <div className="bg-amber-500/20 border border-amber-500/50 rounded-lg px-4 py-2">
+              <div className="text-amber-300 text-xs font-medium">2026 Goal</div>
+              <div className="text-amber-400 text-xl font-bold">{formatCurrency(3000000)}</div>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <button onClick={() => setCurrentView('joe')} className="px-4 py-3 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
-              Joe Morone
+              <span className="hidden sm:inline">Joe Morone</span>
+              <span className="sm:hidden">Pitches</span>
             </button>
-            <button onClick={() => setCurrentView('email')} className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition-all flex items-center gap-2">
+            <button onClick={() => setCurrentView('email')} className="px-4 py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-              Email Blast
+              <span className="hidden sm:inline">Email Blast</span>
+              <span className="sm:hidden">Emails</span>
             </button>
-            <div className="flex flex-col gap-2">
-              <div className="bg-slate-700/30 border border-slate-600/50 rounded-lg px-3 py-1 text-center">
-                <p className="text-slate-400 text-xs italic">"This is a new skill that requires training,</p>
-                <p className="text-slate-400 text-xs italic">practice and guidance." - Joe Morone</p>
-              </div>
-              <div className="bg-amber-500/20 border border-amber-500/50 rounded-lg px-4 py-2">
-                <div className="text-amber-300 text-xs font-medium">2026 Sales Goal</div>
-                <div className="text-amber-400 text-xl font-bold">{formatCurrency(3000000)}</div>
-              </div>
-            </div>
+          </div>
+          
+          <div className="bg-slate-700/30 border border-slate-600/50 rounded-lg px-3 py-2 text-center mb-4">
+            <p className="text-slate-400 text-xs italic">"This is a new skill that requires training, practice and guidance." - Joe Morone</p>
           </div>
         </div>
+
         <div className="mb-4 bg-slate-800/50 rounded-lg border border-slate-700 p-4">
-          <div className="flex items-center justify-between mb-2">
-            <div><h3 className="text-lg font-semibold text-white">Weekly Contacts</h3><p className="text-sm text-slate-400">Track your outreach progress</p></div>
-            <div className="flex items-center gap-3">
-              <button onClick={() => setWeeklyContacts(Math.max(0, weeklyContacts - 1))} className="px-3 py-1 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded text-red-400 font-bold">-</button>
-              <div className="text-center"><div className="text-3xl font-bold text-white">{weeklyContacts}</div><div className="text-xs text-slate-400">/ 100 goal</div></div>
-              <button onClick={() => setWeeklyContacts(weeklyContacts + 1)} className="px-3 py-1 bg-green-500/20 hover:bg-green-500/30 border border-green-500/50 rounded text-green-400 font-bold">+</button>
-              <button onClick={handleReset} className="px-3 py-2 bg-slate-700 hover:bg-slate-600 border border-slate-600 rounded text-slate-300 text-sm font-medium">Reset</button>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-3">
+            <div>
+              <h3 className="text-lg font-semibold text-white">Weekly Contacts</h3>
+              <p className="text-sm text-slate-400">Track your outreach</p>
+            </div>
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <button onClick={() => setWeeklyContacts(Math.max(0, weeklyContacts - 1))} className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded text-red-400 font-bold text-lg">-</button>
+              <div className="text-center flex-1 sm:flex-initial">
+                <div className="text-3xl font-bold text-white">{weeklyContacts}</div>
+                <div className="text-xs text-slate-400">/ 100 goal</div>
+              </div>
+              <button onClick={() => setWeeklyContacts(weeklyContacts + 1)} className="px-4 py-2 bg-green-500/20 hover:bg-green-500/30 border border-green-500/50 rounded text-green-400 font-bold text-lg">+</button>
             </div>
           </div>
-          <div className="w-full bg-slate-700 rounded-full h-4"><div className="h-4 rounded-full transition-all duration-500 bg-gradient-to-r from-blue-500 via-purple-500 to-green-500" style={{ width: `${Math.min((weeklyContacts / 100) * 100, 100)}%` }}></div></div>
-          <div className="mt-2 text-center text-sm"><span className={`font-semibold ${weeklyContacts >= 100 ? 'text-green-400' : weeklyContacts >= 50 ? 'text-yellow-400' : 'text-blue-400'}`}>{Math.round((weeklyContacts / 100) * 100)}% Complete</span></div>
+          <div className="w-full bg-slate-700 rounded-full h-4 mb-2"><div className="h-4 rounded-full transition-all duration-500 bg-gradient-to-r from-blue-500 via-purple-500 to-green-500" style={{ width: `${Math.min((weeklyContacts / 100) * 100, 100)}%` }}></div></div>
+          <div className="text-center text-sm"><span className={`font-semibold ${weeklyContacts >= 100 ? 'text-green-400' : weeklyContacts >= 50 ? 'text-yellow-400' : 'text-blue-400'}`}>{Math.round((weeklyContacts / 100) * 100)}% Complete</span></div>
+          <button onClick={handleReset} className="w-full mt-3 py-2 bg-slate-700 hover:bg-slate-600 border border-slate-600 rounded text-slate-300 text-sm font-medium">Reset Counter</button>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+        <div className="space-y-4">
           <div>
-            <div className="mb-3 bg-blue-900/30 rounded-lg p-3 border border-blue-700/50"><h2 className="text-xl font-bold text-white">Current Prospects</h2><p className="text-blue-300 text-sm">{totalProspects} active</p></div>
-            <div className="space-y-4 max-h-[calc(100vh-320px)] overflow-y-auto pr-2">
-              <div>
-                <h3 className="text-lg font-bold text-white mb-2 px-2 border-b border-slate-600 pb-1">Public Sector</h3>
-                <h4 className="text-sm font-semibold text-slate-300 mb-2 px-2 pl-3">K-12 Education</h4>
-                <div className="space-y-2">{prospectsK12.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}</div>
-                <h4 className="text-sm font-semibold text-slate-300 mb-2 mt-3 px-2 pl-3">Cities & Municipalities</h4>
-                <div className="space-y-2">{prospectsCities.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}</div>
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-white mb-2 px-2 border-b border-slate-600 pb-1">Higher Education</h3>
-                <div className="space-y-2">{prospectsHigherEd.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}</div>
-              </div>
+            <div className="mb-3 bg-blue-900/30 rounded-lg p-4 border border-blue-700/50">
+              <h2 className="text-xl font-bold text-white">Prospects</h2>
+              <p className="text-blue-300 text-sm">{totalProspects} active</p>
+            </div>
+            <div className="space-y-3">
+              <h3 className="text-base font-bold text-white px-2">K-12 Education</h3>
+              {prospectsK12.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}
+              <h3 className="text-base font-bold text-white px-2 mt-4">Cities & Municipalities</h3>
+              {prospectsCities.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}
+              <h3 className="text-base font-bold text-white px-2 mt-4">Higher Education</h3>
+              {prospectsHigherEd.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}
             </div>
           </div>
+          
           <div>
-            <div className="mb-3 bg-green-900/30 rounded-lg p-3 border border-green-700/50 flex items-center justify-between">
-              <div><h2 className="text-xl font-bold text-white">Current Customers</h2><p className="text-green-300 text-sm">{totalCustomers} active</p></div>
-              <div className="bg-emerald-500/20 border border-emerald-500/50 rounded-lg px-3 py-1.5"><div className="text-emerald-300 text-xs">2025 Bookings</div><div className="text-emerald-400 text-lg font-bold">{formatCurrency(507775.82)}</div></div>
+            <div className="mb-3 bg-green-900/30 rounded-lg p-4 border border-green-700/50 flex items-center justify-between">
+              <div><h2 className="text-xl font-bold text-white">Customers</h2><p className="text-green-300 text-sm">{totalCustomers} active</p></div>
+              <div className="bg-emerald-500/20 border border-emerald-500/50 rounded-lg px-3 py-2"><div className="text-emerald-300 text-xs">2025</div><div className="text-emerald-400 text-base font-bold">{formatCurrency(507775.82)}</div></div>
             </div>
-            <div className="space-y-4 max-h-[calc(100vh-320px)] overflow-y-auto pr-2">
-              <div>
-                <h3 className="text-lg font-bold text-white mb-2 px-2 border-b border-slate-600 pb-1">Public Sector</h3>
-                <h4 className="text-sm font-semibold text-slate-300 mb-2 px-2 pl-3">Transit</h4>
-                <div className="space-y-2">{customersTransit.map((c, i) => <Card key={c.id} item={c} index={i} isCustomer={true} expanded={expandedCustomer} toggle={setExpandedCustomer} />)}</div>
-                <h4 className="text-sm font-semibold text-slate-300 mb-2 mt-3 px-2 pl-3">Cities & Municipalities</h4>
-                <div className="space-y-2">{customersCities.map((c, i) => <Card key={c.id} item={c} index={i} isCustomer={true} expanded={expandedCustomer} toggle={setExpandedCustomer} />)}</div>
-              </div>
+            <div className="space-y-3">
+              <h3 className="text-base font-bold text-white px-2">Transit</h3>
+              {customersTransit.map((c, i) => <Card key={c.id} item={c} index={i} isCustomer={true} expanded={expandedCustomer} toggle={setExpandedCustomer} />)}
+              <h3 className="text-base font-bold text-white px-2 mt-4">Cities & Municipalities</h3>
+              {customersCities.map((c, i) => <Card key={c.id} item={c} index={i} isCustomer={true} expanded={expandedCustomer} toggle={setExpandedCustomer} />)}
             </div>
           </div>
         </div>
