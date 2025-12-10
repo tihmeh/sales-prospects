@@ -467,6 +467,13 @@ const SalesProspectsList = () => {
   const total2025Booking = 507775.82;
   const salesGoal2026 = 1500000;
 
+  // Activity goals
+  const activityGoals = {
+    daily: { calls: 20, emails: 100, linkedin: 400 },
+    weekly: { calls: 100, emails: 500, linkedin: 2000 },
+    monthly: { calls: 400, emails: 2000, linkedin: 8000 }
+  };
+
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8">
       <div className="max-w-7xl mx-auto">
@@ -481,6 +488,66 @@ const SalesProspectsList = () => {
           </div>
         </div>
 
+        {/* Activity Goals Section */}
+        <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Daily Goals */}
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-4">
+            <h3 className="text-lg font-semibold text-white mb-3">Daily Goals</h3>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-slate-300 text-sm">Calls</span>
+                <span className="text-blue-400 font-semibold">{activityGoals.daily.calls}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-300 text-sm">Emails</span>
+                <span className="text-purple-400 font-semibold">{activityGoals.daily.emails}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-300 text-sm">LinkedIn Messages</span>
+                <span className="text-cyan-400 font-semibold">{activityGoals.daily.linkedin}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Weekly Goals */}
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-4">
+            <h3 className="text-lg font-semibold text-white mb-3">Weekly Goals</h3>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-slate-300 text-sm">Calls</span>
+                <span className="text-blue-400 font-semibold">{activityGoals.weekly.calls}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-300 text-sm">Emails</span>
+                <span className="text-purple-400 font-semibold">{activityGoals.weekly.emails}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-300 text-sm">LinkedIn Messages</span>
+                <span className="text-cyan-400 font-semibold">{activityGoals.weekly.linkedin}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Monthly Goals */}
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 p-4">
+            <h3 className="text-lg font-semibold text-white mb-3">Monthly Goals</h3>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-slate-300 text-sm">Calls</span>
+                <span className="text-blue-400 font-semibold">{activityGoals.monthly.calls}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-300 text-sm">Emails</span>
+                <span className="text-purple-400 font-semibold">{activityGoals.monthly.emails}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-300 text-sm">LinkedIn Messages</span>
+                <span className="text-cyan-400 font-semibold">{activityGoals.monthly.linkedin}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* PROSPECTS COLUMN */}
           <div>
@@ -489,7 +556,7 @@ const SalesProspectsList = () => {
               <p className="text-blue-300">{totalProspects} active prospects</p>
             </div>
 
-            <div className="space-y-6 max-h-[calc(100vh-250px)] overflow-y-auto pr-2">
+            <div className="space-y-6 max-h-[calc(100vh-450px)] overflow-y-auto pr-2">
               {/* PUBLIC SECTOR MAIN SECTION */}
               <div>
                 <h3 className="text-xl font-bold text-white mb-4 px-2 border-b border-slate-600 pb-2">Public Sector</h3>
@@ -542,7 +609,7 @@ const SalesProspectsList = () => {
               </div>
             </div>
 
-            <div className="space-y-6 max-h-[calc(100vh-250px)] overflow-y-auto pr-2">
+            <div className="space-y-6 max-h-[calc(100vh-450px)] overflow-y-auto pr-2">
               {/* PUBLIC SECTOR MAIN SECTION */}
               <div>
                 <h3 className="text-xl font-bold text-white mb-4 px-2 border-b border-slate-600 pb-2">Public Sector</h3>
