@@ -5,8 +5,8 @@ const SalesBubbles = () => {
     { 
       id: 1, 
       name: "Pinellas County School District", 
-      contact: "John Smith",
-      email: "jsmith@pcsb.org",
+      contact: "Sean Jowell",
+      email: "jowells@pcsb.org",
       color: "from-blue-400 to-blue-600" 
     },
     { 
