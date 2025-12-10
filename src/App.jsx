@@ -320,8 +320,15 @@ const SalesProspectsList = () => {
     const isEditing = editingProspect === item.id;
     
     return (
-      <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-gray-200 hover:border-blue-400 transition-all cursor-pointer shadow-sm">
-        <div className="p-3 flex items-center gap-3" onClick={() => !isEditing && toggle(item.id)}>
+      <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-gray-200 hover:border-blue-400 transition-all shadow-sm">
+        <div 
+          className="p-3 flex items-center gap-3 cursor-pointer" 
+          onClick={() => {
+            if (!isEditing) {
+              toggle(item.id);
+            }
+          }}
+        >
           <span className="text-gray-400 font-semibold text-sm w-6">{index + 1}</span>
           <div className={`w-3 h-3 rounded-full ${isCustomer ? 'bg-green-500' : (item.contacted ? 'bg-green-500' : 'bg-red-500')}`}></div>
           <div className="flex-1 min-w-0">
@@ -334,6 +341,9 @@ const SalesProspectsList = () => {
               onClick={(e) => {
                 e.stopPropagation();
                 handleEditProspect(item);
+                if (expanded !== item.id) {
+                  toggle(item.id);
+                }
               }}
               className="p-1.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 rounded text-blue-600 transition-all"
             >
@@ -345,7 +355,7 @@ const SalesProspectsList = () => {
           <svg className={`w-4 h-4 text-gray-400 transition-transform ${expanded === item.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
         </div>
         {expanded === item.id && (
-          <div className="px-3 pb-3 border-t border-gray-200 pt-3 space-y-2 text-xs" onClick={(e) => isEditing && e.stopPropagation()}>
+          <div className="px-3 pb-3 border-t border-gray-200 pt-3 space-y-2 text-xs">
             {isEditing ? (
               <div className="space-y-3">
                 <div>
@@ -355,7 +365,6 @@ const SalesProspectsList = () => {
                     value={editForm.contact}
                     onChange={(e) => setEditForm({ ...editForm, contact: e.target.value })}
                     className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500"
-                    onClick={(e) => e.stopPropagation()}
                   />
                 </div>
                 <div>
@@ -365,7 +374,6 @@ const SalesProspectsList = () => {
                     value={editForm.title}
                     onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
                     className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500"
-                    onClick={(e) => e.stopPropagation()}
                   />
                 </div>
                 <div>
@@ -375,7 +383,6 @@ const SalesProspectsList = () => {
                     value={editForm.email}
                     onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
                     className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500"
-                    onClick={(e) => e.stopPropagation()}
                   />
                 </div>
                 <div>
@@ -385,10 +392,9 @@ const SalesProspectsList = () => {
                     onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
                     rows={3}
                     className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500 resize-none"
-                    onClick={(e) => e.stopPropagation()}
                   />
                 </div>
-                <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
                     id={`contacted-${item.id}`}
@@ -400,19 +406,13 @@ const SalesProspectsList = () => {
                 </div>
                 <div className="flex gap-2 pt-2">
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleSaveEdit(item.id);
-                    }}
+                    onClick={() => handleSaveEdit(item.id)}
                     className="flex-1 py-1.5 bg-green-600 hover:bg-green-500 text-white rounded text-xs font-semibold transition-all"
                   >
                     Save
                   </button>
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCancelEdit();
-                    }}
+                    onClick={handleCancelEdit}
                     className="flex-1 py-1.5 bg-gray-500 hover:bg-gray-400 text-white rounded text-xs font-semibold transition-all"
                   >
                     Cancel
