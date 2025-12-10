@@ -51,10 +51,24 @@ const SalesProspectsList = () => {
     return saved ? parseInt(saved) : 0;
   });
   const [selectedEmails, setSelectedEmails] = useState([]);
+  const [manualContacts, setManualContacts] = useState(() => {
+    const saved = localStorage.getItem('manualContacts');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [showAddContact, setShowAddContact] = useState(false);
+  const [newContact, setNewContact] = useState({
+    name: '',
+    org: '',
+    email: ''
+  });
 
   useEffect(() => {
     localStorage.setItem('weeklyContacts', weeklyContacts.toString());
   }, [weeklyContacts]);
+
+  useEffect(() => {
+    localStorage.setItem('manualContacts', JSON.stringify(manualContacts));
+  }, [manualContacts]);
 
   const generateElevatorPitch = (prospect, version) => {
     if (!prospect) return "";
@@ -127,6 +141,9 @@ const SalesProspectsList = () => {
       if (prospect.email2) emails.push({ email: prospect.email2, name: prospect.contact2, org: prospect.name });
       if (prospect.email3) emails.push({ email: prospect.email3, name: prospect.contact3, org: prospect.name });
     });
+    manualContacts.forEach(contact => {
+      emails.push({ email: contact.email, name: contact.name, org: contact.org });
+    });
     return emails;
   };
 
@@ -161,8 +178,24 @@ const SalesProspectsList = () => {
     setPitchVersion(pitchVersion + 1);
   };
 
-  const handleOpenClaude = () => {
-    window.open('https://claude.ai', '_blank', 'noopener,noreferrer');
+  const handleAddContact = () => {
+    if (newContact.name && newContact.email) {
+      setManualContacts([...manualContacts, { ...newContact, id: Date.now() }]);
+      setNewContact({ name: '', org: '', email: '' });
+      setShowAddContact(false);
+    } else {
+      alert('Please fill in at least name and email fields');
+    }
+  };
+
+  const handleDeleteManualContact = (id) => {
+    if (window.confirm('Are you sure you want to delete this contact?')) {
+      setManualContacts(manualContacts.filter(c => c.id !== id));
+      setSelectedEmails(selectedEmails.filter(email => {
+        const contact = manualContacts.find(c => c.id === id);
+        return email !== contact?.email;
+      }));
+    }
   };
 
   const Card = ({ item, index, isCustomer, expanded, toggle }) => (
@@ -303,31 +336,51 @@ const SalesProspectsList = () => {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
-              <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4">
+              <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4 mb-4">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-bold text-white">Select Recipients ({selectedEmails.length} selected)</h2>
                   <button onClick={handleSelectAll} className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm font-semibold transition-all">{selectedEmails.length === allEmails.length ? 'Deselect All' : 'Select All'}</button>
                 </div>
                 <div className="space-y-2 max-h-[calc(100vh-300px)] overflow-y-auto pr-2">
-                  {allEmails.map((item, index) => (
-                    <div key={index} onClick={() => handleEmailSelection(item.email)} className={`p-3 rounded-lg border cursor-pointer transition-all ${selectedEmails.includes(item.email) ? 'bg-blue-900/30 border-blue-500' : 'bg-slate-800/50 border-slate-700 hover:border-slate-600'}`}>
-                      <div className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${selectedEmails.includes(item.email) ? 'bg-blue-600 border-blue-600' : 'border-slate-600'}`}>
-                          {selectedEmails.includes(item.email) && <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
-                        </div>
-                        <div className="flex-1">
-                          <div className="text-white font-semibold text-sm">{item.name}</div>
-                          <div className="text-slate-400 text-xs">{item.org}</div>
-                          <div className="text-blue-400 text-xs">{item.email}</div>
+                  {allEmails.map((item, index) => {
+                    const isManual = manualContacts.some(c => c.email === item.email);
+                    return (
+                      <div key={index} className={`p-3 rounded-lg border cursor-pointer transition-all ${selectedEmails.includes(item.email) ? 'bg-blue-900/30 border-blue-500' : 'bg-slate-800/50 border-slate-700 hover:border-slate-600'}`}>
+                        <div className="flex items-center gap-3" onClick={() => handleEmailSelection(item.email)}>
+                          <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${selectedEmails.includes(item.email) ? 'bg-blue-600 border-blue-600' : 'border-slate-600'}`}>
+                            {selectedEmails.includes(item.email) && <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <div className="text-white font-semibold text-sm">{item.name}</div>
+                              {isManual && <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full border border-purple-500/50">Manual</span>}
+                            </div>
+                            <div className="text-slate-400 text-xs">{item.org}</div>
+                            <div className="text-blue-400 text-xs">{item.email}</div>
+                          </div>
+                          {isManual && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const contact = manualContacts.find(c => c.email === item.email);
+                                if (contact) handleDeleteManualContact(contact.id);
+                              }}
+                              className="p-1.5 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded text-red-400 transition-all"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            </button>
+                          )}
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
             <div className="lg:col-span-1">
-              <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4 sticky top-6">
+              <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4 mb-4 sticky top-6">
                 <h2 className="text-xl font-bold text-white mb-4">Actions</h2>
                 <div className="space-y-4">
                   <div className="bg-slate-700/30 rounded-lg p-3 border border-slate-600">
@@ -344,6 +397,75 @@ const SalesProspectsList = () => {
                   </div>
                 </div>
               </div>
+
+              <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-lg font-bold text-white">Manual Contacts</h2>
+                  <span className="text-xs text-slate-400">{manualContacts.length} added</span>
+                </div>
+                
+                {!showAddContact ? (
+                  <button
+                    onClick={() => setShowAddContact(true)}
+                    className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add Contact
+                  </button>
+                ) : (
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-slate-400 text-xs mb-1 block">Name *</label>
+                      <input
+                        type="text"
+                        value={newContact.name}
+                        onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
+                        placeholder="John Doe"
+                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-slate-400 text-xs mb-1 block">Organization</label>
+                      <input
+                        type="text"
+                        value={newContact.org}
+                        onChange={(e) => setNewContact({ ...newContact, org: e.target.value })}
+                        placeholder="Company Name"
+                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-slate-400 text-xs mb-1 block">Email *</label>
+                      <input
+                        type="email"
+                        value={newContact.email}
+                        onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
+                        placeholder="john.doe@example.com"
+                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleAddContact}
+                        className="flex-1 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all text-sm"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowAddContact(false);
+                          setNewContact({ name: '', org: '', email: '' });
+                        }}
+                        className="flex-1 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all text-sm"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -357,10 +479,6 @@ const SalesProspectsList = () => {
         <div className="mb-6 flex items-start justify-between">
           <div><h1 className="text-3xl font-bold text-white mb-1">Tim's Prospecting Model</h1><p className="text-slate-300 text-sm">Pipeline Overview</p></div>
           <div className="flex gap-3 items-start">
-            <button onClick={handleOpenClaude} className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-semibold transition-all flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
-              Claude
-            </button>
             <button onClick={() => setCurrentView('joe')} className="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-semibold transition-all flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
               Joe Morone
