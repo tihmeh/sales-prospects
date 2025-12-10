@@ -362,6 +362,7 @@ const SalesProspectsList = () => {
                   <label className="text-gray-500 text-xs mb-1 block">Contact Name</label>
                   <input
                     key={`contact-${item.id}`}
+                    key={`contact-${item.id}`}
                     type="text"
                     value={editForm.contact}
                     onChange={(e) => setEditForm({ ...editForm, contact: e.target.value })}
