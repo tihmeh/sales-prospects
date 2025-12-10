@@ -161,6 +161,10 @@ const SalesProspectsList = () => {
     setPitchVersion(pitchVersion + 1);
   };
 
+  const handleOpenClaude = () => {
+    window.open('https://claude.ai', '_blank', 'noopener,noreferrer');
+  };
+
   const Card = ({ item, index, isCustomer, expanded, toggle }) => (
     <div className="bg-slate-800/50 rounded-lg border border-slate-700 hover:border-slate-600 transition-all cursor-pointer" onClick={() => toggle(item.id)}>
       <div className="p-3 flex items-center gap-3">
@@ -353,6 +357,10 @@ const SalesProspectsList = () => {
         <div className="mb-6 flex items-start justify-between">
           <div><h1 className="text-3xl font-bold text-white mb-1">Tim's Prospecting Model</h1><p className="text-slate-300 text-sm">Pipeline Overview</p></div>
           <div className="flex gap-3 items-start">
+            <button onClick={handleOpenClaude} className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-semibold transition-all flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+              Claude
+            </button>
             <button onClick={() => setCurrentView('joe')} className="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-semibold transition-all flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
               Joe Morone
