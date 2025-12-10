@@ -28,31 +28,34 @@ const SalesProspectsList = () => {
     { 
       id: 3, 
       name: "City of Dunedin", 
-      contact: "Mike Williams",
-      title: "Technology Coordinator",
+      contact: "Michael Nagy",
+      title: "Director of IT",
       email: "mwilliams@dunedinfl.gov",
+      contact2: "Ronbert Ignacio",
+      title: "IT Specialist",
+      email: "ronbert.ignacio@dunedin.gov",
       contacted: true,
-      notes: "Meeting scheduled for 12/15 at 2pm.",
+      notes: "Reachout out through email, no response",
       vertical: "Public Sector"
     },
     { 
       id: 5, 
       name: "City of Gulfport", 
-      contact: "TBD",
-      title: "TBD",
-      email: "contact@gulfport.us",
-      contacted: false,
-      notes: "New prospect - need to identify contact.",
+      contact: "David Mather",
+      title: "Director of IT",
+      email: "dmather@mygulfport.us",
+      contacted: true,
+      notes: "Visited in person, followed up over email",
       vertical: "Public Sector"
     },
     { 
       id: 6, 
       name: "City of Treasure Island", 
-      contact: "TBD",
-      title: "TBD",
-      email: "contact@treasureislandfl.gov",
-      contacted: false,
-      notes: "New prospect - need to identify contact.",
+      contact: "Chris Pagan",
+      title: "Director of IT",
+      email: "cpagan@mytreasureisland.org",
+      contacted: true,
+      notes: "Visited in person, followed up over email",
       vertical: "Public Sector"
     },
     { 
@@ -98,21 +101,21 @@ const SalesProspectsList = () => {
     { 
       id: 12, 
       name: "City of Seminole", 
-      contact: "TBD",
-      title: "TBD",
-      email: "contact@seminoleflorida.com",
-      contacted: false,
-      notes: "New prospect - need to identify contact.",
+      contact: "Matthew Sabella",
+      title: "Director of IT",
+      email: "msabella@myseminole.com",
+      contacted: true,
+      notes: "reached out over email. Plan to stop by in person soon",
       vertical: "Public Sector"
     },
     { 
       id: 13, 
       name: "City of S. Pasadena", 
-      contact: "TBD",
-      title: "TBD",
-      email: "contact@spasadena.com",
-      contacted: false,
-      notes: "New prospect - need to identify contact.",
+      contact: "Alex Britton-Kant",
+      title: "Director of IT",
+      email: "abrittonkant@mysouthpasadena.com",
+      contacted: true,
+      notes: "Stopped by in person and reached out over email. no response",
       vertical: "Public Sector"
     },
     { 
@@ -128,11 +131,11 @@ const SalesProspectsList = () => {
     { 
       id: 15, 
       name: "City of Tarpon Springs", 
-      contact: "TBD",
-      title: "TBD",
-      email: "contact@tarponsprings.gov",
-      contacted: false,
-      notes: "New prospect - need to identify contact.",
+      contact: "Suzanne Linton",
+      title: "Director of IT",
+      email: "slinton@ctsfl.us",
+      contacted: true,
+      notes: "Connected on linked in. Preparing email to send this week 12/9/25",
       vertical: "Public Sector"
     }
   ];
@@ -141,11 +144,17 @@ const SalesProspectsList = () => {
     { 
       id: 16, 
       name: "Eckerd College", 
-      contact: "TBD",
-      title: "TBD",
-      email: "contact@eckerd.edu",
-      contacted: false,
-      notes: "New prospect - need to identify contact.",
+      contact: "Jessica Cinney",
+      title: "Director of Campus Safety & Security",
+      email: "cinneyj@eckerd.edu",
+      contact2: "Walter Moore",
+      title: "Director of IT",
+      email: "moorewr@eckerd.edu",
+      contact3: "Tonya Womack",
+      title: "Risk Management & Safety",
+      email: "womacktm@eckerd.edu",
+      contacted: true,
+      notes: "Old customer that has bad experience with Convergint",
       vertical: "Higher Education"
     },
     { 
@@ -171,11 +180,14 @@ const SalesProspectsList = () => {
     { 
       id: 19, 
       name: "Polk State College", 
-      contact: "TBD",
-      title: "TBD",
-      email: "contact@polk.edu",
-      contacted: false,
-      notes: "New prospect - need to identify contact.",
+      contact: "Emmett Andrews",
+      title: "Director of Safety & Security",
+      email: "eandrews@polk.edu",
+      contact2: "Martin Gang",
+      title: "Director of Technology and IT",
+      email: "mgang@polk.edu",
+      contacted: true,
+      notes: "Reached out over email",
       vertical: "Higher Education"
     }
   ];
@@ -184,19 +196,19 @@ const SalesProspectsList = () => {
     {
       id: 101,
       name: "PSTA - Pinellas Suncoast Transit Authority",
-      contact: "TBD",
-      title: "TBD",
-      email: "contact@psta.net",
-      startDate: "2024-01-15",
+      contact: "Missy Nevitt",
+      title: "Superintendant of Facilities",
+      email: "mnevitt@psta.net",
+      startDate: "12/20/2024",
       notes: "Current customer",
       vertical: "Public Sector Transit"
     },
     {
       id: 102,
       name: "Town of Indian Shores",
-      contact: "TBD",
-      title: "TBD",
-      email: "contact@myindianshores.com",
+      contact: "Jennifer Angelo",
+      title: "Admin Assistant",
+      email: "jangelo@myindianshores.com",
       startDate: "2024-06-10",
       notes: "Current customer",
       vertical: "Public Sector"
@@ -204,9 +216,12 @@ const SalesProspectsList = () => {
     {
       id: 103,
       name: "City of Largo",
-      contact: "TBD",
-      title: "TBD",
-      email: "contact@largo.com",
+      contact: "Hansel Roush",
+      title: "Director of IT",
+      email: "hroush@largo.com",
+      contact2: "Tim Clark",
+      title: "IT Admin",
+      email: "tclark@largo.com",
       startDate: "2024-03-20",
       notes: "Current customer",
       vertical: "Public Sector"
