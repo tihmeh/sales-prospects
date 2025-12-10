@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
 
 const SalesProspectsList = () => {
-  const prospectsPublicSector = [
+  const prospectsK12 = [
+    { 
+      id: 1, 
+      name: "Pinellas County School District", 
+      contact: "John Smith",
+      title: "Director of IT",
+      email: "jsmith@pcsb.org",
+      contacted: true,
+      notes: "Interested in Q1 demo. Follow up next week.",
+      vertical: "K-12"
+    }
+  ];
+
+  const prospectsCities = [
     { 
       id: 2, 
       name: "City of St. Petersburg", 
@@ -121,19 +134,6 @@ const SalesProspectsList = () => {
       contacted: false,
       notes: "New prospect - need to identify contact.",
       vertical: "Public Sector"
-    }
-  ];
-
-  const prospectsK12 = [
-    { 
-      id: 1, 
-      name: "Pinellas County School District", 
-      contact: "John Smith",
-      title: "Director of IT",
-      email: "jsmith@pcsb.org",
-      contacted: true,
-      notes: "Interested in Q1 demo. Follow up next week.",
-      vertical: "K-12"
     }
   ];
 
@@ -295,7 +295,7 @@ const SalesProspectsList = () => {
     </div>
   );
 
-  const totalProspects = prospectsPublicSector.length + prospectsK12.length + prospectsHigherEd.length;
+  const totalProspects = prospectsK12.length + prospectsCities.length + prospectsHigherEd.length;
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8">
@@ -314,29 +314,34 @@ const SalesProspectsList = () => {
             </div>
 
             <div className="space-y-6 max-h-[calc(100vh-250px)] overflow-y-auto pr-2">
-              {/* PUBLIC SECTOR SECTION */}
+              {/* PUBLIC SECTOR MAIN SECTION */}
               <div>
-                <h3 className="text-lg font-semibold text-slate-300 mb-3 px-2">Public Sector</h3>
-                <div className="space-y-3">
-                  {prospectsPublicSector.map((prospect, index) => (
-                    <ProspectCard key={prospect.id} prospect={prospect} index={index} />
-                  ))}
+                <h3 className="text-xl font-bold text-white mb-4 px-2 border-b border-slate-600 pb-2">Public Sector</h3>
+                
+                {/* K-12 SUBSECTION */}
+                <div className="mb-4">
+                  <h4 className="text-md font-semibold text-slate-300 mb-3 px-2 pl-4">K-12 Education</h4>
+                  <div className="space-y-3">
+                    {prospectsK12.map((prospect, index) => (
+                      <ProspectCard key={prospect.id} prospect={prospect} index={index} />
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* K-12 SECTION */}
-              <div>
-                <h3 className="text-lg font-semibold text-slate-300 mb-3 px-2">K-12 Education</h3>
-                <div className="space-y-3">
-                  {prospectsK12.map((prospect, index) => (
-                    <ProspectCard key={prospect.id} prospect={prospect} index={index} />
-                  ))}
+                {/* CITIES/MUNICIPALITIES SUBSECTION */}
+                <div>
+                  <h4 className="text-md font-semibold text-slate-300 mb-3 px-2 pl-4">Cities & Municipalities</h4>
+                  <div className="space-y-3">
+                    {prospectsCities.map((prospect, index) => (
+                      <ProspectCard key={prospect.id} prospect={prospect} index={index} />
+                    ))}
+                  </div>
                 </div>
               </div>
 
               {/* HIGHER EDUCATION SECTION */}
               <div>
-                <h3 className="text-lg font-semibold text-slate-300 mb-3 px-2">Higher Education</h3>
+                <h3 className="text-xl font-bold text-white mb-4 px-2 border-b border-slate-600 pb-2">Higher Education</h3>
                 <div className="space-y-3">
                   {prospectsHigherEd.map((prospect, index) => (
                     <ProspectCard key={prospect.id} prospect={prospect} index={index} />
