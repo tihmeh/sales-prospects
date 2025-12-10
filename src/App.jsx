@@ -8,12 +8,12 @@ const SalesProspectsList = () => {
   const [selectedProspect, setSelectedProspect] = useState(null);
   const [pitchVersion, setPitchVersion] = useState(0);
 
-  const initialProspectsK12 = [
+  const prospectsK12 = [
     { id: 1, name: "Pinellas County School District", contact: "Sean Jowell", title: "Director Safety & Security", email: "jowells@pcsb.org", contacted: true, notes: "Attending Utilities Unite Event in Clearwater", vertical: "K-12" },
     { id: 20, name: "Sumter County Public Schools", contact: "Philip Martin", title: "Director of Safety & Security", email: "philip.martin@sumter.k12.fl.us", contacted: false, notes: "New prospect - need to make initial contact.", vertical: "K-12" }
   ];
 
-  const initialProspectsCities = [
+  const prospectsCities = [
     { id: 2, name: "City of St. Petersburg", contact: "Sarah Johnson", title: "IT Manager", email: "sjohnson@stpete.org", contacted: false, notes: "Left voicemail on 12/5. Awaiting callback.", vertical: "Public Sector" },
     { id: 3, name: "City of Dunedin", contact: "Michael Nagy", title: "Director of IT", email: "mwilliams@dunedinfl.gov", contact2: "Ronbert Ignacio", title2: "IT Specialist", email2: "ronbert.ignacio@dunedin.gov", contacted: true, notes: "Reachout out through email, no response", vertical: "Public Sector" },
     { id: 5, name: "City of Gulfport", contact: "David Mather", title: "Director of IT", email: "dmather@mygulfport.us", contacted: true, notes: "Visited in person, followed up over email", vertical: "Public Sector" },
@@ -28,7 +28,7 @@ const SalesProspectsList = () => {
     { id: 15, name: "City of Tarpon Springs", contact: "Suzanne Linton", title: "Director of IT", email: "slinton@ctsfl.us", contacted: true, notes: "Connected on linked in. Preparing email to send this week 12/9/25", vertical: "Public Sector" }
   ];
 
-  const initialProspectsHigherEd = [
+  const prospectsHigherEd = [
     { id: 16, name: "Eckerd College", contact: "Jessica Cinney", title: "Director of Campus Safety & Security", email: "cinneyj@eckerd.edu", contact2: "Walter Moore", title2: "Director of IT", email2: "moorewr@eckerd.edu", contact3: "Tonya Womack", title3: "Risk Management & Safety", email3: "womacktm@eckerd.edu", contacted: true, notes: "Old customer that has bad experience with Convergint", vertical: "Higher Education" },
     { id: 17, name: "St. Petersburg College", contact: "TBD", title: "TBD", email: "contact@spcollege.edu", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Higher Education" },
     { id: 18, name: "St. Pete Technical College", contact: "TBD", title: "TBD", email: "contact@sptech.edu", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Higher Education" },
@@ -36,28 +36,13 @@ const SalesProspectsList = () => {
   ];
 
   const customersCities = [
-    { id: 102, name: "Town of Indian Shores", contact: "Jennifer Angelo", title: "Admin Assistant", email: "jangelo@myindianshores.com", startDate: "2024-06-10", notes: "Current customer", vertical: "Public Sector" },
-    { id: 103, name: "City of Largo", contact: "Hansel Roush", title: "Director of IT", email: "hroush@largo.com", contact2: "Tim Clark", title2: "IT Admin", email2: "tclark@largo.com", startDate: "2024-03-20", notes: "Current customer", vertical: "Public Sector" }
+    { id: 102, name: "Town of Indian Shores", contact: "Jennifer Angelo", title: "Admin Assistant", email: "jangelo@myindianshores.com", startDate: "2024-06-10", notes: "Current customer", vertical: "Public Sector", bookingAmount: 0 },
+    { id: 103, name: "City of Largo", contact: "Hansel Roush", title: "Director of IT", email: "hroush@largo.com", contact2: "Tim Clark", title2: "IT Admin", email2: "tclark@largo.com", startDate: "2024-03-20", notes: "Current customer", vertical: "Public Sector", bookingAmount: 0 }
   ];
 
   const customersTransit = [
-    { id: 101, name: "PSTA - Pinellas Suncoast Transit Authority", contact: "Missy Nevitt", title: "Superintendant of Facilities", email: "mnevitt@psta.net", startDate: "12/20/2024", notes: "Current customer", vertical: "Transit" }
+    { id: 101, name: "PSTA - Pinellas Suncoast Transit Authority", contact: "Missy Nevitt", title: "Superintendant of Facilities", email: "mnevitt@psta.net", startDate: "12/20/2024", notes: "Current customer", vertical: "Transit", bookingAmount: 124560 }
   ];
-
-  const [prospectsK12, setProspectsK12] = useState(() => {
-    const saved = localStorage.getItem('prospectsK12');
-    return saved ? JSON.parse(saved) : initialProspectsK12;
-  });
-
-  const [prospectsCities, setProspectsCities] = useState(() => {
-    const saved = localStorage.getItem('prospectsCities');
-    return saved ? JSON.parse(saved) : initialProspectsCities;
-  });
-
-  const [prospectsHigherEd, setProspectsHigherEd] = useState(() => {
-    const saved = localStorage.getItem('prospectsHigherEd');
-    return saved ? JSON.parse(saved) : initialProspectsHigherEd;
-  });
 
   const [expandedProspect, setExpandedProspect] = useState(null);
   const [expandedCustomer, setExpandedCustomer] = useState(null);
@@ -74,18 +59,7 @@ const SalesProspectsList = () => {
   const [newContact, setNewContact] = useState({
     name: '',
     org: '',
-    title: '',
     email: ''
-  });
-  const [randomProspect, setRandomProspect] = useState(null);
-  const [isSpinning, setIsSpinning] = useState(false);
-  const [editingProspect, setEditingProspect] = useState(null);
-  const [editForm, setEditForm] = useState({
-    contact: '',
-    title: '',
-    email: '',
-    notes: '',
-    contacted: false
   });
 
   useEffect(() => {
@@ -95,18 +69,6 @@ const SalesProspectsList = () => {
   useEffect(() => {
     localStorage.setItem('manualContacts', JSON.stringify(manualContacts));
   }, [manualContacts]);
-
-  useEffect(() => {
-    localStorage.setItem('prospectsK12', JSON.stringify(prospectsK12));
-  }, [prospectsK12]);
-
-  useEffect(() => {
-    localStorage.setItem('prospectsCities', JSON.stringify(prospectsCities));
-  }, [prospectsCities]);
-
-  useEffect(() => {
-    localStorage.setItem('prospectsHigherEd', JSON.stringify(prospectsHigherEd));
-  }, [prospectsHigherEd]);
 
   const generateElevatorPitch = (prospect, version) => {
     if (!prospect) return "";
@@ -142,15 +104,10 @@ const SalesProspectsList = () => {
         `${contactName}, are you discovering that aging infrastructure is limiting ${orgName}'s ability to maintain consistent service levels? Top-performing authorities are enhancing reliability by 40% through strategic upgrades - is this important to your team right now?`,
         `${contactName}, many superintendents like yourself are finding that traditional approaches create conflicts between cost control and service quality. The most competitive transit systems are resolving this through smart technology deployment - is this relevant to your situation?`,
         `${contactName}, I'm curious - is ${orgName} under pressure to improve both rider experience and operational efficiency with existing budget constraints? Leading authorities are achieving dramatic improvements through infrastructure modernization - does this align with your priorities?`
-      ],
-      "Manual": [
-        `${contactName}, I'm reaching out because many organizations like ${orgName} are discovering that their current approaches no longer meet today's competitive requirements. Leading companies are achieving significant improvements through strategic initiatives - is this something you're focused on right now?`,
-        `${contactName}, are you finding that ${orgName} faces pressure to improve efficiency while maintaining quality? Top-performing organizations are achieving both objectives through smart solutions - does this resonate with your current priorities?`,
-        `${contactName}, I'm curious - is ${orgName} looking to strengthen its competitive position in the market? Leading companies are achieving measurable improvements that drive real business value - is this relevant to your team?`
       ]
     };
     
-    const verticalPitches = pitches[vertical] || pitches["Manual"];
+    const verticalPitches = pitches[vertical] || pitches["Public Sector"];
     return verticalPitches[version % verticalPitches.length];
   };
 
@@ -185,7 +142,7 @@ const SalesProspectsList = () => {
       if (prospect.email3) emails.push({ email: prospect.email3, name: prospect.contact3, org: prospect.name });
     });
     manualContacts.forEach(contact => {
-      emails.push({ email: contact.email, name: contact.contact, org: contact.name });
+      emails.push({ email: contact.email, name: contact.name, org: contact.org });
     });
     return emails;
   };
@@ -221,35 +178,10 @@ const SalesProspectsList = () => {
     setPitchVersion(pitchVersion + 1);
   };
 
-  const handleRandomizeProspect = () => {
-    const uncontactedProspects = allProspects.filter(p => !p.contacted);
-    if (uncontactedProspects.length === 0) {
-      alert('All prospects have been contacted!');
-      return;
-    }
-    
-    setIsSpinning(true);
-    setTimeout(() => {
-      const randomIndex = Math.floor(Math.random() * uncontactedProspects.length);
-      setRandomProspect(uncontactedProspects[randomIndex]);
-      setIsSpinning(false);
-    }, 1000);
-  };
-
   const handleAddContact = () => {
     if (newContact.name && newContact.email) {
-      const newContactWithDefaults = {
-        id: Date.now(),
-        contact: newContact.name,
-        name: newContact.org || 'Manual Contact',
-        title: newContact.title || 'Not Specified',
-        email: newContact.email,
-        vertical: 'Manual',
-        contacted: false,
-        notes: 'Manually added contact'
-      };
-      setManualContacts([...manualContacts, newContactWithDefaults]);
-      setNewContact({ name: '', org: '', title: '', email: '' });
+      setManualContacts([...manualContacts, { ...newContact, id: Date.now() }]);
+      setNewContact({ name: '', org: '', email: '' });
       setShowAddContact(false);
     } else {
       alert('Please fill in at least name and email fields');
@@ -266,296 +198,48 @@ const SalesProspectsList = () => {
     }
   };
 
-  const handleEditProspect = (prospect) => {
-    setEditingProspect(prospect.id);
-    setEditForm({
-      contact: prospect.contact,
-      title: prospect.title,
-      email: prospect.email,
-      notes: prospect.notes,
-      contacted: prospect.contacted
-    });
-  };
-
-  const handleSaveEdit = (prospectId) => {
-    // Check which list the prospect is in
-    const k12Index = prospectsK12.findIndex(p => p.id === prospectId);
-    const citiesIndex = prospectsCities.findIndex(p => p.id === prospectId);
-    const higherEdIndex = prospectsHigherEd.findIndex(p => p.id === prospectId);
-    const manualIndex = manualContacts.findIndex(p => p.id === prospectId);
-
-    if (k12Index !== -1) {
-      const updated = [...prospectsK12];
-      updated[k12Index] = { ...updated[k12Index], ...editForm };
-      setProspectsK12(updated);
-    } else if (citiesIndex !== -1) {
-      const updated = [...prospectsCities];
-      updated[citiesIndex] = { ...updated[citiesIndex], ...editForm };
-      setProspectsCities(updated);
-    } else if (higherEdIndex !== -1) {
-      const updated = [...prospectsHigherEd];
-      updated[higherEdIndex] = { ...updated[higherEdIndex], ...editForm };
-      setProspectsHigherEd(updated);
-    } else if (manualIndex !== -1) {
-      const updated = [...manualContacts];
-      updated[manualIndex] = { ...updated[manualIndex], ...editForm };
-      setManualContacts(updated);
-    }
-
-    setEditingProspect(null);
-  };
-
-  const handleCancelEdit = () => {
-    setEditingProspect(null);
-    setEditForm({
-      contact: '',
-      title: '',
-      email: '',
-      notes: '',
-      contacted: false
-    });
-  };
-
-  const Card = ({ item, index, isCustomer, expanded, toggle }) => {
-    const isEditing = editingProspect === item.id;
-    
-    return (
-      <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-gray-200 hover:border-blue-400 transition-all shadow-sm">
-        <div 
-          className={`p-3 flex items-center gap-3 ${!isEditing ? 'cursor-pointer' : ''}`}
-          onClick={() => {
-            if (!isEditing) {
-              toggle(item.id);
-            }
-          }}
-        >
-          <span className="text-gray-400 font-semibold text-sm w-6">{index + 1}</span>
-          <div className={`w-3 h-3 rounded-full ${isCustomer ? 'bg-green-500' : (item.contacted ? 'bg-green-500' : 'bg-red-500')}`}></div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-gray-900 font-semibold text-sm truncate">{item.name}</h3>
-            <p className="text-gray-500 text-xs truncate">{item.contact} • {item.title}</p>
-          </div>
-          <span className={`text-xs font-medium ${isCustomer ? 'text-green-600 bg-green-100' : 'text-blue-600 bg-blue-100'} px-2 py-1 rounded-full`}>{item.vertical}</span>
-          {!isCustomer && !isEditing && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleEditProspect(item);
-                if (expanded !== item.id) {
-                  toggle(item.id);
-                }
-              }}
-              className="p-1.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 rounded text-blue-600 transition-all"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-              </svg>
-            </button>
-          )}
-          <svg className={`w-4 h-4 text-gray-400 transition-transform ${expanded === item.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+  const Card = ({ item, index, isCustomer, expanded, toggle }) => (
+    <div className="bg-slate-800/50 rounded-lg border border-slate-700 hover:border-slate-600 transition-all cursor-pointer" onClick={() => toggle(item.id)}>
+      <div className="p-3 flex items-center gap-3">
+        <span className="text-slate-400 font-semibold text-sm w-6">{index + 1}</span>
+        <div className={`w-3 h-3 rounded-full ${isCustomer ? 'bg-green-500' : (item.contacted ? 'bg-green-500' : 'bg-red-500')}`}></div>
+        <div className="flex-1 min-w-0">
+          <h3 className="text-white font-semibold text-sm truncate">{item.name}</h3>
+          <p className="text-slate-400 text-xs truncate">{item.contact} • {item.title}</p>
         </div>
-        {expanded === item.id && (
-          <div className="px-3 pb-3 border-t border-gray-200 pt-3 space-y-2 text-xs">
-            {isEditing ? (
-              <div className="space-y-3">
-                <div>
-                  <label className="text-gray-500 text-xs mb-1 block">Contact Name</label>
-                  <input
-                    key={`contact-${item.id}`}
-                    key={`contact-${item.id}`}
-                    type="text"
-                    value={editForm.contact}
-                    onChange={(e) => setEditForm({ ...editForm, contact: e.target.value })}
-                    className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500"
-                    autoFocus
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-500 text-xs mb-1 block">Title</label>
-                  <input
-                    key={`title-${item.id}`}
-                    type="text"
-                    value={editForm.title}
-                    onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
-                    className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-500 text-xs mb-1 block">Email</label>
-                  <input
-                    key={`email-${item.id}`}
-                    type="email"
-                    value={editForm.email}
-                    onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                    className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-500 text-xs mb-1 block">Notes</label>
-                  <textarea
-                    key={`notes-${item.id}`}
-                    value={editForm.notes}
-                    onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
-                    rows={3}
-                    className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500 resize-none"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id={`contacted-${item.id}`}
-                    checked={editForm.contacted}
-                    onChange={(e) => setEditForm({ ...editForm, contacted: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                  />
-                  <label htmlFor={`contacted-${item.id}`} className="text-gray-700 text-xs cursor-pointer">Mark as Contacted</label>
-                </div>
-                <div className="flex gap-2 pt-2">
-                  <button
-                    onClick={() => handleSaveEdit(item.id)}
-                    className="flex-1 py-1.5 bg-green-600 hover:bg-green-500 text-white rounded text-xs font-semibold transition-all"
-                  >
-                    Save
-                  </button>
-                  <button
-                    onClick={handleCancelEdit}
-                    className="flex-1 py-1.5 bg-gray-500 hover:bg-gray-400 text-white rounded text-xs font-semibold transition-all"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="text-gray-700"><span className="text-gray-500">Contact:</span> {item.contact}</div>
-                <div className="text-gray-700"><span className="text-gray-500">Title:</span> {item.title}</div>
-                <div className="text-gray-700"><span className="text-gray-500">Email:</span> {item.email}</div>
-                {item.contact2 && <><div className="text-gray-700 mt-2 pt-2 border-t border-gray-200"><span className="text-gray-500">Contact 2:</span> {item.contact2}</div><div className="text-gray-700"><span className="text-gray-500">Title:</span> {item.title2}</div><div className="text-gray-700"><span className="text-gray-500">Email:</span> {item.email2}</div></>}
-                {item.contact3 && <><div className="text-gray-700 mt-2 pt-2 border-t border-gray-200"><span className="text-gray-500">Contact 3:</span> {item.contact3}</div><div className="text-gray-700"><span className="text-gray-500">Title:</span> {item.title3}</div><div className="text-gray-700"><span className="text-gray-500">Email:</span> {item.email3}</div></>}
-                <div className="text-gray-700 mt-2 pt-2 border-t border-gray-200"><span className="text-gray-500">Vertical:</span> {item.vertical}</div>
-                {!isCustomer ? <><div className="text-gray-700"><span className="text-gray-500">Status:</span> <span className={item.contacted ? 'text-green-600' : 'text-red-600'}>{item.contacted ? 'Contacted' : 'Not Contacted'}</span></div></> : <><div className="text-gray-700"><span className="text-gray-500">Customer Since:</span> <span className="text-green-600">{item.startDate}</span></div></>}
-                <div className="text-gray-700"><span className="text-gray-500">Notes:</span> <span className="text-gray-600 italic">{item.notes}</span></div>
-              </>
-            )}
-          </div>
-        )}
+        <span className={`text-xs font-medium ${isCustomer ? 'text-green-400 bg-green-900/30' : 'text-blue-400 bg-blue-900/30'} px-2 py-1 rounded-full`}>{item.vertical}</span>
+        {isCustomer && <span className="text-xs font-semibold text-emerald-400">{formatCurrency(item.bookingAmount)}</span>}
+        <svg className={`w-4 h-4 text-slate-400 transition-transform ${expanded === item.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
       </div>
-    );
-  };
+      {expanded === item.id && (
+        <div className="px-3 pb-3 border-t border-slate-700 pt-3 space-y-1 text-xs">
+          <div className="text-slate-300"><span className="text-slate-500">Contact:</span> {item.contact}</div>
+          <div className="text-slate-300"><span className="text-slate-500">Title:</span> {item.title}</div>
+          <div className="text-slate-300"><span className="text-slate-500">Email:</span> {item.email}</div>
+          {item.contact2 && <><div className="text-slate-300 mt-2 pt-2 border-t border-slate-700/50"><span className="text-slate-500">Contact 2:</span> {item.contact2}</div><div className="text-slate-300"><span className="text-slate-500">Title:</span> {item.title2}</div><div className="text-slate-300"><span className="text-slate-500">Email:</span> {item.email2}</div></>}
+          {item.contact3 && <><div className="text-slate-300 mt-2 pt-2 border-t border-slate-700/50"><span className="text-slate-500">Contact 3:</span> {item.contact3}</div><div className="text-slate-300"><span className="text-slate-500">Title:</span> {item.title3}</div><div className="text-slate-300"><span className="text-slate-500">Email:</span> {item.email3}</div></>}
+          <div className="text-slate-300 mt-2 pt-2 border-t border-slate-700/50"><span className="text-slate-500">Vertical:</span> {item.vertical}</div>
+          {!isCustomer ? <><div className="text-slate-300"><span className="text-slate-500">Status:</span> <span className={item.contacted ? 'text-green-400' : 'text-red-400'}>{item.contacted ? 'Contacted' : 'Not Contacted'}</span></div></> : <><div className="text-slate-300"><span className="text-slate-500">Booking:</span> <span className="text-emerald-400">{formatCurrency(item.bookingAmount)}</span></div><div className="text-slate-300"><span className="text-slate-500">Customer Since:</span> <span className="text-green-400">{item.startDate}</span></div></>}
+          <div className="text-slate-300"><span className="text-slate-500">Notes:</span> <span className="text-slate-400 italic">{item.notes}</span></div>
+        </div>
+      )}
+    </div>
+  );
 
-  const totalProspects = prospectsK12.length + prospectsCities.length + prospectsHigherEd.length + manualContacts.length;
+  const totalProspects = prospectsK12.length + prospectsCities.length + prospectsHigherEd.length;
   const totalCustomers = customersCities.length + customersTransit.length;
   const allEmails = getAllEmails();
-  const allProspects = [...prospectsK12, ...prospectsCities, ...prospectsHigherEd, ...manualContacts];
+  const allProspects = [...prospectsK12, ...prospectsCities, ...prospectsHigherEd];
 
   if (!isAuthenticated) {
     return (
-      <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.5) 1px, transparent 1px)',
-            backgroundSize: '50px 50px'
-          }}></div>
-        </div>
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute w-full h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent animate-scan"></div>
-        </div>
-        <div className="w-full max-w-md relative z-10">
-          <div className="bg-slate-800/50 backdrop-blur-xl rounded-3xl border-2 border-blue-500/30 shadow-2xl shadow-blue-500/20 p-8">
-            <div className="text-center mb-8">
-              <div className="relative mx-auto w-24 h-24 mb-6">
-                <div className="absolute inset-0 rounded-full border-4 border-blue-500/30 animate-spin-slow"></div>
-                <div className="absolute inset-2 rounded-full border-4 border-t-blue-400 border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/50">
-                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <h1 className="text-3xl font-bold text-white mb-2 tracking-wide">ACCESS CONTROL</h1>
-              <p className="text-blue-300 text-sm font-mono uppercase tracking-widest">Secure Authentication Required</p>
-              <div className="mt-4 flex items-center justify-center gap-2">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-green-400 text-xs font-mono">SYSTEM ONLINE</span>
-              </div>
-            </div>
-            <form onSubmit={handleLogin} className={`space-y-6 ${shake ? 'animate-shake' : ''}`}>
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-2xl blur-xl"></div>
-                <div className="relative bg-slate-900/80 border-2 border-blue-400/50 rounded-2xl p-6 backdrop-blur-sm">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
-                        <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-blue-300 text-xs font-mono uppercase tracking-wider mb-1">Security Credential</div>
-                      <input 
-                        type="password" 
-                        value={password} 
-                        onChange={(e) => setPassword(e.target.value)} 
-                        placeholder="Enter Access Code"
-                        className="w-full bg-transparent border-none text-white text-lg font-mono tracking-widest placeholder-slate-500 focus:outline-none"
-                        autoFocus
-                      />
-                    </div>
-                  </div>
-                  <div className="flex gap-1 h-1 mt-4">
-                    {[...Array(12)].map((_, i) => (
-                      <div 
-                        key={i} 
-                        className="flex-1 bg-blue-500/30 rounded-full animate-pulse"
-                        style={{ animationDelay: `${i * 0.1}s` }}
-                      ></div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <button type="submit" className="w-full relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl blur-lg group-hover:blur-xl transition-all opacity-50"></div>
-                <div className="relative bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-bold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-3 border-2 border-blue-400/50">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
-                  </svg>
-                  <span className="text-lg tracking-wide">AUTHENTICATE</span>
-                  <svg className="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </div>
-              </button>
-            </form>
-            <div className="mt-6 pt-6 border-t border-slate-700/50">
-              <div className="flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2 text-slate-400">
-                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></div>
-                  <span className="font-mono">ENCRYPTED</span>
-                </div>
-                <div className="flex items-center gap-2 text-slate-400">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                  <span className="font-mono">LEVEL 5 CLEARANCE</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="mt-6 text-center">
-            <p className="text-slate-500 text-xs font-mono">© 2025 SECURE ACCESS SYSTEM v2.4.1</p>
-          </div>
-        </div>
-        <style jsx>{`
-          @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } } 
-          .animate-shake { animation: shake 0.3s ease-in-out; }
-          @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
-          .animate-scan { animation: scan 3s linear infinite; }
-          @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-          .animate-spin-slow { animation: spin-slow 8s linear infinite; }
-        `}</style>
+      <div className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 flex items-center justify-center">
+        <form onSubmit={handleLogin} className={`flex flex-col items-center gap-4 bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl border border-slate-700 ${shake ? 'animate-shake' : ''}`}>
+          <h1 className="text-3xl font-bold text-white mb-4">Tim's Prospecting Model</h1>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter access code" className="px-6 py-3 bg-slate-900/50 border-2 border-blue-500/30 rounded-lg text-white text-center text-lg focus:outline-none focus:border-blue-400 transition-all w-64" autoFocus />
+          <button type="submit" className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg shadow-blue-500/50 w-64">Enter</button>
+        </form>
+        <style jsx>{`@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } } .animate-shake { animation: shake 0.3s ease-in-out; }`}</style>
       </div>
     );
   }
@@ -713,13 +397,18 @@ const SalesProspectsList = () => {
                   </div>
                 </div>
               </div>
+
               <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-lg font-bold text-white">Add New Contact</h2>
-                  <span className="text-xs text-slate-400">{manualContacts.length} total</span>
+                  <h2 className="text-lg font-bold text-white">Manual Contacts</h2>
+                  <span className="text-xs text-slate-400">{manualContacts.length} added</span>
                 </div>
+                
                 {!showAddContact ? (
-                  <button onClick={() => setShowAddContact(true)} className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2">
+                  <button
+                    onClick={() => setShowAddContact(true)}
+                    className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2"
+                  >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
@@ -729,23 +418,50 @@ const SalesProspectsList = () => {
                   <div className="space-y-3">
                     <div>
                       <label className="text-slate-400 text-xs mb-1 block">Name *</label>
-                      <input type="text" value={newContact.name} onChange={(e) => setNewContact({ ...newContact, name: e.target.value })} placeholder="John Doe" className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all" />
-                    </div>
-                    <div>
-                      <label className="text-slate-400 text-xs mb-1 block">Title</label>
-                      <input type="text" value={newContact.title} onChange={(e) => setNewContact({ ...newContact, title: e.target.value })} placeholder="Director of IT" className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all" />
+                      <input
+                        type="text"
+                        value={newContact.name}
+                        onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
+                        placeholder="John Doe"
+                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all"
+                      />
                     </div>
                     <div>
                       <label className="text-slate-400 text-xs mb-1 block">Organization</label>
-                      <input type="text" value={newContact.org} onChange={(e) => setNewContact({ ...newContact, org: e.target.value })} placeholder="Company Name" className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all" />
+                      <input
+                        type="text"
+                        value={newContact.org}
+                        onChange={(e) => setNewContact({ ...newContact, org: e.target.value })}
+                        placeholder="Company Name"
+                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all"
+                      />
                     </div>
                     <div>
                       <label className="text-slate-400 text-xs mb-1 block">Email *</label>
-                      <input type="email" value={newContact.email} onChange={(e) => setNewContact({ ...newContact, email: e.target.value })} placeholder="john.doe@example.com" className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all" />
+                      <input
+                        type="email"
+                        value={newContact.email}
+                        onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
+                        placeholder="john.doe@example.com"
+                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all"
+                      />
                     </div>
                     <div className="flex gap-2">
-                      <button onClick={handleAddContact} className="flex-1 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all text-sm">Save</button>
-                      <button onClick={() => { setShowAddContact(false); setNewContact({ name: '', org: '', title: '', email: '' }); }} className="flex-1 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all text-sm">Cancel</button>
+                      <button
+                        onClick={handleAddContact}
+                        className="flex-1 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all text-sm"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowAddContact(false);
+                          setNewContact({ name: '', org: '', email: '' });
+                        }}
+                        className="flex-1 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all text-sm"
+                      >
+                        Cancel
+                      </button>
                     </div>
                   </div>
                 )}
@@ -758,51 +474,72 @@ const SalesProspectsList = () => {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-gray-50 to-white p-4 sm:p-6">
+    <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-6 flex items-start justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-1">Tim's Prospecting Model</h1>
-            <p className="text-gray-600 text-sm">Pipeline Overview</p>
+          <div><h1 className="text-3xl font-bold text-white mb-1">Tim's Prospecting Model</h1><p className="text-slate-300 text-sm">Pipeline Overview</p></div>
+          <div className="flex gap-3 items-start">
+            <button onClick={() => setCurrentView('joe')} className="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-semibold transition-all flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+              Joe Morone
+            </button>
+            <button onClick={() => setCurrentView('email')} className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition-all flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+              Email Blast
+            </button>
+            <div className="flex flex-col gap-2">
+              <div className="bg-slate-700/30 border border-slate-600/50 rounded-lg px-3 py-1 text-center">
+                <p className="text-slate-400 text-xs italic">"This is a new skill that requires training,</p>
+                <p className="text-slate-400 text-xs italic">practice and guidance." - Joe Morone</p>
+              </div>
+              <div className="bg-amber-500/20 border border-amber-500/50 rounded-lg px-4 py-2">
+                <div className="text-amber-300 text-xs font-medium">2026 Sales Goal</div>
+                <div className="text-amber-400 text-xl font-bold">{formatCurrency(3000000)}</div>
+              </div>
+            </div>
           </div>
+        </div>
+        <div className="mb-4 bg-slate-800/50 rounded-lg border border-slate-700 p-4">
+          <div className="flex items-center justify-between mb-2">
+            <div><h3 className="text-lg font-semibold text-white">Weekly Contacts</h3><p className="text-sm text-slate-400">Track your outreach progress</p></div>
+            <div className="flex items-center gap-3">
+              <button onClick={() => setWeeklyContacts(Math.max(0, weeklyContacts - 1))} className="px-3 py-1 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded text-red-400 font-bold">-</button>
+              <div className="text-center"><div className="text-3xl font-bold text-white">{weeklyContacts}</div><div className="text-xs text-slate-400">/ 100 goal</div></div>
+              <button onClick={() => setWeeklyContacts(weeklyContacts + 1)} className="px-3 py-1 bg-green-500/20 hover:bg-green-500/30 border border-green-500/50 rounded text-green-400 font-bold">+</button>
+              <button onClick={handleReset} className="px-3 py-2 bg-slate-700 hover:bg-slate-600 border border-slate-600 rounded text-slate-300 text-sm font-medium">Reset</button>
+            </div>
+          </div>
+          <div className="w-full bg-slate-700 rounded-full h-4"><div className="h-4 rounded-full transition-all duration-500 bg-gradient-to-r from-blue-500 via-purple-500 to-green-500" style={{ width: `${Math.min((weeklyContacts / 100) * 100, 100)}%` }}></div></div>
+          <div className="mt-2 text-center text-sm"><span className={`font-semibold ${weeklyContacts >= 100 ? 'text-green-400' : weeklyContacts >= 50 ? 'text-yellow-400' : 'text-blue-400'}`}>{Math.round((weeklyContacts / 100) * 100)}% Complete</span></div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
-            <div className="mb-3 bg-blue-50 rounded-2xl p-3 border border-blue-200">
-              <h2 className="text-xl font-bold text-gray-900">Current Prospects</h2>
-              <p className="text-blue-600 text-sm">{totalProspects} active</p>
-            </div>
+            <div className="mb-3 bg-blue-900/30 rounded-lg p-3 border border-blue-700/50"><h2 className="text-xl font-bold text-white">Current Prospects</h2><p className="text-blue-300 text-sm">{totalProspects} active</p></div>
             <div className="space-y-4 max-h-[calc(100vh-320px)] overflow-y-auto pr-2">
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2 px-2 border-b border-gray-200 pb-1">Public Sector</h3>
-                <h4 className="text-sm font-semibold text-gray-700 mb-2 px-2 pl-3">K-12 Education</h4>
+                <h3 className="text-lg font-bold text-white mb-2 px-2 border-b border-slate-600 pb-1">Public Sector</h3>
+                <h4 className="text-sm font-semibold text-slate-300 mb-2 px-2 pl-3">K-12 Education</h4>
                 <div className="space-y-2">{prospectsK12.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}</div>
-                <h4 className="text-sm font-semibold text-gray-700 mb-2 mt-3 px-2 pl-3">Cities & Municipalities</h4>
+                <h4 className="text-sm font-semibold text-slate-300 mb-2 mt-3 px-2 pl-3">Cities & Municipalities</h4>
                 <div className="space-y-2">{prospectsCities.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}</div>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2 px-2 border-b border-gray-200 pb-1">Higher Education</h3>
+                <h3 className="text-lg font-bold text-white mb-2 px-2 border-b border-slate-600 pb-1">Higher Education</h3>
                 <div className="space-y-2">{prospectsHigherEd.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}</div>
               </div>
-              {manualContacts.length > 0 && (
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 px-2 border-b border-gray-200 pb-1">Other Contacts</h3>
-                  <div className="space-y-2">{manualContacts.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}</div>
-                </div>
-              )}
             </div>
           </div>
           <div>
-            <div className="mb-3 bg-green-50 rounded-2xl p-3 border border-green-200">
-              <h2 className="text-xl font-bold text-gray-900">Current Customers</h2>
-              <p className="text-green-600 text-sm">{totalCustomers} active</p>
+            <div className="mb-3 bg-green-900/30 rounded-lg p-3 border border-green-700/50 flex items-center justify-between">
+              <div><h2 className="text-xl font-bold text-white">Current Customers</h2><p className="text-green-300 text-sm">{totalCustomers} active</p></div>
+              <div className="bg-emerald-500/20 border border-emerald-500/50 rounded-lg px-3 py-1.5"><div className="text-emerald-300 text-xs">2025 Bookings</div><div className="text-emerald-400 text-lg font-bold">{formatCurrency(507775.82)}</div></div>
             </div>
             <div className="space-y-4 max-h-[calc(100vh-320px)] overflow-y-auto pr-2">
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2 px-2 border-b border-gray-200 pb-1">Public Sector</h3>
-                <h4 className="text-sm font-semibold text-gray-700 mb-2 px-2 pl-3">Transit</h4>
+                <h3 className="text-lg font-bold text-white mb-2 px-2 border-b border-slate-600 pb-1">Public Sector</h3>
+                <h4 className="text-sm font-semibold text-slate-300 mb-2 px-2 pl-3">Transit</h4>
                 <div className="space-y-2">{customersTransit.map((c, i) => <Card key={c.id} item={c} index={i} isCustomer={true} expanded={expandedCustomer} toggle={setExpandedCustomer} />)}</div>
-                <h4 className="text-sm font-semibold text-gray-700 mb-2 mt-3 px-2 pl-3">Cities & Municipalities</h4>
+                <h4 className="text-sm font-semibold text-slate-300 mb-2 mt-3 px-2 pl-3">Cities & Municipalities</h4>
                 <div className="space-y-2">{customersCities.map((c, i) => <Card key={c.id} item={c} index={i} isCustomer={true} expanded={expandedCustomer} toggle={setExpandedCustomer} />)}</div>
               </div>
             </div>
