@@ -106,10 +106,15 @@ const SalesProspectsList = () => {
         `${contactName}, are you discovering that aging infrastructure is limiting ${orgName}'s ability to maintain consistent service levels? Top-performing authorities are enhancing reliability by 40% through strategic upgrades - is this important to your team right now?`,
         `${contactName}, many superintendents like yourself are finding that traditional approaches create conflicts between cost control and service quality. The most competitive transit systems are resolving this through smart technology deployment - is this relevant to your situation?`,
         `${contactName}, I'm curious - is ${orgName} under pressure to improve both rider experience and operational efficiency with existing budget constraints? Leading authorities are achieving dramatic improvements through infrastructure modernization - does this align with your priorities?`
+      ],
+      "Manual": [
+        `${contactName}, I'm reaching out because many organizations like ${orgName} are discovering that their current approaches no longer meet today's competitive requirements. Leading companies are achieving significant improvements through strategic initiatives - is this something you're focused on right now?`,
+        `${contactName}, are you finding that ${orgName} faces pressure to improve efficiency while maintaining quality? Top-performing organizations are achieving both objectives through smart solutions - does this resonate with your current priorities?`,
+        `${contactName}, I'm curious - is ${orgName} looking to strengthen its competitive position in the market? Leading companies are achieving measurable improvements that drive real business value - is this relevant to your team?`
       ]
     };
     
-    const verticalPitches = pitches[vertical] || pitches["Public Sector"];
+    const verticalPitches = pitches[vertical] || pitches["Manual"];
     return verticalPitches[version % verticalPitches.length];
   };
 
@@ -143,7 +148,6 @@ const SalesProspectsList = () => {
       if (prospect.email2) emails.push({ email: prospect.email2, name: prospect.contact2, org: prospect.name });
       if (prospect.email3) emails.push({ email: prospect.email3, name: prospect.contact3, org: prospect.name });
     });
-    // Add manual contacts
     manualContacts.forEach(contact => {
       emails.push({ email: contact.email, name: contact.name, org: contact.org });
     });
@@ -261,30 +265,21 @@ const SalesProspectsList = () => {
   if (!isAuthenticated) {
     return (
       <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
-        {/* Animated background grid */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0" style={{
             backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.5) 1px, transparent 1px)',
             backgroundSize: '50px 50px'
           }}></div>
         </div>
-        
-        {/* Scanning lines animation */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute w-full h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent animate-scan"></div>
         </div>
-
         <div className="w-full max-w-md relative z-10">
-          {/* Security Badge Scanner */}
           <div className="bg-slate-800/50 backdrop-blur-xl rounded-3xl border-2 border-blue-500/30 shadow-2xl shadow-blue-500/20 p-8">
-            {/* Header */}
             <div className="text-center mb-8">
               <div className="relative mx-auto w-24 h-24 mb-6">
-                {/* Rotating outer ring */}
                 <div className="absolute inset-0 rounded-full border-4 border-blue-500/30 animate-spin-slow"></div>
                 <div className="absolute inset-2 rounded-full border-4 border-t-blue-400 border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
-                
-                {/* Center icon */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/50">
                     <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -293,7 +288,6 @@ const SalesProspectsList = () => {
                   </div>
                 </div>
               </div>
-              
               <h1 className="text-3xl font-bold text-white mb-2 tracking-wide">ACCESS CONTROL</h1>
               <p className="text-blue-300 text-sm font-mono uppercase tracking-widest">Secure Authentication Required</p>
               <div className="mt-4 flex items-center justify-center gap-2">
@@ -301,8 +295,6 @@ const SalesProspectsList = () => {
                 <span className="text-green-400 text-xs font-mono">SYSTEM ONLINE</span>
               </div>
             </div>
-
-            {/* Badge Scanner Area */}
             <form onSubmit={handleLogin} className={`space-y-6 ${shake ? 'animate-shake' : ''}`}>
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-2xl blur-xl"></div>
@@ -327,8 +319,6 @@ const SalesProspectsList = () => {
                       />
                     </div>
                   </div>
-                  
-                  {/* Scanning animation bars */}
                   <div className="flex gap-1 h-1 mt-4">
                     {[...Array(12)].map((_, i) => (
                       <div 
@@ -340,11 +330,7 @@ const SalesProspectsList = () => {
                   </div>
                 </div>
               </div>
-
-              <button 
-                type="submit" 
-                className="w-full relative group"
-              >
+              <button type="submit" className="w-full relative group">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl blur-lg group-hover:blur-xl transition-all opacity-50"></div>
                 <div className="relative bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-bold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-3 border-2 border-blue-400/50">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -357,8 +343,6 @@ const SalesProspectsList = () => {
                 </div>
               </button>
             </form>
-
-            {/* Security Footer */}
             <div className="mt-6 pt-6 border-t border-slate-700/50">
               <div className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2 text-slate-400">
@@ -374,38 +358,17 @@ const SalesProspectsList = () => {
               </div>
             </div>
           </div>
-
-          {/* Bottom decorative elements */}
           <div className="mt-6 text-center">
-            <p className="text-slate-500 text-xs font-mono">
-              © 2025 SECURE ACCESS SYSTEM v2.4.1
-            </p>
+            <p className="text-slate-500 text-xs font-mono">© 2025 SECURE ACCESS SYSTEM v2.4.1</p>
           </div>
         </div>
-
         <style jsx>{`
-          @keyframes shake { 
-            0%, 100% { transform: translateX(0); } 
-            25% { transform: translateX(-10px); } 
-            75% { transform: translateX(10px); } 
-          } 
-          .animate-shake { 
-            animation: shake 0.3s ease-in-out; 
-          }
-          @keyframes scan {
-            0% { top: 0%; }
-            100% { top: 100%; }
-          }
-          .animate-scan {
-            animation: scan 3s linear infinite;
-          }
-          @keyframes spin-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-          .animate-spin-slow {
-            animation: spin-slow 8s linear infinite;
-          }
+          @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } } 
+          .animate-shake { animation: shake 0.3s ease-in-out; }
+          @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
+          .animate-scan { animation: scan 3s linear infinite; }
+          @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+          .animate-spin-slow { animation: spin-slow 8s linear infinite; }
         `}</style>
       </div>
     );
@@ -564,19 +527,13 @@ const SalesProspectsList = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Add Manual Contact Section */}
               <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4">
                 <div className="flex items-center justify-between mb-3">
                   <h2 className="text-lg font-bold text-white">Manual Contacts</h2>
                   <span className="text-xs text-slate-400">{manualContacts.length} added</span>
                 </div>
-                
                 {!showAddContact ? (
-                  <button
-                    onClick={() => setShowAddContact(true)}
-                    className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2"
-                  >
+                  <button onClick={() => setShowAddContact(true)} className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
@@ -586,50 +543,19 @@ const SalesProspectsList = () => {
                   <div className="space-y-3">
                     <div>
                       <label className="text-slate-400 text-xs mb-1 block">Name *</label>
-                      <input
-                        type="text"
-                        value={newContact.name}
-                        onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
-                        placeholder="John Doe"
-                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all"
-                      />
+                      <input type="text" value={newContact.name} onChange={(e) => setNewContact({ ...newContact, name: e.target.value })} placeholder="John Doe" className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all" />
                     </div>
                     <div>
                       <label className="text-slate-400 text-xs mb-1 block">Organization</label>
-                      <input
-                        type="text"
-                        value={newContact.org}
-                        onChange={(e) => setNewContact({ ...newContact, org: e.target.value })}
-                        placeholder="Company Name"
-                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all"
-                      />
+                      <input type="text" value={newContact.org} onChange={(e) => setNewContact({ ...newContact, org: e.target.value })} placeholder="Company Name" className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all" />
                     </div>
                     <div>
                       <label className="text-slate-400 text-xs mb-1 block">Email *</label>
-                      <input
-                        type="email"
-                        value={newContact.email}
-                        onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
-                        placeholder="john.doe@example.com"
-                        className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all"
-                      />
+                      <input type="email" value={newContact.email} onChange={(e) => setNewContact({ ...newContact, email: e.target.value })} placeholder="john.doe@example.com" className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all" />
                     </div>
                     <div className="flex gap-2">
-                      <button
-                        onClick={handleAddContact}
-                        className="flex-1 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all text-sm"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={() => {
-                          setShowAddContact(false);
-                          setNewContact({ name: '', org: '', email: '' });
-                        }}
-                        className="flex-1 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all text-sm"
-                      >
-                        Cancel
-                      </button>
+                      <button onClick={handleAddContact} className="flex-1 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all text-sm">Save</button>
+                      <button onClick={() => { setShowAddContact(false); setNewContact({ name: '', org: '', email: '' }); }} className="flex-1 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all text-sm">Cancel</button>
                     </div>
                   </div>
                 )}
@@ -685,11 +611,7 @@ const SalesProspectsList = () => {
                   <div className="text-blue-600 text-xs mt-1">{randomProspect.name}</div>
                 </div>
               )}
-              <button 
-                onClick={handleRandomizeProspect} 
-                disabled={isSpinning}
-                className={`px-6 py-4 rounded-xl font-bold text-lg transition-all flex items-center gap-3 ${isSpinning ? 'bg-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 shadow-lg'} text-white`}
-              >
+              <button onClick={handleRandomizeProspect} disabled={isSpinning} className={`px-6 py-4 rounded-xl font-bold text-lg transition-all flex items-center gap-3 ${isSpinning ? 'bg-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 shadow-lg'} text-white`}>
                 <svg className={`w-6 h-6 ${isSpinning ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
