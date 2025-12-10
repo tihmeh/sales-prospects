@@ -5,11 +5,12 @@ const SalesProspectsList = () => {
     { 
       id: 1, 
       name: "Pinellas County School District", 
-      contact: "Sean Jowell",
-      title: "Director of Safety & Security",
-      email: "jowells@pcsb.org",
+      contact: "John Smith",
+      title: "Director of IT",
+      email: "jsmith@pcsb.org",
       contacted: true,
-      notes: "Attending Utilities Unite Event in Clearwater."
+      notes: "Interested in Q1 demo. Follow up next week.",
+      vertical: "K-12"
     },
     { 
       id: 2, 
@@ -18,7 +19,8 @@ const SalesProspectsList = () => {
       title: "IT Manager",
       email: "sjohnson@stpete.org",
       contacted: false,
-      notes: "Left voicemail on 12/5. Awaiting callback."
+      notes: "Left voicemail on 12/5. Awaiting callback.",
+      vertical: "Public Sector"
     },
     { 
       id: 3, 
@@ -27,7 +29,8 @@ const SalesProspectsList = () => {
       title: "Technology Coordinator",
       email: "mwilliams@dunedinfl.gov",
       contacted: true,
-      notes: "Meeting scheduled for 12/15 at 2pm."
+      notes: "Meeting scheduled for 12/15 at 2pm.",
+      vertical: "Public Sector"
     },
     { 
       id: 5, 
@@ -36,7 +39,8 @@ const SalesProspectsList = () => {
       title: "TBD",
       email: "contact@gulfport.us",
       contacted: false,
-      notes: "New prospect - need to identify contact."
+      notes: "New prospect - need to identify contact.",
+      vertical: "Public Sector"
     },
     { 
       id: 6, 
@@ -45,7 +49,8 @@ const SalesProspectsList = () => {
       title: "TBD",
       email: "contact@treasureislandfl.gov",
       contacted: false,
-      notes: "New prospect - need to identify contact."
+      notes: "New prospect - need to identify contact.",
+      vertical: "Public Sector"
     },
     { 
       id: 7, 
@@ -54,7 +59,8 @@ const SalesProspectsList = () => {
       title: "TBD",
       email: "contact@belleairbeach.com",
       contacted: false,
-      notes: "New prospect - need to identify contact."
+      notes: "New prospect - need to identify contact.",
+      vertical: "Public Sector"
     },
     { 
       id: 8, 
@@ -63,7 +69,8 @@ const SalesProspectsList = () => {
       title: "TBD",
       email: "contact@belleairbluffs.org",
       contacted: false,
-      notes: "New prospect - need to identify contact."
+      notes: "New prospect - need to identify contact.",
+      vertical: "Public Sector"
     },
     { 
       id: 9, 
@@ -72,7 +79,8 @@ const SalesProspectsList = () => {
       title: "TBD",
       email: "contact@belleair.net",
       contacted: false,
-      notes: "New prospect - need to identify contact."
+      notes: "New prospect - need to identify contact.",
+      vertical: "Public Sector"
     },
     { 
       id: 11, 
@@ -81,7 +89,8 @@ const SalesProspectsList = () => {
       title: "TBD",
       email: "contact@oldsmar.com",
       contacted: false,
-      notes: "New prospect - need to identify contact."
+      notes: "New prospect - need to identify contact.",
+      vertical: "Public Sector"
     },
     { 
       id: 12, 
@@ -90,7 +99,8 @@ const SalesProspectsList = () => {
       title: "TBD",
       email: "contact@seminoleflorida.com",
       contacted: false,
-      notes: "New prospect - need to identify contact."
+      notes: "New prospect - need to identify contact.",
+      vertical: "Public Sector"
     },
     { 
       id: 13, 
@@ -99,7 +109,8 @@ const SalesProspectsList = () => {
       title: "TBD",
       email: "contact@spasadena.com",
       contacted: false,
-      notes: "New prospect - need to identify contact."
+      notes: "New prospect - need to identify contact.",
+      vertical: "Public Sector"
     },
     { 
       id: 14, 
@@ -108,7 +119,8 @@ const SalesProspectsList = () => {
       title: "TBD",
       email: "contact@stpetebeach.org",
       contacted: false,
-      notes: "New prospect - need to identify contact."
+      notes: "New prospect - need to identify contact.",
+      vertical: "Public Sector"
     },
     { 
       id: 15, 
@@ -117,7 +129,8 @@ const SalesProspectsList = () => {
       title: "TBD",
       email: "contact@tarponsprings.gov",
       contacted: false,
-      notes: "New prospect - need to identify contact."
+      notes: "New prospect - need to identify contact.",
+      vertical: "Public Sector"
     }
   ];
 
@@ -125,11 +138,12 @@ const SalesProspectsList = () => {
     {
       id: 101,
       name: "PSTA - Pinellas Suncoast Transit Authority",
-      contact: "Missy Nevitt",
-      title: "Superintendent of Facilities",
-      email: "mnevitt@psta.org",
-      startDate: "12-20-2024",
-      notes: "Current customer"
+      contact: "TBD",
+      title: "TBD",
+      email: "contact@psta.net",
+      startDate: "2024-01-15",
+      notes: "Current customer",
+      vertical: "Public Sector Transit"
     },
     {
       id: 102,
@@ -138,18 +152,18 @@ const SalesProspectsList = () => {
       title: "TBD",
       email: "contact@myindianshores.com",
       startDate: "2024-06-10",
-      notes: "Current customer"
+      notes: "Current customer",
+      vertical: "Public Sector"
     },
     {
       id: 103,
       name: "City of Largo",
       contact: "TBD",
       title: "TBD",
-      contact2: "TBD",
-      title: "TBD",
       email: "contact@largo.com",
       startDate: "2024-03-20",
-      notes: "Current customer"
+      notes: "Current customer",
+      vertical: "Public Sector"
     }
   ];
 
@@ -196,9 +210,15 @@ const SalesProspectsList = () => {
                       <div className={`w-4 h-4 rounded-full ${prospect.contacted ? 'bg-green-500' : 'bg-red-500'}`}></div>
                     </div>
 
-                    <div className="flex-1">
-                      <h3 className="text-white font-semibold text-base">{prospect.name}</h3>
-                      <p className="text-slate-400 text-sm">{prospect.contact} • {prospect.title}</p>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-white font-semibold text-base truncate">{prospect.name}</h3>
+                      <p className="text-slate-400 text-sm truncate">{prospect.contact} • {prospect.title}</p>
+                    </div>
+
+                    <div className="flex-shrink-0">
+                      <span className="text-xs font-medium text-blue-400 bg-blue-900/30 px-3 py-1 rounded-full">
+                        {prospect.vertical}
+                      </span>
                     </div>
 
                     <div className="flex-shrink-0 text-slate-400">
@@ -226,6 +246,10 @@ const SalesProspectsList = () => {
                       <div className="text-slate-300">
                         <span className="text-slate-500 text-sm">Email:</span>
                         <span className="ml-2">{prospect.email}</span>
+                      </div>
+                      <div className="text-slate-300">
+                        <span className="text-slate-500 text-sm">Vertical:</span>
+                        <span className="ml-2">{prospect.vertical}</span>
                       </div>
                       <div className="text-slate-300">
                         <span className="text-slate-500 text-sm">Status:</span>
@@ -267,9 +291,15 @@ const SalesProspectsList = () => {
                       <div className="w-4 h-4 rounded-full bg-green-500"></div>
                     </div>
 
-                    <div className="flex-1">
-                      <h3 className="text-white font-semibold text-base">{customer.name}</h3>
-                      <p className="text-slate-400 text-sm">{customer.contact} • {customer.title}</p>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-white font-semibold text-base truncate">{customer.name}</h3>
+                      <p className="text-slate-400 text-sm truncate">{customer.contact} • {customer.title}</p>
+                    </div>
+
+                    <div className="flex-shrink-0">
+                      <span className="text-xs font-medium text-green-400 bg-green-900/30 px-3 py-1 rounded-full">
+                        {customer.vertical}
+                      </span>
                     </div>
 
                     <div className="flex-shrink-0 text-slate-400">
@@ -297,6 +327,10 @@ const SalesProspectsList = () => {
                       <div className="text-slate-300">
                         <span className="text-slate-500 text-sm">Email:</span>
                         <span className="ml-2">{customer.email}</span>
+                      </div>
+                      <div className="text-slate-300">
+                        <span className="text-slate-500 text-sm">Vertical:</span>
+                        <span className="ml-2">{customer.vertical}</span>
                       </div>
                       <div className="text-slate-300">
                         <span className="text-slate-500 text-sm">Customer Since:</span>
