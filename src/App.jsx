@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 const SalesProspectsList = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [shake, setShake] = useState(false);
+
   const prospectsK12 = [
     { id: 1, name: "Pinellas County School District", contact: "Sean Jowell", title: "Director Safety & Security", email: "jowells@pcsb.org", contacted: true, notes: "Attending Utilities Unite Event in Clearwater", vertical: "K-12" },
     { id: 20, name: "Sumter County Public Schools", contact: "Philip Martin", title: "Director of Safety & Security", email: "philip.martin@sumter.k12.fl.us", contacted: false, notes: "New prospect - need to make initial contact.", vertical: "K-12" }
@@ -53,7 +57,6 @@ const SalesProspectsList = () => {
   });
   const [expandedActivity, setExpandedActivity] = useState({ daily: false, weekly: false, monthly: false });
 
-  // Save to localStorage whenever activity changes
   useEffect(() => {
     localStorage.setItem('dailyActivity', JSON.stringify(dailyActivity));
   }, [dailyActivity]);
@@ -65,6 +68,17 @@ const SalesProspectsList = () => {
   useEffect(() => {
     localStorage.setItem('monthlyActivity', JSON.stringify(monthlyActivity));
   }, [monthlyActivity]);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (password.toLowerCase() === 'sales') {
+      setIsAuthenticated(true);
+    } else {
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+      setPassword('');
+    }
+  };
 
   const handleReset = () => {
     if (window.confirm('Are you sure you want to reset all activity counters to zero?')) {
@@ -157,6 +171,81 @@ const SalesProspectsList = () => {
   const totalProspects = prospectsK12.length + prospectsCities.length + prospectsHigherEd.length;
   const totalCustomers = customersCities.length + customersTransit.length;
 
+  // Login Screen
+  if (!isAuthenticated) {
+    return (
+      <div className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 flex items-center justify-center relative overflow-hidden">
+        {/* Animated background effect */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        </div>
+
+        {/* Floating Orb with Electricity */}
+        <div className="relative z-10 flex flex-col items-center gap-8">
+          <div className="relative">
+            {/* Main Orb */}
+            <div className="w-40 h-40 rounded-full bg-gradient-to-br from-blue-400 via-cyan-300 to-blue-500 animate-pulse shadow-2xl shadow-blue-500/50 flex items-center justify-center">
+              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-300 via-white to-cyan-200 animate-spin-slow shadow-inner"></div>
+            </div>
+            
+            {/* Electric rings */}
+            <div className="absolute inset-0 rounded-full border-2 border-blue-400/30 animate-ping"></div>
+            <div className="absolute inset-0 rounded-full border-2 border-cyan-400/20 animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+            
+            {/* Lightning bolts */}
+            <svg className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full w-1 h-16 opacity-70 animate-pulse" viewBox="0 0 10 100">
+              <path d="M5 0 L5 40 L8 40 L3 100 L7 60 L5 60 Z" fill="url(#electric-gradient)" />
+              <defs>
+                <linearGradient id="electric-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style={{ stopColor: '#60A5FA', stopOpacity: 0 }} />
+                  <stop offset="50%" style={{ stopColor: '#60A5FA', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#60A5FA', stopOpacity: 0 }} />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          {/* Login Form */}
+          <form onSubmit={handleLogin} className={`flex flex-col items-center gap-4 ${shake ? 'animate-shake' : ''}`}>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter access code"
+              className="px-6 py-3 bg-slate-800/50 border-2 border-blue-500/30 rounded-lg text-white text-center text-lg focus:outline-none focus:border-blue-400 transition-all backdrop-blur-sm"
+              autoFocus
+            />
+            <button
+              type="submit"
+              className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg shadow-blue-500/50"
+            >
+              Enter
+            </button>
+          </form>
+        </div>
+
+        <style jsx>{`
+          @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+          }
+          .animate-spin-slow {
+            animation: spin-slow 3s linear infinite;
+          }
+          .animate-shake {
+            animation: shake 0.3s ease-in-out;
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  // Main Dashboard (after login)
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
       <div className="max-w-7xl mx-auto">
