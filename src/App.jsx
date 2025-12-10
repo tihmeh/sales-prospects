@@ -345,7 +345,7 @@ const SalesProspectsList = () => {
           <svg className={`w-4 h-4 text-gray-400 transition-transform ${expanded === item.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
         </div>
         {expanded === item.id && (
-          <div className="px-3 pb-3 border-t border-gray-200 pt-3 space-y-2 text-xs">
+          <div className="px-3 pb-3 border-t border-gray-200 pt-3 space-y-2 text-xs" onClick={(e) => isEditing && e.stopPropagation()}>
             {isEditing ? (
               <div className="space-y-3">
                 <div>
@@ -355,6 +355,7 @@ const SalesProspectsList = () => {
                     value={editForm.contact}
                     onChange={(e) => setEditForm({ ...editForm, contact: e.target.value })}
                     className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500"
+                    onClick={(e) => e.stopPropagation()}
                   />
                 </div>
                 <div>
@@ -364,6 +365,7 @@ const SalesProspectsList = () => {
                     value={editForm.title}
                     onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
                     className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500"
+                    onClick={(e) => e.stopPropagation()}
                   />
                 </div>
                 <div>
@@ -373,6 +375,7 @@ const SalesProspectsList = () => {
                     value={editForm.email}
                     onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
                     className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500"
+                    onClick={(e) => e.stopPropagation()}
                   />
                 </div>
                 <div>
@@ -382,9 +385,10 @@ const SalesProspectsList = () => {
                     onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
                     rows={3}
                     className="w-full px-2 py-1.5 bg-gray-50 border border-gray-300 rounded text-gray-900 text-xs focus:outline-none focus:border-blue-500 resize-none"
+                    onClick={(e) => e.stopPropagation()}
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                   <input
                     type="checkbox"
                     id={`contacted-${item.id}`}
@@ -396,13 +400,19 @@ const SalesProspectsList = () => {
                 </div>
                 <div className="flex gap-2 pt-2">
                   <button
-                    onClick={() => handleSaveEdit(item.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSaveEdit(item.id);
+                    }}
                     className="flex-1 py-1.5 bg-green-600 hover:bg-green-500 text-white rounded text-xs font-semibold transition-all"
                   >
                     Save
                   </button>
                   <button
-                    onClick={handleCancelEdit}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCancelEdit();
+                    }}
                     className="flex-1 py-1.5 bg-gray-500 hover:bg-gray-400 text-white rounded text-xs font-semibold transition-all"
                   >
                     Cancel
@@ -544,8 +554,6 @@ const SalesProspectsList = () => {
     );
   }
 
-  // Continue with Joe Morone and Email views (keeping same as before, just updated allProspects reference)
-  
   if (currentView === 'joe') {
     return (
       <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
