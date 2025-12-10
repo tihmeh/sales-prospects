@@ -6,6 +6,7 @@ const SalesProspectsList = () => {
   const [shake, setShake] = useState(false);
   const [currentView, setCurrentView] = useState('dashboard');
   const [selectedProspect, setSelectedProspect] = useState(null);
+  const [pitchVersion, setPitchVersion] = useState(0);
 
   const prospectsK12 = [
     { id: 1, name: "Pinellas County School District", contact: "Sean Jowell", title: "Director Safety & Security", email: "jowells@pcsb.org", contacted: true, notes: "Attending Utilities Unite Event in Clearwater", vertical: "K-12" },
@@ -55,19 +56,45 @@ const SalesProspectsList = () => {
     localStorage.setItem('weeklyContacts', weeklyContacts.toString());
   }, [weeklyContacts]);
 
-  const generateElevatorPitch = (prospect) => {
+  const generateElevatorPitch = (prospect, version) => {
     if (!prospect) return "";
     const vertical = prospect.vertical;
     const contactName = prospect.contact;
+    const orgName = prospect.name;
     
     const pitches = {
-      "K-12": `${contactName}, are you finding that ${prospect.name} needs to improve student safety response times while meeting compliance requirements? Top-performing districts are reducing incident response by 40% through integrated monitoring - is this important to you right now?`,
-      "Public Sector": `${contactName}, are IT operational costs and aging infrastructure limiting ${prospect.name}'s ability to deliver critical services to residents? Leading municipalities are reducing cycle time by 35% through modernization - is improving service delivery important to your team right now?`,
-      "Higher Education": `${contactName}, is ${prospect.name} looking to improve campus safety response while meeting compliance requirements? Leading institutions are achieving 24/7 visibility with 50% better incident management - does this align with your priorities?`,
-      "Transit": `${contactName}, is ${prospect.name} finding that operational efficiency and rider safety are becoming harder to balance with existing systems? Top transit authorities are improving service reliability by 40% through smart infrastructure - is this a priority for your team?`
+      "K-12": [
+        `${contactName}, are you finding that ${orgName} needs to improve student safety response times while meeting compliance requirements? Top-performing districts are reducing incident response by 40% through integrated monitoring - is this important to you right now?`,
+        `${contactName}, I'm curious - is ${orgName} facing pressure to enhance campus security while staying within budget constraints? Leading school districts are achieving both by modernizing their safety infrastructure - does this resonate with your current priorities?`,
+        `${contactName}, many directors like yourself are discovering that traditional security approaches no longer meet today's compliance standards. Top districts are improving emergency response effectiveness by 40% - is enhancing ${orgName}'s safety posture something you're focused on?`,
+        `${contactName}, are incident response times and comprehensive security visibility challenges that ${orgName} is working to address? The highest-performing districts are cutting response times nearly in half through strategic technology deployment - is this relevant to your team?`,
+        `${contactName}, I've noticed that many school safety leaders are under increasing pressure to demonstrate measurable improvements in both response capability and compliance. Is strengthening ${orgName}'s competitive position in student safety important to you right now?`
+      ],
+      "Public Sector": [
+        `${contactName}, are IT operational costs and aging infrastructure limiting ${orgName}'s ability to deliver critical services to residents? Leading municipalities are reducing cycle time by 35% through modernization - is improving service delivery important to your team right now?`,
+        `${contactName}, I'm reaching out because many IT Directors are facing pressure to do more with less while maintaining service quality. Top-performing cities are enhancing operational efficiency by over a third - does improving ${orgName}'s competitive position matter to you?`,
+        `${contactName}, are you finding that legacy systems are creating bottlenecks in ${orgName}'s ability to serve residents effectively? Leading municipalities are cutting operational cycle time by 35% through strategic infrastructure upgrades - is this a priority for your team?`,
+        `${contactName}, many directors like yourself are discovering that infrastructure limitations directly impact service delivery quality. The most competitive cities are achieving dramatic improvements in first-time quality - is strengthening ${orgName}'s operational excellence important to you right now?`,
+        `${contactName}, I'm curious - is ${orgName} under pressure to reduce costs while simultaneously improving service reliability for residents? Top-performing municipalities are achieving both through modernization strategies - does this align with your current objectives?`
+      ],
+      "Higher Education": [
+        `${contactName}, is ${orgName} looking to improve campus safety response while meeting compliance requirements? Leading institutions are achieving 24/7 visibility with 50% better incident management - does this align with your priorities?`,
+        `${contactName}, I'm curious - are you facing pressure to enhance campus security without significantly increasing operational overhead? Top colleges are leveraging integrated solutions to improve both safety outcomes and cost efficiency - is this relevant to your situation?`,
+        `${contactName}, many campus safety directors are discovering that traditional approaches no longer satisfy today's regulatory requirements. Leading institutions are improving incident response by 50% - is strengthening ${orgName}'s safety posture important to you right now?`,
+        `${contactName}, are comprehensive security visibility and faster emergency response challenges that ${orgName} is working to address? The most competitive institutions are achieving round-the-clock monitoring with dramatically better outcomes - does this matter to your team?`,
+        `${contactName}, I've noticed that campus safety leaders are under increasing pressure to demonstrate measurable improvements while managing tight budgets. Is enhancing ${orgName}'s competitive position in student protection a priority for you?`
+      ],
+      "Transit": [
+        `${contactName}, is ${orgName} finding that operational efficiency and rider safety are becoming harder to balance with existing systems? Top transit authorities are improving service reliability by 40% through smart infrastructure - is this a priority for your team?`,
+        `${contactName}, I'm reaching out because many facility superintendents are facing pressure to reduce maintenance costs while improving system uptime. Leading transit agencies are achieving both objectives simultaneously - does strengthening ${orgName}'s operational performance matter to you?`,
+        `${contactName}, are you discovering that aging infrastructure is limiting ${orgName}'s ability to maintain consistent service levels? Top-performing authorities are enhancing reliability by 40% through strategic upgrades - is this important to your team right now?`,
+        `${contactName}, many superintendents like yourself are finding that traditional approaches create conflicts between cost control and service quality. The most competitive transit systems are resolving this through smart technology deployment - is this relevant to your situation?`,
+        `${contactName}, I'm curious - is ${orgName} under pressure to improve both rider experience and operational efficiency with existing budget constraints? Leading authorities are achieving dramatic improvements through infrastructure modernization - does this align with your priorities?`
+      ]
     };
     
-    return pitches[vertical] || pitches["Public Sector"];
+    const verticalPitches = pitches[vertical] || pitches["Public Sector"];
+    return verticalPitches[version % verticalPitches.length];
   };
 
   const handleLogin = (e) => {
@@ -130,6 +157,10 @@ const SalesProspectsList = () => {
     alert('Elevator pitch copied to clipboard!');
   };
 
+  const handleEnhancePitch = () => {
+    setPitchVersion(pitchVersion + 1);
+  };
+
   const Card = ({ item, index, isCustomer, expanded, toggle }) => (
     <div className="bg-slate-800/50 rounded-lg border border-slate-700 hover:border-slate-600 transition-all cursor-pointer" onClick={() => toggle(item.id)}>
       <div className="p-3 flex items-center gap-3">
@@ -182,7 +213,7 @@ const SalesProspectsList = () => {
         <div className="max-w-7xl mx-auto">
           <div className="mb-6 flex items-center justify-between">
             <div><h1 className="text-3xl font-bold text-white mb-1">Joe Morone's Smart Sales Method</h1><p className="text-slate-300 text-sm">SEL Model: Survival → Emotion → Logic</p></div>
-            <button onClick={() => { setCurrentView('dashboard'); setSelectedProspect(null); }} className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all">Back to Dashboard</button>
+            <button onClick={() => { setCurrentView('dashboard'); setSelectedProspect(null); setPitchVersion(0); }} className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all">Back to Dashboard</button>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
@@ -190,7 +221,7 @@ const SalesProspectsList = () => {
                 <h2 className="text-xl font-bold text-white mb-3">Select a Prospect</h2>
                 <div className="space-y-2 max-h-[calc(100vh-400px)] overflow-y-auto pr-2">
                   {allProspects.map((prospect) => (
-                    <div key={prospect.id} onClick={() => setSelectedProspect(prospect)} className={`p-3 rounded-lg border cursor-pointer transition-all ${selectedProspect?.id === prospect.id ? 'bg-orange-900/30 border-orange-500' : 'bg-slate-800/50 border-slate-700 hover:border-slate-600'}`}>
+                    <div key={prospect.id} onClick={() => { setSelectedProspect(prospect); setPitchVersion(0); }} className={`p-3 rounded-lg border cursor-pointer transition-all ${selectedProspect?.id === prospect.id ? 'bg-orange-900/30 border-orange-500' : 'bg-slate-800/50 border-slate-700 hover:border-slate-600'}`}>
                       <div className="flex items-center gap-3">
                         <div className={`w-5 h-5 rounded-full ${prospect.contacted ? 'bg-green-500' : 'bg-red-500'}`}></div>
                         <div className="flex-1">
@@ -216,16 +247,25 @@ const SalesProspectsList = () => {
                       <div className="text-blue-400 text-xs mt-1">{selectedProspect.name}</div>
                     </div>
                     <div className="bg-orange-900/20 border border-orange-500/50 rounded-lg p-4">
-                      <div className="flex items-center gap-2 mb-3">
-                        <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
-                        <span className="text-orange-400 font-semibold text-sm">Elevator Pitch</span>
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                          <span className="text-orange-400 font-semibold text-sm">Elevator Pitch</span>
+                        </div>
+                        <span className="text-orange-300 text-xs">v{pitchVersion + 1}</span>
                       </div>
-                      <p className="text-white text-sm leading-relaxed">{generateElevatorPitch(selectedProspect)}</p>
+                      <p className="text-white text-sm leading-relaxed">{generateElevatorPitch(selectedProspect, pitchVersion)}</p>
                     </div>
-                    <button onClick={() => handleCopyPitch(generateElevatorPitch(selectedProspect))} className="w-full py-3 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                      Copy Pitch
-                    </button>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button onClick={handleEnhancePitch} className="py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                        Enhance
+                      </button>
+                      <button onClick={() => handleCopyPitch(generateElevatorPitch(selectedProspect, pitchVersion))} className="py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        Copy
+                      </button>
+                    </div>
                     <div className="bg-slate-700/30 rounded-lg p-3 border border-slate-600">
                       <div className="text-slate-400 text-xs mb-2">Smart Sales Method (SEL)</div>
                       <div className="space-y-2 text-xs">
