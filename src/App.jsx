@@ -5,11 +5,11 @@ const SalesProspectsList = () => {
     { 
       id: 1, 
       name: "Pinellas County School District", 
-      contact: "John Smith",
-      title: "Director of IT",
-      email: "jsmith@pcsb.org",
+      contact: "Sean Jowell",
+      title: "Director Safety & Security",
+      email: "jowells@pcsb.org",
       contacted: true,
-      notes: "Interested in Q1 demo. Follow up next week.",
+      notes: "Attending Utilities Unite Event in Clearwater",
       vertical: "K-12"
     }
   ];
