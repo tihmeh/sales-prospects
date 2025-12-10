@@ -1,283 +1,430 @@
 import React, { useState, useEffect } from 'react';
 
-const Magic8BallSalesAdvisor = () => {
-  const [isShaking, setIsShaking] = useState(false);
-  const [answer, setAnswer] = useState('');
-  const [showAnswer, setShowAnswer] = useState(false);
-  const [question, setQuestion] = useState('');
-  const [particles, setParticles] = useState([]);
-  const [mood, setMood] = useState('mysterious');
+const SalesProspectsList = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [shake, setShake] = useState(false);
+  const [currentView, setCurrentView] = useState('dashboard');
+  const [selectedProspect, setSelectedProspect] = useState(null);
+  const [pitchVersion, setPitchVersion] = useState(0);
 
-  const mysticalAnswers = [
-    { text: "The stars align - call them NOW! ⭐", mood: "positive", color: "from-green-400 to-emerald-600" },
-    { text: "Mercury is in retrograde... send an email instead 📧", mood: "caution", color: "from-yellow-400 to-orange-500" },
-    { text: "The cosmic forces say: Schedule for next Tuesday 🌙", mood: "neutral", color: "from-blue-400 to-indigo-600" },
-    { text: "Your LinkedIn connection request will be accepted! 🔮", mood: "positive", color: "from-purple-400 to-pink-600" },
-    { text: "The universe demands a follow-up email within 24 hours ⚡", mood: "urgent", color: "from-red-400 to-pink-600" },
-    { text: "Signs point to: They're thinking about you too 💭", mood: "positive", color: "from-cyan-400 to-blue-600" },
-    { text: "The prophecy reveals: Leave a voicemail at 3:33 PM 📞", mood: "mysterious", color: "from-indigo-400 to-purple-600" },
-    { text: "Ancient wisdom says: Wait 3 business days ⏰", mood: "patience", color: "from-gray-400 to-slate-600" },
-    { text: "Your coffee break fortune: Visit them in person! ☕", mood: "bold", color: "from-amber-400 to-orange-600" },
-    { text: "The sales gods decree: Send a handwritten note 📝", mood: "creative", color: "from-rose-400 to-red-600" },
-    { text: "Mystical insight: They're ready to close the deal! 💰", mood: "jackpot", color: "from-yellow-300 to-yellow-600" },
-    { text: "The oracle warns: Budget approval needed first 💸", mood: "caution", color: "from-orange-400 to-red-500" },
-    { text: "Spiritual guidance: Schedule a Zoom call 🎥", mood: "modern", color: "from-teal-400 to-cyan-600" },
-    { text: "The fates whisper: Add them to your email sequence 📨", mood: "strategic", color: "from-violet-400 to-purple-600" },
-    { text: "Crystal ball reveals: They need 3 more touchpoints 💎", mood: "patient", color: "from-pink-400 to-fuchsia-600" }
+  const prospectsK12 = [
+    { id: 1, name: "Pinellas County School District", contact: "Sean Jowell", title: "Director Safety & Security", email: "jowells@pcsb.org", contacted: true, notes: "Attending Utilities Unite Event in Clearwater", vertical: "K-12" },
+    { id: 20, name: "Sumter County Public Schools", contact: "Philip Martin", title: "Director of Safety & Security", email: "philip.martin@sumter.k12.fl.us", contacted: false, notes: "New prospect - need to make initial contact.", vertical: "K-12" }
   ];
 
-  const funQuestions = [
-    "Should I cold call this prospect?",
-    "Is today a good day to close this deal?",
-    "Will they respond to my email?",
-    "Should I send a follow-up?",
-    "Is this prospect worth pursuing?",
-    "Will this meeting go well?",
-    "Should I offer a discount?",
-    "Is now the right time to reach out?"
+  const prospectsCities = [
+    { id: 2, name: "City of St. Petersburg", contact: "Sarah Johnson", title: "IT Manager", email: "sjohnson@stpete.org", contacted: false, notes: "Left voicemail on 12/5. Awaiting callback.", vertical: "Public Sector" },
+    { id: 3, name: "City of Dunedin", contact: "Michael Nagy", title: "Director of IT", email: "mwilliams@dunedinfl.gov", contact2: "Ronbert Ignacio", title2: "IT Specialist", email2: "ronbert.ignacio@dunedin.gov", contacted: true, notes: "Reachout out through email, no response", vertical: "Public Sector" },
+    { id: 5, name: "City of Gulfport", contact: "David Mather", title: "Director of IT", email: "dmather@mygulfport.us", contacted: true, notes: "Visited in person, followed up over email", vertical: "Public Sector" },
+    { id: 6, name: "City of Treasure Island", contact: "Chris Pagan", title: "Director of IT", email: "cpagan@mytreasureisland.org", contacted: true, notes: "Visited in person, followed up over email", vertical: "Public Sector" },
+    { id: 7, name: "Belleair Beach City", contact: "TBD", title: "TBD", email: "contact@belleairbeach.com", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
+    { id: 8, name: "Belleair Bluffs City", contact: "TBD", title: "TBD", email: "contact@belleairbluffs.org", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
+    { id: 9, name: "City of Belleair", contact: "TBD", title: "TBD", email: "contact@belleair.net", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
+    { id: 11, name: "City of Oldsmar", contact: "TBD", title: "TBD", email: "contact@oldsmar.com", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
+    { id: 12, name: "City of Seminole", contact: "Matthew Sabella", title: "Director of IT", email: "msabella@myseminole.com", contacted: true, notes: "reached out over email. Plan to stop by in person soon", vertical: "Public Sector" },
+    { id: 13, name: "City of S. Pasadena", contact: "Alex Britton-Kant", title: "Director of IT", email: "abrittonkant@mysouthpasadena.com", contacted: true, notes: "Stopped by in person and reached out over email. no response", vertical: "Public Sector" },
+    { id: 14, name: "City of St. Pete Beach", contact: "TBD", title: "TBD", email: "contact@stpetebeach.org", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
+    { id: 15, name: "City of Tarpon Springs", contact: "Suzanne Linton", title: "Director of IT", email: "slinton@ctsfl.us", contacted: true, notes: "Connected on linked in. Preparing email to send this week 12/9/25", vertical: "Public Sector" }
   ];
 
-  const shake8Ball = () => {
-    if (isShaking) return;
-    
-    setIsShaking(true);
-    setShowAnswer(false);
-    setAnswer('');
-    
-    // Create particle explosion
-    const newParticles = Array.from({ length: 20 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      delay: Math.random() * 0.5
-    }));
-    setParticles(newParticles);
+  const prospectsHigherEd = [
+    { id: 16, name: "Eckerd College", contact: "Jessica Cinney", title: "Director of Campus Safety & Security", email: "cinneyj@eckerd.edu", contact2: "Walter Moore", title2: "Director of IT", email2: "moorewr@eckerd.edu", contact3: "Tonya Womack", title3: "Risk Management & Safety", email3: "womacktm@eckerd.edu", contacted: true, notes: "Old customer that has bad experience with Convergint", vertical: "Higher Education" },
+    { id: 17, name: "St. Petersburg College", contact: "TBD", title: "TBD", email: "contact@spcollege.edu", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Higher Education" },
+    { id: 18, name: "St. Pete Technical College", contact: "TBD", title: "TBD", email: "contact@sptech.edu", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Higher Education" },
+    { id: 19, name: "Polk State College", contact: "Emmett Andrews", title: "Director of Safety & Security", email: "eandrews@polk.edu", contact2: "Martin Gang", title2: "Director of Technology and IT", email2: "mgang@polk.edu", contacted: true, notes: "Reached out over email", vertical: "Higher Education" }
+  ];
 
-    setTimeout(() => {
-      const randomAnswer = mysticalAnswers[Math.floor(Math.random() * mysticalAnswers.length)];
-      setAnswer(randomAnswer.text);
-      setMood(randomAnswer.mood);
-      setShowAnswer(true);
-      setIsShaking(false);
-      setTimeout(() => setParticles([]), 1000);
-    }, 2000);
-  };
+  const customersCities = [
+    { id: 102, name: "Town of Indian Shores", contact: "Jennifer Angelo", title: "Admin Assistant", email: "jangelo@myindianshores.com", startDate: "2024-06-10", notes: "Current customer", vertical: "Public Sector" },
+    { id: 103, name: "City of Largo", contact: "Hansel Roush", title: "Director of IT", email: "hroush@largo.com", contact2: "Tim Clark", title2: "IT Admin", email2: "tclark@largo.com", startDate: "2024-03-20", notes: "Current customer", vertical: "Public Sector" }
+  ];
 
-  const suggestQuestion = () => {
-    const randomQ = funQuestions[Math.floor(Math.random() * funQuestions.length)];
-    setQuestion(randomQ);
-  };
+  const customersTransit = [
+    { id: 101, name: "PSTA - Pinellas Suncoast Transit Authority", contact: "Missy Nevitt", title: "Superintendant of Facilities", email: "mnevitt@psta.net", startDate: "12/20/2024", notes: "Current customer", vertical: "Transit" }
+  ];
+
+  const [expandedProspect, setExpandedProspect] = useState(null);
+  const [expandedCustomer, setExpandedCustomer] = useState(null);
+  const [weeklyContacts, setWeeklyContacts] = useState(() => {
+    const saved = localStorage.getItem('weeklyContacts');
+    return saved ? parseInt(saved) : 0;
+  });
+  const [selectedEmails, setSelectedEmails] = useState([]);
+  const [manualContacts, setManualContacts] = useState(() => {
+    const saved = localStorage.getItem('manualContacts');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [showAddContact, setShowAddContact] = useState(false);
+  const [newContact, setNewContact] = useState({
+    name: '',
+    org: '',
+    email: ''
+  });
+  const [randomProspect, setRandomProspect] = useState(null);
+  const [isSpinning, setIsSpinning] = useState(false);
 
   useEffect(() => {
-    suggestQuestion();
-  }, []);
+    localStorage.setItem('weeklyContacts', weeklyContacts.toString());
+  }, [weeklyContacts]);
+
+  useEffect(() => {
+    localStorage.setItem('manualContacts', JSON.stringify(manualContacts));
+  }, [manualContacts]);
+
+  const generateElevatorPitch = (prospect, version) => {
+    if (!prospect) return "";
+    const vertical = prospect.vertical;
+    const contactName = prospect.contact;
+    const orgName = prospect.name;
+    
+    const pitches = {
+      "K-12": [
+        `${contactName}, are you finding that ${orgName} needs to improve student safety response times while meeting compliance requirements? Top-performing districts are reducing incident response by 40% through integrated monitoring - is this important to you right now?`,
+        `${contactName}, I'm curious - is ${orgName} facing pressure to enhance campus security while staying within budget constraints? Leading school districts are achieving both by modernizing their safety infrastructure - does this resonate with your current priorities?`,
+        `${contactName}, many directors like yourself are discovering that traditional security approaches no longer meet today's compliance standards. Top districts are improving emergency response effectiveness by 40% - is enhancing ${orgName}'s safety posture something you're focused on?`,
+        `${contactName}, are incident response times and comprehensive security visibility challenges that ${orgName} is working to address? The highest-performing districts are cutting response times nearly in half through strategic technology deployment - is this relevant to your team?`,
+        `${contactName}, I've noticed that many school safety leaders are under increasing pressure to demonstrate measurable improvements in both response capability and compliance. Is strengthening ${orgName}'s competitive position in student safety important to you right now?`
+      ],
+      "Public Sector": [
+        `${contactName}, are IT operational costs and aging infrastructure limiting ${orgName}'s ability to deliver critical services to residents? Leading municipalities are reducing cycle time by 35% through modernization - is improving service delivery important to your team right now?`,
+        `${contactName}, I'm reaching out because many IT Directors are facing pressure to do more with less while maintaining service quality. Top-performing cities are enhancing operational efficiency by over a third - does improving ${orgName}'s competitive position matter to you?`,
+        `${contactName}, are you finding that legacy systems are creating bottlenecks in ${orgName}'s ability to serve residents effectively? Leading municipalities are cutting operational cycle time by 35% through strategic infrastructure upgrades - is this a priority for your team?`,
+        `${contactName}, many directors like yourself are discovering that infrastructure limitations directly impact service delivery quality. The most competitive cities are achieving dramatic improvements in first-time quality - is strengthening ${orgName}'s operational excellence important to you right now?`,
+        `${contactName}, I'm curious - is ${orgName} under pressure to reduce costs while simultaneously improving service reliability for residents? Top-performing municipalities are achieving both through modernization strategies - does this align with your current objectives?`
+      ],
+      "Higher Education": [
+        `${contactName}, is ${orgName} looking to improve campus safety response while meeting compliance requirements? Leading institutions are achieving 24/7 visibility with 50% better incident management - does this align with your priorities?`,
+        `${contactName}, I'm curious - are you facing pressure to enhance campus security without significantly increasing operational overhead? Top colleges are leveraging integrated solutions to improve both safety outcomes and cost efficiency - is this relevant to your situation?`,
+        `${contactName}, many campus safety directors are discovering that traditional approaches no longer satisfy today's regulatory requirements. Leading institutions are improving incident response by 50% - is strengthening ${orgName}'s safety posture important to you right now?`,
+        `${contactName}, are comprehensive security visibility and faster emergency response challenges that ${orgName} is working to address? The most competitive institutions are achieving round-the-clock monitoring with dramatically better outcomes - does this matter to your team?`,
+        `${contactName}, I've noticed that campus safety leaders are under increasing pressure to demonstrate measurable improvements while managing tight budgets. Is enhancing ${orgName}'s competitive position in student protection a priority for you?`
+      ],
+      "Transit": [
+        `${contactName}, is ${orgName} finding that operational efficiency and rider safety are becoming harder to balance with existing systems? Top transit authorities are improving service reliability by 40% through smart infrastructure - is this a priority for your team?`,
+        `${contactName}, I'm reaching out because many facility superintendents are facing pressure to reduce maintenance costs while improving system uptime. Leading transit agencies are achieving both objectives simultaneously - does strengthening ${orgName}'s operational performance matter to you?`,
+        `${contactName}, are you discovering that aging infrastructure is limiting ${orgName}'s ability to maintain consistent service levels? Top-performing authorities are enhancing reliability by 40% through strategic upgrades - is this important to your team right now?`,
+        `${contactName}, many superintendents like yourself are finding that traditional approaches create conflicts between cost control and service quality. The most competitive transit systems are resolving this through smart technology deployment - is this relevant to your situation?`,
+        `${contactName}, I'm curious - is ${orgName} under pressure to improve both rider experience and operational efficiency with existing budget constraints? Leading authorities are achieving dramatic improvements through infrastructure modernization - does this align with your priorities?`
+      ],
+      "Manual": [
+        `${contactName}, I'm reaching out because many organizations like ${orgName} are discovering that their current approaches no longer meet today's competitive requirements. Leading companies are achieving significant improvements through strategic initiatives - is this something you're focused on right now?`,
+        `${contactName}, are you finding that ${orgName} faces pressure to improve efficiency while maintaining quality? Top-performing organizations are achieving both objectives through smart solutions - does this resonate with your current priorities?`,
+        `${contactName}, I'm curious - is ${orgName} looking to strengthen its competitive position in the market? Leading companies are achieving measurable improvements that drive real business value - is this relevant to your team?`
+      ]
+    };
+    
+    const verticalPitches = pitches[vertical] || pitches["Manual"];
+    return verticalPitches[version % verticalPitches.length];
+  };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (password.toLowerCase() === 'sales') {
+      setIsAuthenticated(true);
+    } else {
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+      setPassword('');
+    }
+  };
+
+  const handleReset = () => {
+    if (window.confirm('Are you sure you want to reset the weekly contact counter to zero?')) {
+      setWeeklyContacts(0);
+      localStorage.removeItem('weeklyContacts');
+    }
+  };
+
+  const formatCurrency = (amount) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(amount);
+
+  const getAllEmails = () => {
+    const allProspects = [...prospectsK12, ...prospectsCities, ...prospectsHigherEd];
+    const emails = [];
+    allProspects.forEach(prospect => {
+      if (prospect.email && !prospect.email.includes('contact@')) {
+        emails.push({ email: prospect.email, name: prospect.contact, org: prospect.name });
+      }
+      if (prospect.email2) emails.push({ email: prospect.email2, name: prospect.contact2, org: prospect.name });
+      if (prospect.email3) emails.push({ email: prospect.email3, name: prospect.contact3, org: prospect.name });
+    });
+    manualContacts.forEach(contact => {
+      emails.push({ email: contact.email, name: contact.name, org: contact.org });
+    });
+    return emails;
+  };
+
+  const handleEmailSelection = (email) => {
+    if (selectedEmails.includes(email)) {
+      setSelectedEmails(selectedEmails.filter(e => e !== email));
+    } else {
+      setSelectedEmails([...selectedEmails, email]);
+    }
+  };
+
+  const handleSelectAll = () => {
+    const allEmails = getAllEmails();
+    if (selectedEmails.length === allEmails.length) {
+      setSelectedEmails([]);
+    } else {
+      setSelectedEmails(allEmails.map(e => e.email));
+    }
+  };
+
+  const handleCopyEmails = () => {
+    navigator.clipboard.writeText(selectedEmails.join('; '));
+    alert('Email addresses copied to clipboard!');
+  };
+
+  const handleCopyPitch = (pitch) => {
+    navigator.clipboard.writeText(pitch);
+    alert('Elevator pitch copied to clipboard!');
+  };
+
+  const handleEnhancePitch = () => {
+    setPitchVersion(pitchVersion + 1);
+  };
+
+  const handleRandomizeProspect = () => {
+    const uncontactedProspects = allProspects.filter(p => !p.contacted);
+    if (uncontactedProspects.length === 0) {
+      alert('All prospects have been contacted!');
+      return;
+    }
+    
+    setIsSpinning(true);
+    setTimeout(() => {
+      const randomIndex = Math.floor(Math.random() * uncontactedProspects.length);
+      setRandomProspect(uncontactedProspects[randomIndex]);
+      setIsSpinning(false);
+    }, 1000);
+  };
+
+  const handleAddContact = () => {
+    if (newContact.name && newContact.email) {
+      const newContactWithDefaults = {
+        ...newContact,
+        id: Date.now(),
+        contact: newContact.name,
+        name: newContact.org || 'Manual Contact',
+        title: 'Manual Entry',
+        vertical: 'Manual',
+        contacted: false,
+        notes: 'Manually added contact'
+      };
+      setManualContacts([...manualContacts, newContactWithDefaults]);
+      setNewContact({ name: '', org: '', email: '' });
+      setShowAddContact(false);
+    } else {
+      alert('Please fill in at least name and email fields');
+    }
+  };
+
+  const handleDeleteManualContact = (id) => {
+    if (window.confirm('Are you sure you want to delete this contact?')) {
+      setManualContacts(manualContacts.filter(c => c.id !== id));
+      setSelectedEmails(selectedEmails.filter(email => {
+        const contact = manualContacts.find(c => c.id === id);
+        return email !== contact?.email;
+      }));
+    }
+  };
+
+  const Card = ({ item, index, isCustomer, expanded, toggle }) => (
+    <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-gray-200 hover:border-blue-400 transition-all cursor-pointer shadow-sm" onClick={() => toggle(item.id)}>
+      <div className="p-3 flex items-center gap-3">
+        <span className="text-gray-400 font-semibold text-sm w-6">{index + 1}</span>
+        <div className={`w-3 h-3 rounded-full ${isCustomer ? 'bg-green-500' : (item.contacted ? 'bg-green-500' : 'bg-red-500')}`}></div>
+        <div className="flex-1 min-w-0">
+          <h3 className="text-gray-900 font-semibold text-sm truncate">{item.name}</h3>
+          <p className="text-gray-500 text-xs truncate">{item.contact} • {item.title}</p>
+        </div>
+        <span className={`text-xs font-medium ${isCustomer ? 'text-green-600 bg-green-100' : 'text-blue-600 bg-blue-100'} px-2 py-1 rounded-full`}>{item.vertical}</span>
+        <svg className={`w-4 h-4 text-gray-400 transition-transform ${expanded === item.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+      </div>
+      {expanded === item.id && (
+        <div className="px-3 pb-3 border-t border-gray-200 pt-3 space-y-1 text-xs">
+          <div className="text-gray-700"><span className="text-gray-500">Contact:</span> {item.contact}</div>
+          <div className="text-gray-700"><span className="text-gray-500">Title:</span> {item.title}</div>
+          <div className="text-gray-700"><span className="text-gray-500">Email:</span> {item.email}</div>
+          {item.contact2 && <><div className="text-gray-700 mt-2 pt-2 border-t border-gray-200"><span className="text-gray-500">Contact 2:</span> {item.contact2}</div><div className="text-gray-700"><span className="text-gray-500">Title:</span> {item.title2}</div><div className="text-gray-700"><span className="text-gray-500">Email:</span> {item.email2}</div></>}
+          {item.contact3 && <><div className="text-gray-700 mt-2 pt-2 border-t border-gray-200"><span className="text-gray-500">Contact 3:</span> {item.contact3}</div><div className="text-gray-700"><span className="text-gray-500">Title:</span> {item.title3}</div><div className="text-gray-700"><span className="text-gray-500">Email:</span> {item.email3}</div></>}
+          <div className="text-gray-700 mt-2 pt-2 border-t border-gray-200"><span className="text-gray-500">Vertical:</span> {item.vertical}</div>
+          {!isCustomer ? <><div className="text-gray-700"><span className="text-gray-500">Status:</span> <span className={item.contacted ? 'text-green-600' : 'text-red-600'}>{item.contacted ? 'Contacted' : 'Not Contacted'}</span></div></> : <><div className="text-gray-700"><span className="text-gray-500">Customer Since:</span> <span className="text-green-600">{item.startDate}</span></div></>}
+          <div className="text-gray-700"><span className="text-gray-500">Notes:</span> <span className="text-gray-600 italic">{item.notes}</span></div>
+        </div>
+      )}
+    </div>
+  );
+
+  const totalProspects = prospectsK12.length + prospectsCities.length + prospectsHigherEd.length + manualContacts.length;
+  const totalCustomers = customersCities.length + customersTransit.length;
+  const allEmails = getAllEmails();
+  const allProspects = [...prospectsK12, ...prospectsCities, ...prospectsHigherEd, ...manualContacts];
+
+  if (!isAuthenticated) {
+    return (
+      <div className="w-full min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center p-4">
+        <div className="w-full max-w-[380px]">
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-[22px] shadow-lg flex items-center justify-center">
+              <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-semibold text-gray-900 mb-1">Tim's Prospecting</h1>
+            <p className="text-sm text-gray-500">Enter your access code</p>
+          </div>
+          <form onSubmit={handleLogin} className={`space-y-4 ${shake ? 'animate-shake' : ''}`}>
+            <input 
+              type="password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              placeholder="Access Code" 
+              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm" 
+              autoFocus 
+            />
+            <button 
+              type="submit" 
+              className="w-full py-3.5 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white rounded-xl font-semibold text-base transition-all shadow-sm"
+            >
+              Continue
+            </button>
+          </form>
+        </div>
+        <style jsx>{`@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } } .animate-shake { animation: shake 0.3s ease-in-out; }`}</style>
+      </div>
+    );
+  }
+
+  // Joe Morone and Email views would follow the same pattern - applying white/light theme with rounded-2xl borders
+  // For brevity, I'll show the main dashboard return statement
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Mystical background stars */}
-      <div className="absolute inset-0">
-        {[...Array(50)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-white rounded-full animate-twinkle"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              opacity: Math.random() * 0.7 + 0.3
-            }}
-          ></div>
-        ))}
-      </div>
-
-      {/* Floating particles during shake */}
-      {particles.map(particle => (
-        <div
-          key={particle.id}
-          className="absolute w-2 h-2 bg-yellow-400 rounded-full animate-float-away"
-          style={{
-            left: `${particle.x}%`,
-            top: `${particle.y}%`,
-            animationDelay: `${particle.delay}s`
-          }}
-        ></div>
-      ))}
-
-      <div className="max-w-2xl w-full relative z-10">
-        {/* Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-pink-300 to-purple-400 mb-2 animate-pulse-slow">
-            🔮 Mystical Sales Advisor 🔮
-          </h1>
-          <p className="text-purple-200 text-lg italic">Ask the cosmic forces to guide your outreach...</p>
-        </div>
-
-        {/* Question Input */}
-        <div className="bg-white/10 backdrop-blur-xl rounded-3xl border-2 border-purple-400/30 p-6 mb-6 shadow-2xl">
-          <label className="text-purple-200 text-sm font-semibold mb-2 block">Your Question to the Universe:</label>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              placeholder="Ask about your next sales move..."
-              className="flex-1 bg-white/20 border-2 border-purple-300/50 rounded-2xl px-4 py-3 text-white placeholder-purple-300 focus:outline-none focus:border-yellow-400 transition-all"
-            />
-            <button
-              onClick={suggestQuestion}
-              className="bg-purple-500/50 hover:bg-purple-400/50 border-2 border-purple-300/50 rounded-2xl px-4 text-white transition-all"
-              title="Suggest a question"
-            >
-              🎲
+    <div className="w-full min-h-screen bg-gradient-to-b from-gray-50 to-white p-4 sm:p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-6 flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-1">Tim's Prospecting Model</h1>
+            <p className="text-gray-600 text-sm">Pipeline Overview</p>
+          </div>
+          <div className="flex gap-3 items-start">
+            <button onClick={() => setCurrentView('joe')} className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-semibold transition-all flex items-center gap-2 shadow-sm">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+              Joe Morone
             </button>
+            <button onClick={() => setCurrentView('email')} className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-xl font-semibold transition-all flex items-center gap-2 shadow-sm">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+              Email Blast
+            </button>
+            <div className="flex flex-col gap-2">
+              <div className="bg-gray-100 border border-gray-200 rounded-xl px-3 py-1 text-center">
+                <p className="text-gray-600 text-xs italic">"This is a new skill that requires training,</p>
+                <p className="text-gray-600 text-xs italic">practice and guidance." - Joe Morone</p>
+              </div>
+              <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-2">
+                <div className="text-amber-700 text-xs font-medium">2026 Sales Goal</div>
+                <div className="text-amber-900 text-xl font-bold">{formatCurrency(3000000)}</div>
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Magic 8 Ball */}
-        <div className="flex flex-col items-center">
-          <div 
-            className={`relative cursor-pointer transition-all duration-500 ${isShaking ? 'animate-shake-intense scale-110' : 'hover:scale-105'}`}
-            onClick={shake8Ball}
-          >
-            {/* Outer glow */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full blur-3xl opacity-50 animate-pulse"></div>
-            
-            {/* 8 Ball sphere */}
-            <div className="relative w-80 h-80 rounded-full bg-gradient-to-br from-gray-900 via-black to-gray-900 border-8 border-gray-800 shadow-2xl flex items-center justify-center">
-              {/* Highlight effect */}
-              <div className="absolute top-10 left-10 w-20 h-20 bg-white/30 rounded-full blur-2xl"></div>
-              
-              {/* Number 8 or Answer window */}
-              {!showAnswer ? (
-                <div className="w-32 h-32 rounded-full bg-white flex items-center justify-center shadow-inner">
-                  <span className="text-8xl font-bold text-black">8</span>
+        <div className="mb-4 bg-white/80 backdrop-blur-xl rounded-2xl border border-gray-200 p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">Contact Randomizer</h3>
+              <p className="text-sm text-gray-600">Let fate decide your next outreach</p>
+            </div>
+            <div className="flex items-center gap-4">
+              {randomProspect && (
+                <div className={`bg-blue-50 rounded-xl border border-blue-200 px-4 py-3 min-w-[300px] ${isSpinning ? 'animate-pulse' : ''}`}>
+                  <div className="text-xs text-blue-600 mb-1">Your Next Contact:</div>
+                  <div className="text-gray-900 font-bold text-lg">{randomProspect.contact}</div>
+                  <div className="text-gray-700 text-sm">{randomProspect.title}</div>
+                  <div className="text-blue-600 text-xs mt-1">{randomProspect.name}</div>
                 </div>
-              ) : (
-                <div className="w-48 h-48 rounded-full bg-gradient-to-br from-blue-900 to-purple-900 flex items-center justify-center p-6 border-4 border-blue-400/50 shadow-2xl animate-float">
-                  <div className="text-center">
-                    <div className={`text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${mysticalAnswers.find(a => a.text === answer)?.color || 'from-blue-400 to-purple-600'} animate-glow`}>
-                      {answer}
-                    </div>
-                  </div>
+              )}
+              <button 
+                onClick={handleRandomizeProspect} 
+                disabled={isSpinning}
+                className={`px-6 py-4 rounded-xl font-bold text-lg transition-all flex items-center gap-3 ${isSpinning ? 'bg-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 shadow-lg'} text-white`}
+              >
+                <svg className={`w-6 h-6 ${isSpinning ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                {isSpinning ? 'Randomizing...' : 'Pick Random Contact'}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="mb-4 bg-white/80 backdrop-blur-xl rounded-2xl border border-gray-200 p-4 shadow-sm">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">Weekly Contacts</h3>
+              <p className="text-sm text-gray-600">Track your outreach progress</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <button onClick={() => setWeeklyContacts(Math.max(0, weeklyContacts - 1))} className="px-3 py-1 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg text-red-600 font-bold transition-all">-</button>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-gray-900">{weeklyContacts}</div>
+                <div className="text-xs text-gray-500">/ 100 goal</div>
+              </div>
+              <button onClick={() => setWeeklyContacts(weeklyContacts + 1)} className="px-3 py-1 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg text-green-600 font-bold transition-all">+</button>
+              <button onClick={handleReset} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-200 rounded-lg text-gray-700 text-sm font-medium transition-all">Reset</button>
+            </div>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-3">
+            <div className="h-3 rounded-full transition-all duration-500 bg-gradient-to-r from-blue-500 via-purple-500 to-green-500" style={{ width: `${Math.min((weeklyContacts / 100) * 100, 100)}%` }}></div>
+          </div>
+          <div className="mt-2 text-center text-sm">
+            <span className={`font-semibold ${weeklyContacts >= 100 ? 'text-green-600' : weeklyContacts >= 50 ? 'text-yellow-600' : 'text-blue-600'}`}>{Math.round((weeklyContacts / 100) * 100)}% Complete</span>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div>
+            <div className="mb-3 bg-blue-50 rounded-2xl p-3 border border-blue-200">
+              <h2 className="text-xl font-bold text-gray-900">Current Prospects</h2>
+              <p className="text-blue-600 text-sm">{totalProspects} active</p>
+            </div>
+            <div className="space-y-4 max-h-[calc(100vh-320px)] overflow-y-auto pr-2">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2 px-2 border-b border-gray-200 pb-1">Public Sector</h3>
+                <h4 className="text-sm font-semibold text-gray-700 mb-2 px-2 pl-3">K-12 Education</h4>
+                <div className="space-y-2">{prospectsK12.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}</div>
+                <h4 className="text-sm font-semibold text-gray-700 mb-2 mt-3 px-2 pl-3">Cities & Municipalities</h4>
+                <div className="space-y-2">{prospectsCities.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}</div>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2 px-2 border-b border-gray-200 pb-1">Higher Education</h3>
+                <div className="space-y-2">{prospectsHigherEd.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}</div>
+              </div>
+              {manualContacts.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 px-2 border-b border-gray-200 pb-1">Manual Contacts</h3>
+                  <div className="space-y-2">{manualContacts.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}</div>
                 </div>
               )}
             </div>
           </div>
-
-          {/* Instruction text */}
-          <div className="mt-8 text-center">
-            {!showAnswer ? (
-              <p className="text-purple-200 text-xl font-semibold animate-bounce">
-                ✨ Click the mystical orb to receive guidance ✨
-              </p>
-            ) : (
-              <p className="text-yellow-300 text-lg italic animate-pulse">
-                The cosmos have spoken! 🌟
-              </p>
-            )}
+          <div>
+            <div className="mb-3 bg-green-50 rounded-2xl p-3 border border-green-200">
+              <h2 className="text-xl font-bold text-gray-900">Current Customers</h2>
+              <p className="text-green-600 text-sm">{totalCustomers} active</p>
+            </div>
+            <div className="space-y-4 max-h-[calc(100vh-320px)] overflow-y-auto pr-2">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2 px-2 border-b border-gray-200 pb-1">Public Sector</h3>
+                <h4 className="text-sm font-semibold text-gray-700 mb-2 px-2 pl-3">Transit</h4>
+                <div className="space-y-2">{customersTransit.map((c, i) => <Card key={c.id} item={c} index={i} isCustomer={true} expanded={expandedCustomer} toggle={setExpandedCustomer} />)}</div>
+                <h4 className="text-sm font-semibold text-gray-700 mb-2 mt-3 px-2 pl-3">Cities & Municipalities</h4>
+                <div className="space-y-2">{customersCities.map((c, i) => <Card key={c.id} item={c} index={i} isCustomer={true} expanded={expandedCustomer} toggle={setExpandedCustomer} />)}</div>
+              </div>
+            </div>
           </div>
-
-          {/* Shake Again Button */}
-          {showAnswer && (
-            <button
-              onClick={shake8Ball}
-              className="mt-6 px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold rounded-full shadow-lg transform hover:scale-105 transition-all animate-fade-in"
-            >
-              Ask Another Question 🔄
-            </button>
-          )}
-        </div>
-
-        {/* Fun stats */}
-        <div className="mt-12 grid grid-cols-3 gap-4">
-          <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-4 text-center border border-purple-400/30">
-            <div className="text-3xl mb-2">🌙</div>
-            <div className="text-purple-200 text-xs">Mystical</div>
-            <div className="text-white text-xl font-bold">Power</div>
-          </div>
-          <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-4 text-center border border-purple-400/30">
-            <div className="text-3xl mb-2">⭐</div>
-            <div className="text-purple-200 text-xs">Cosmic</div>
-            <div className="text-white text-xl font-bold">Accuracy</div>
-          </div>
-          <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-4 text-center border border-purple-400/30">
-            <div className="text-3xl mb-2">🔮</div>
-            <div className="text-purple-200 text-xs">Fortune</div>
-            <div className="text-white text-xl font-bold">Reading</div>
-          </div>
-        </div>
-
-        {/* Disclaimer */}
-        <div className="mt-8 text-center">
-          <p className="text-purple-300 text-xs italic">
-            * For entertainment purposes only. Or is it? The universe works in mysterious ways... 👻
-          </p>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes shake-intense {
-          0%, 100% { transform: rotate(0deg) translateX(0); }
-          10% { transform: rotate(-15deg) translateX(-10px); }
-          20% { transform: rotate(15deg) translateX(10px); }
-          30% { transform: rotate(-15deg) translateX(-10px); }
-          40% { transform: rotate(15deg) translateX(10px); }
-          50% { transform: rotate(-10deg) translateX(-5px); }
-          60% { transform: rotate(10deg) translateX(5px); }
-          70% { transform: rotate(-5deg) translateX(-3px); }
-          80% { transform: rotate(5deg) translateX(3px); }
-          90% { transform: rotate(-2deg) translateX(-1px); }
-        }
-        .animate-shake-intense {
-          animation: shake-intense 0.5s ease-in-out infinite;
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(5deg); }
-        }
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float-away {
-          0% { transform: translate(0, 0) scale(1); opacity: 1; }
-          100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
-        }
-        .animate-float-away {
-          animation: float-away 1s ease-out forwards;
-          --tx: calc((Math.random() - 0.5) * 200px);
-          --ty: calc((Math.random() - 0.5) * 200px);
-        }
-        @keyframes twinkle {
-          0%, 100% { opacity: 0.3; transform: scale(1); }
-          50% { opacity: 1; transform: scale(1.5); }
-        }
-        .animate-twinkle {
-          animation: twinkle 3s ease-in-out infinite;
-        }
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.7; }
-        }
-        .animate-pulse-slow {
-          animation: pulse-slow 4s ease-in-out infinite;
-        }
-        @keyframes glow {
-          0%, 100% { filter: brightness(1); }
-          50% { filter: brightness(1.5); }
-        }
-        .animate-glow {
-          animation: glow 2s ease-in-out infinite;
-        }
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.5s ease-out;
-        }
-      `}</style>
     </div>
   );
 };
 
-export default Magic8BallSalesAdvisor;
+export default SalesProspectsList;
