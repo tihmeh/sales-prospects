@@ -32,8 +32,8 @@ const SalesProspectsList = () => {
       title: "Director of IT",
       email: "mwilliams@dunedinfl.gov",
       contact2: "Ronbert Ignacio",
-      title: "IT Specialist",
-      email: "ronbert.ignacio@dunedin.gov",
+      title2: "IT Specialist",
+      email2: "ronbert.ignacio@dunedin.gov",
       contacted: true,
       notes: "Reachout out through email, no response",
       vertical: "Public Sector"
@@ -148,11 +148,11 @@ const SalesProspectsList = () => {
       title: "Director of Campus Safety & Security",
       email: "cinneyj@eckerd.edu",
       contact2: "Walter Moore",
-      title: "Director of IT",
-      email: "moorewr@eckerd.edu",
+      title2: "Director of IT",
+      email2: "moorewr@eckerd.edu",
       contact3: "Tonya Womack",
-      title: "Risk Management & Safety",
-      email: "womacktm@eckerd.edu",
+      title3: "Risk Management & Safety",
+      email3: "womacktm@eckerd.edu",
       contacted: true,
       notes: "Old customer that has bad experience with Convergint",
       vertical: "Higher Education"
@@ -184,25 +184,15 @@ const SalesProspectsList = () => {
       title: "Director of Safety & Security",
       email: "eandrews@polk.edu",
       contact2: "Martin Gang",
-      title: "Director of Technology and IT",
-      email: "mgang@polk.edu",
+      title2: "Director of Technology and IT",
+      email2: "mgang@polk.edu",
       contacted: true,
       notes: "Reached out over email",
       vertical: "Higher Education"
     }
   ];
 
-  const customers = [
-    {
-      id: 101,
-      name: "PSTA - Pinellas Suncoast Transit Authority",
-      contact: "Missy Nevitt",
-      title: "Superintendant of Facilities",
-      email: "mnevitt@psta.net",
-      startDate: "12/20/2024",
-      notes: "Current customer",
-      vertical: "Public Sector Transit"
-    },
+  const customersCities = [
     {
       id: 102,
       name: "Town of Indian Shores",
@@ -220,11 +210,24 @@ const SalesProspectsList = () => {
       title: "Director of IT",
       email: "hroush@largo.com",
       contact2: "Tim Clark",
-      title: "IT Admin",
-      email: "tclark@largo.com",
+      title2: "IT Admin",
+      email2: "tclark@largo.com",
       startDate: "2024-03-20",
       notes: "Current customer",
       vertical: "Public Sector"
+    }
+  ];
+
+  const customersTransit = [
+    {
+      id: 101,
+      name: "PSTA - Pinellas Suncoast Transit Authority",
+      contact: "Missy Nevitt",
+      title: "Superintendant of Facilities",
+      email: "mnevitt@psta.net",
+      startDate: "12/20/2024",
+      notes: "Current customer",
+      vertical: "Transit"
     }
   ];
 
@@ -291,7 +294,39 @@ const SalesProspectsList = () => {
             <span className="text-slate-500 text-sm">Email:</span>
             <span className="ml-2">{prospect.email}</span>
           </div>
-          <div className="text-slate-300">
+          {prospect.contact2 && (
+            <>
+              <div className="text-slate-300 mt-3 pt-2 border-t border-slate-700/50">
+                <span className="text-slate-500 text-sm">Contact 2:</span>
+                <span className="ml-2">{prospect.contact2}</span>
+              </div>
+              <div className="text-slate-300">
+                <span className="text-slate-500 text-sm">Title:</span>
+                <span className="ml-2">{prospect.title2}</span>
+              </div>
+              <div className="text-slate-300">
+                <span className="text-slate-500 text-sm">Email:</span>
+                <span className="ml-2">{prospect.email2}</span>
+              </div>
+            </>
+          )}
+          {prospect.contact3 && (
+            <>
+              <div className="text-slate-300 mt-3 pt-2 border-t border-slate-700/50">
+                <span className="text-slate-500 text-sm">Contact 3:</span>
+                <span className="ml-2">{prospect.contact3}</span>
+              </div>
+              <div className="text-slate-300">
+                <span className="text-slate-500 text-sm">Title:</span>
+                <span className="ml-2">{prospect.title3}</span>
+              </div>
+              <div className="text-slate-300">
+                <span className="text-slate-500 text-sm">Email:</span>
+                <span className="ml-2">{prospect.email3}</span>
+              </div>
+            </>
+          )}
+          <div className="text-slate-300 mt-3 pt-2 border-t border-slate-700/50">
             <span className="text-slate-500 text-sm">Vertical:</span>
             <span className="ml-2">{prospect.vertical}</span>
           </div>
@@ -310,7 +345,93 @@ const SalesProspectsList = () => {
     </div>
   );
 
+  const CustomerCard = ({ customer, index }) => (
+    <div
+      key={customer.id}
+      className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 hover:border-slate-600 transition-all cursor-pointer"
+      onClick={() => toggleCustomer(customer.id)}
+    >
+      <div className="p-4 flex items-center gap-4">
+        <div className="flex-shrink-0 w-8 text-center">
+          <span className="text-slate-400 font-semibold">{index + 1}</span>
+        </div>
+        
+        <div className="flex-shrink-0">
+          <div className="w-4 h-4 rounded-full bg-green-500"></div>
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <h3 className="text-white font-semibold text-base truncate">{customer.name}</h3>
+          <p className="text-slate-400 text-sm truncate">{customer.contact} • {customer.title}</p>
+        </div>
+
+        <div className="flex-shrink-0">
+          <span className="text-xs font-medium text-green-400 bg-green-900/30 px-3 py-1 rounded-full">
+            {customer.vertical}
+          </span>
+        </div>
+
+        <div className="flex-shrink-0 text-slate-400">
+          <svg 
+            className={`w-5 h-5 transition-transform ${expandedCustomer === customer.id ? 'rotate-180' : ''}`} 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+
+      {expandedCustomer === customer.id && (
+        <div className="px-4 pb-4 border-t border-slate-700 pt-4 space-y-2">
+          <div className="text-slate-300">
+            <span className="text-slate-500 text-sm">Contact:</span>
+            <span className="ml-2">{customer.contact}</span>
+          </div>
+          <div className="text-slate-300">
+            <span className="text-slate-500 text-sm">Title:</span>
+            <span className="ml-2">{customer.title}</span>
+          </div>
+          <div className="text-slate-300">
+            <span className="text-slate-500 text-sm">Email:</span>
+            <span className="ml-2">{customer.email}</span>
+          </div>
+          {customer.contact2 && (
+            <>
+              <div className="text-slate-300 mt-3 pt-2 border-t border-slate-700/50">
+                <span className="text-slate-500 text-sm">Contact 2:</span>
+                <span className="ml-2">{customer.contact2}</span>
+              </div>
+              <div className="text-slate-300">
+                <span className="text-slate-500 text-sm">Title:</span>
+                <span className="ml-2">{customer.title2}</span>
+              </div>
+              <div className="text-slate-300">
+                <span className="text-slate-500 text-sm">Email:</span>
+                <span className="ml-2">{customer.email2}</span>
+              </div>
+            </>
+          )}
+          <div className="text-slate-300 mt-3 pt-2 border-t border-slate-700/50">
+            <span className="text-slate-500 text-sm">Vertical:</span>
+            <span className="ml-2">{customer.vertical}</span>
+          </div>
+          <div className="text-slate-300">
+            <span className="text-slate-500 text-sm">Customer Since:</span>
+            <span className="ml-2 text-green-400">{customer.startDate}</span>
+          </div>
+          <div className="text-slate-300">
+            <span className="text-slate-500 text-sm">Notes:</span>
+            <p className="ml-2 mt-1 text-slate-400 italic">{customer.notes}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
   const totalProspects = prospectsK12.length + prospectsCities.length + prospectsHigherEd.length;
+  const totalCustomers = customersCities.length + customersTransit.length;
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8">
@@ -370,78 +491,34 @@ const SalesProspectsList = () => {
           <div>
             <div className="mb-4 bg-green-900/30 rounded-lg p-4 border border-green-700/50">
               <h2 className="text-2xl font-bold text-white mb-1">Current Customers</h2>
-              <p className="text-green-300">{customers.length} active customers</p>
+              <p className="text-green-300">{totalCustomers} active customers</p>
             </div>
 
-            <div className="space-y-3 max-h-[calc(100vh-250px)] overflow-y-auto pr-2">
-              {customers.map((customer, index) => (
-                <div
-                  key={customer.id}
-                  className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 hover:border-slate-600 transition-all cursor-pointer"
-                  onClick={() => toggleCustomer(customer.id)}
-                >
-                  <div className="p-4 flex items-center gap-4">
-                    <div className="flex-shrink-0 w-8 text-center">
-                      <span className="text-slate-400 font-semibold">{index + 1}</span>
-                    </div>
-                    
-                    <div className="flex-shrink-0">
-                      <div className="w-4 h-4 rounded-full bg-green-500"></div>
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-white font-semibold text-base truncate">{customer.name}</h3>
-                      <p className="text-slate-400 text-sm truncate">{customer.contact} • {customer.title}</p>
-                    </div>
-
-                    <div className="flex-shrink-0">
-                      <span className="text-xs font-medium text-green-400 bg-green-900/30 px-3 py-1 rounded-full">
-                        {customer.vertical}
-                      </span>
-                    </div>
-
-                    <div className="flex-shrink-0 text-slate-400">
-                      <svg 
-                        className={`w-5 h-5 transition-transform ${expandedCustomer === customer.id ? 'rotate-180' : ''}`} 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
+            <div className="space-y-6 max-h-[calc(100vh-250px)] overflow-y-auto pr-2">
+              {/* PUBLIC SECTOR MAIN SECTION */}
+              <div>
+                <h3 className="text-xl font-bold text-white mb-4 px-2 border-b border-slate-600 pb-2">Public Sector</h3>
+                
+                {/* CITIES/MUNICIPALITIES SUBSECTION */}
+                <div className="mb-4">
+                  <h4 className="text-md font-semibold text-slate-300 mb-3 px-2 pl-4">Cities & Municipalities</h4>
+                  <div className="space-y-3">
+                    {customersCities.map((customer, index) => (
+                      <CustomerCard key={customer.id} customer={customer} index={index} />
+                    ))}
                   </div>
-
-                  {expandedCustomer === customer.id && (
-                    <div className="px-4 pb-4 border-t border-slate-700 pt-4 space-y-2">
-                      <div className="text-slate-300">
-                        <span className="text-slate-500 text-sm">Contact:</span>
-                        <span className="ml-2">{customer.contact}</span>
-                      </div>
-                      <div className="text-slate-300">
-                        <span className="text-slate-500 text-sm">Title:</span>
-                        <span className="ml-2">{customer.title}</span>
-                      </div>
-                      <div className="text-slate-300">
-                        <span className="text-slate-500 text-sm">Email:</span>
-                        <span className="ml-2">{customer.email}</span>
-                      </div>
-                      <div className="text-slate-300">
-                        <span className="text-slate-500 text-sm">Vertical:</span>
-                        <span className="ml-2">{customer.vertical}</span>
-                      </div>
-                      <div className="text-slate-300">
-                        <span className="text-slate-500 text-sm">Customer Since:</span>
-                        <span className="ml-2 text-green-400">{customer.startDate}</span>
-                      </div>
-                      <div className="text-slate-300">
-                        <span className="text-slate-500 text-sm">Notes:</span>
-                        <p className="ml-2 mt-1 text-slate-400 italic">{customer.notes}</p>
-                      </div>
-                    </div>
-                  )}
                 </div>
-              ))}
+
+                {/* TRANSIT SUBSECTION */}
+                <div>
+                  <h4 className="text-md font-semibold text-slate-300 mb-3 px-2 pl-4">Transit</h4>
+                  <div className="space-y-3">
+                    {customersTransit.map((customer, index) => (
+                      <CustomerCard key={customer.id} customer={customer} index={index} />
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
