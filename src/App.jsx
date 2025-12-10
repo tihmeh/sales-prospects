@@ -198,7 +198,7 @@ const SalesProspectsList = () => {
     return (
       <div className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 flex items-center justify-center">
         <form onSubmit={handleLogin} className={`flex flex-col items-center gap-4 bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl border border-slate-700 ${shake ? 'animate-shake' : ''}`}>
-          <h1 className="text-3xl font-bold text-white mb-4">Sales Dashboard</h1>
+          <h1 className="text-3xl font-bold text-white mb-4">Tim's Prospecting Model</h1>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter access code" className="px-6 py-3 bg-slate-900/50 border-2 border-blue-500/30 rounded-lg text-white text-center text-lg focus:outline-none focus:border-blue-400 transition-all w-64" autoFocus />
           <button type="submit" className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg shadow-blue-500/50 w-64">Enter</button>
         </form>
@@ -351,7 +351,7 @@ const SalesProspectsList = () => {
     <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-6 flex items-start justify-between">
-          <div><h1 className="text-3xl font-bold text-white mb-1">Sales Dashboard</h1><p className="text-slate-300 text-sm">Pipeline Overview</p></div>
+          <div><h1 className="text-3xl font-bold text-white mb-1">Tim's Prospecting Model</h1><p className="text-slate-300 text-sm">Pipeline Overview</p></div>
           <div className="flex gap-3 items-start">
             <button onClick={() => setCurrentView('joe')} className="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-semibold transition-all flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
