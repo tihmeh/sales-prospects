@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const SalesProspectsList = () => {
   const prospectsK12 = [
@@ -39,10 +39,43 @@ const SalesProspectsList = () => {
 
   const [expandedProspect, setExpandedProspect] = useState(null);
   const [expandedCustomer, setExpandedCustomer] = useState(null);
-  const [dailyActivity, setDailyActivity] = useState({ calls: 0, emails: 0, linkedin: 0 });
-  const [weeklyActivity, setWeeklyActivity] = useState({ calls: 0, emails: 0, linkedin: 0 });
-  const [monthlyActivity, setMonthlyActivity] = useState({ calls: 0, emails: 0, linkedin: 0 });
+  const [dailyActivity, setDailyActivity] = useState(() => {
+    const saved = localStorage.getItem('dailyActivity');
+    return saved ? JSON.parse(saved) : { calls: 0, emails: 0, linkedin: 0 };
+  });
+  const [weeklyActivity, setWeeklyActivity] = useState(() => {
+    const saved = localStorage.getItem('weeklyActivity');
+    return saved ? JSON.parse(saved) : { calls: 0, emails: 0, linkedin: 0 };
+  });
+  const [monthlyActivity, setMonthlyActivity] = useState(() => {
+    const saved = localStorage.getItem('monthlyActivity');
+    return saved ? JSON.parse(saved) : { calls: 0, emails: 0, linkedin: 0 };
+  });
   const [expandedActivity, setExpandedActivity] = useState({ daily: false, weekly: false, monthly: false });
+
+  // Save to localStorage whenever activity changes
+  useEffect(() => {
+    localStorage.setItem('dailyActivity', JSON.stringify(dailyActivity));
+  }, [dailyActivity]);
+
+  useEffect(() => {
+    localStorage.setItem('weeklyActivity', JSON.stringify(weeklyActivity));
+  }, [weeklyActivity]);
+
+  useEffect(() => {
+    localStorage.setItem('monthlyActivity', JSON.stringify(monthlyActivity));
+  }, [monthlyActivity]);
+
+  const handleReset = () => {
+    if (window.confirm('Are you sure you want to reset all activity counters to zero?')) {
+      setDailyActivity({ calls: 0, emails: 0, linkedin: 0 });
+      setWeeklyActivity({ calls: 0, emails: 0, linkedin: 0 });
+      setMonthlyActivity({ calls: 0, emails: 0, linkedin: 0 });
+      localStorage.removeItem('dailyActivity');
+      localStorage.removeItem('weeklyActivity');
+      localStorage.removeItem('monthlyActivity');
+    }
+  };
 
   const formatCurrency = (amount) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(amount);
 
@@ -129,6 +162,13 @@ const SalesProspectsList = () => {
       <div className="max-w-7xl mx-auto">
         <div className="mb-6 flex items-start justify-between">
           <div><h1 className="text-3xl font-bold text-white mb-1">Sales Dashboard</h1><p className="text-slate-300 text-sm">Pipeline Overview</p></div>
+          <button 
+            onClick={handleReset}
+            className="bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 hover:border-red-500 rounded-lg px-4 py-2 transition-all"
+          >
+            <div className="text-red-300 text-xs font-medium">Reset Activity</div>
+            <div className="text-red-400 text-sm font-semibold">Clear Counters</div>
+          </button>
           <div className="bg-amber-500/20 border border-amber-500/50 rounded-lg px-4 py-2"><div className="text-amber-300 text-xs font-medium">2026 Sales Goal</div><div className="text-amber-400 text-xl font-bold">{formatCurrency(3000000)}</div></div>
         </div>
         <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-3">
