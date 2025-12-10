@@ -5,10 +5,10 @@ const SalesProspectsList = () => {
     { 
       id: 1, 
       name: "Pinellas County School District", 
-      contact: "John Smith",
-      email: "jsmith@pcsb.org",
+      contact: "Sean Jowell",
+      email: "jowells@pcsb.org",
       contacted: true,
-      notes: "Interested in Q1 demo. Follow up next week."
+      notes: "Attending Utilities Unite Event in Clearwater."
     },
     { 
       id: 2, 
@@ -29,18 +29,22 @@ const SalesProspectsList = () => {
     { 
       id: 4, 
       name: "City of Largo", 
-      contact: "TBD",
-      email: "contact@largo.com",
-      contacted: false,
-      notes: "New prospect - need to identify contact."
+      contact: "Hansel Roush",
+      title: "Director of IT"
+      email: "hroush@largo.com",
+      contact2: "Tim Clark",
+      email: "tclark@largo.com",
+      contacted: true,
+      notes: "Greg's customer, need to re connect with them"
     },
     { 
       id: 5, 
       name: "City of Gulfport", 
-      contact: "TBD",
-      email: "contact@gulfport.us",
-      contacted: false,
-      notes: "New prospect - need to identify contact."
+      contact: "David Mather",
+      title: "Director of IT",
+      email: "dmather@mygulfport.us",
+      contacted: true,
+      notes: "visited in person and followed up with Email."
     },
     { 
       id: 6, 
