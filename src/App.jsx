@@ -7,33 +7,44 @@ const SalesProspectsList = () => {
   const [currentView, setCurrentView] = useState('dashboard');
   const [selectedProspect, setSelectedProspect] = useState(null);
   const [pitchVersion, setPitchVersion] = useState(0);
+  const [editingProspect, setEditingProspect] = useState(null);
+  const [editForm, setEditForm] = useState({});
 
-  const prospectsK12 = [
-    { id: 1, name: "Pinellas County School District", contact: "Sean Jowell", title: "Director Safety & Security", email: "jowells@pcsb.org", contacted: true, notes: "Attending Utilities Unite Event in Clearwater", vertical: "K-12" },
-    { id: 20, name: "Sumter County Public Schools", contact: "Philip Martin", title: "Director of Safety & Security", email: "philip.martin@sumter.k12.fl.us", contacted: false, notes: "New prospect - need to make initial contact.", vertical: "K-12" }
-  ];
+  const [prospectsK12, setProspectsK12] = useState(() => {
+    const saved = localStorage.getItem('prospectsK12');
+    return saved ? JSON.parse(saved) : [
+      { id: 1, name: "Pinellas County School District", contact: "Sean Jowell", title: "Director Safety & Security", email: "jowells@pcsb.org", contacted: true, notes: "Attending Utilities Unite Event in Clearwater", vertical: "K-12" },
+      { id: 20, name: "Sumter County Public Schools", contact: "Philip Martin", title: "Director of Safety & Security", email: "philip.martin@sumter.k12.fl.us", contacted: false, notes: "New prospect - need to make initial contact.", vertical: "K-12" }
+    ];
+  });
 
-  const prospectsCities = [
-    { id: 2, name: "City of St. Petersburg", contact: "Sarah Johnson", title: "IT Manager", email: "sjohnson@stpete.org", contacted: false, notes: "Left voicemail on 12/5. Awaiting callback.", vertical: "Public Sector" },
-    { id: 3, name: "City of Dunedin", contact: "Michael Nagy", title: "Director of IT", email: "mwilliams@dunedinfl.gov", contact2: "Ronbert Ignacio", title2: "IT Specialist", email2: "ronbert.ignacio@dunedin.gov", contacted: true, notes: "Reachout out through email, no response", vertical: "Public Sector" },
-    { id: 5, name: "City of Gulfport", contact: "David Mather", title: "Director of IT", email: "dmather@mygulfport.us", contacted: true, notes: "Visited in person, followed up over email", vertical: "Public Sector" },
-    { id: 6, name: "City of Treasure Island", contact: "Chris Pagan", title: "Director of IT", email: "cpagan@mytreasureisland.org", contacted: true, notes: "Visited in person, followed up over email", vertical: "Public Sector" },
-    { id: 7, name: "Belleair Beach City", contact: "TBD", title: "TBD", email: "contact@belleairbeach.com", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
-    { id: 8, name: "Belleair Bluffs City", contact: "TBD", title: "TBD", email: "contact@belleairbluffs.org", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
-    { id: 9, name: "City of Belleair", contact: "TBD", title: "TBD", email: "contact@belleair.net", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
-    { id: 11, name: "City of Oldsmar", contact: "TBD", title: "TBD", email: "contact@oldsmar.com", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
-    { id: 12, name: "City of Seminole", contact: "Matthew Sabella", title: "Director of IT", email: "msabella@myseminole.com", contacted: true, notes: "reached out over email. Plan to stop by in person soon", vertical: "Public Sector" },
-    { id: 13, name: "City of S. Pasadena", contact: "Alex Britton-Kant", title: "Director of IT", email: "abrittonkant@mysouthpasadena.com", contacted: true, notes: "Stopped by in person and reached out over email. no response", vertical: "Public Sector" },
-    { id: 14, name: "City of St. Pete Beach", contact: "TBD", title: "TBD", email: "contact@stpetebeach.org", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
-    { id: 15, name: "City of Tarpon Springs", contact: "Suzanne Linton", title: "Director of IT", email: "slinton@ctsfl.us", contacted: true, notes: "Connected on linked in. Preparing email to send this week 12/9/25", vertical: "Public Sector" }
-  ];
+  const [prospectsCities, setProspectsCities] = useState(() => {
+    const saved = localStorage.getItem('prospectsCities');
+    return saved ? JSON.parse(saved) : [
+      { id: 2, name: "City of St. Petersburg", contact: "Sarah Johnson", title: "IT Manager", email: "sjohnson@stpete.org", contacted: false, notes: "Left voicemail on 12/5. Awaiting callback.", vertical: "Public Sector" },
+      { id: 3, name: "City of Dunedin", contact: "Michael Nagy", title: "Director of IT", email: "mwilliams@dunedinfl.gov", contact2: "Ronbert Ignacio", title2: "IT Specialist", email2: "ronbert.ignacio@dunedin.gov", contacted: true, notes: "Reachout out through email, no response", vertical: "Public Sector" },
+      { id: 5, name: "City of Gulfport", contact: "David Mather", title: "Director of IT", email: "dmather@mygulfport.us", contacted: true, notes: "Visited in person, followed up over email", vertical: "Public Sector" },
+      { id: 6, name: "City of Treasure Island", contact: "Chris Pagan", title: "Director of IT", email: "cpagan@mytreasureisland.org", contacted: true, notes: "Visited in person, followed up over email", vertical: "Public Sector" },
+      { id: 7, name: "Belleair Beach City", contact: "TBD", title: "TBD", email: "contact@belleairbeach.com", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
+      { id: 8, name: "Belleair Bluffs City", contact: "TBD", title: "TBD", email: "contact@belleairbluffs.org", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
+      { id: 9, name: "City of Belleair", contact: "TBD", title: "TBD", email: "contact@belleair.net", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
+      { id: 11, name: "City of Oldsmar", contact: "TBD", title: "TBD", email: "contact@oldsmar.com", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
+      { id: 12, name: "City of Seminole", contact: "Matthew Sabella", title: "Director of IT", email: "msabella@myseminole.com", contacted: true, notes: "reached out over email. Plan to stop by in person soon", vertical: "Public Sector" },
+      { id: 13, name: "City of S. Pasadena", contact: "Alex Britton-Kant", title: "Director of IT", email: "abrittonkant@mysouthpasadena.com", contacted: true, notes: "Stopped by in person and reached out over email. no response", vertical: "Public Sector" },
+      { id: 14, name: "City of St. Pete Beach", contact: "TBD", title: "TBD", email: "contact@stpetebeach.org", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
+      { id: 15, name: "City of Tarpon Springs", contact: "Suzanne Linton", title: "Director of IT", email: "slinton@ctsfl.us", contacted: true, notes: "Connected on linked in. Preparing email to send this week 12/9/25", vertical: "Public Sector" }
+    ];
+  });
 
-  const prospectsHigherEd = [
-    { id: 16, name: "Eckerd College", contact: "Jessica Cinney", title: "Director of Campus Safety & Security", email: "cinneyj@eckerd.edu", contact2: "Walter Moore", title2: "Director of IT", email2: "moorewr@eckerd.edu", contact3: "Tonya Womack", title3: "Risk Management & Safety", email3: "womacktm@eckerd.edu", contacted: true, notes: "Old customer that has bad experience with Convergint", vertical: "Higher Education" },
-    { id: 17, name: "St. Petersburg College", contact: "TBD", title: "TBD", email: "contact@spcollege.edu", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Higher Education" },
-    { id: 18, name: "St. Pete Technical College", contact: "TBD", title: "TBD", email: "contact@sptech.edu", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Higher Education" },
-    { id: 19, name: "Polk State College", contact: "Emmett Andrews", title: "Director of Safety & Security", email: "eandrews@polk.edu", contact2: "Martin Gang", title2: "Director of Technology and IT", email2: "mgang@polk.edu", contacted: true, notes: "Reached out over email", vertical: "Higher Education" }
-  ];
+  const [prospectsHigherEd, setProspectsHigherEd] = useState(() => {
+    const saved = localStorage.getItem('prospectsHigherEd');
+    return saved ? JSON.parse(saved) : [
+      { id: 16, name: "Eckerd College", contact: "Jessica Cinney", title: "Director of Campus Safety & Security", email: "cinneyj@eckerd.edu", contact2: "Walter Moore", title2: "Director of IT", email2: "moorewr@eckerd.edu", contact3: "Tonya Womack", title3: "Risk Management & Safety", email3: "womacktm@eckerd.edu", contacted: true, notes: "Old customer that has bad experience with Convergint", vertical: "Higher Education" },
+      { id: 17, name: "St. Petersburg College", contact: "TBD", title: "TBD", email: "contact@spcollege.edu", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Higher Education" },
+      { id: 18, name: "St. Pete Technical College", contact: "TBD", title: "TBD", email: "contact@sptech.edu", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Higher Education" },
+      { id: 19, name: "Polk State College", contact: "Emmett Andrews", title: "Director of Safety & Security", email: "eandrews@polk.edu", contact2: "Martin Gang", title2: "Director of Technology and IT", email2: "mgang@polk.edu", contacted: true, notes: "Reached out over email", vertical: "Higher Education" }
+    ];
+  });
 
   const customersCities = [
     { id: 102, name: "Town of Indian Shores", contact: "Jennifer Angelo", title: "Admin Assistant", email: "jangelo@myindianshores.com", startDate: "2024-06-10", notes: "Current customer", vertical: "Public Sector", bookingAmount: 0 },
@@ -69,6 +80,57 @@ const SalesProspectsList = () => {
   useEffect(() => {
     localStorage.setItem('manualContacts', JSON.stringify(manualContacts));
   }, [manualContacts]);
+
+  useEffect(() => {
+    localStorage.setItem('prospectsK12', JSON.stringify(prospectsK12));
+  }, [prospectsK12]);
+
+  useEffect(() => {
+    localStorage.setItem('prospectsCities', JSON.stringify(prospectsCities));
+  }, [prospectsCities]);
+
+  useEffect(() => {
+    localStorage.setItem('prospectsHigherEd', JSON.stringify(prospectsHigherEd));
+  }, [prospectsHigherEd]);
+
+  const updateProspect = (id, vertical, updatedData) => {
+    if (vertical === 'K-12') {
+      setProspectsK12(prev => prev.map(p => p.id === id ? { ...p, ...updatedData } : p));
+    } else if (vertical === 'Higher Education') {
+      setProspectsHigherEd(prev => prev.map(p => p.id === id ? { ...p, ...updatedData } : p));
+    } else if (vertical === 'Public Sector') {
+      setProspectsCities(prev => prev.map(p => p.id === id ? { ...p, ...updatedData } : p));
+    }
+  };
+
+  const deleteProspect = (id, vertical) => {
+    if (window.confirm('Are you sure you want to delete this prospect?')) {
+      if (vertical === 'K-12') {
+        setProspectsK12(prev => prev.filter(p => p.id !== id));
+      } else if (vertical === 'Higher Education') {
+        setProspectsHigherEd(prev => prev.filter(p => p.id !== id));
+      } else if (vertical === 'Public Sector') {
+        setProspectsCities(prev => prev.filter(p => p.id !== id));
+      }
+      setEditingProspect(null);
+    }
+  };
+
+  const startEdit = (prospect) => {
+    setEditingProspect(prospect.id);
+    setEditForm({ ...prospect });
+  };
+
+  const cancelEdit = () => {
+    setEditingProspect(null);
+    setEditForm({});
+  };
+
+  const saveEdit = () => {
+    updateProspect(editForm.id, editForm.vertical, editForm);
+    setEditingProspect(null);
+    setEditForm({});
+  };
 
   const generateElevatorPitch = (prospect, version) => {
     if (!prospect) return "";
@@ -213,33 +275,207 @@ const SalesProspectsList = () => {
     }
   };
 
-  const Card = ({ item, index, isCustomer, expanded, toggle }) => (
-    <div className="bg-slate-800/50 rounded-lg border border-slate-700 hover:border-slate-600 transition-all cursor-pointer" onClick={() => toggle(item.id)}>
-      <div className="p-3 flex items-center gap-3">
-        <span className="text-slate-400 font-semibold text-sm w-6">{index + 1}</span>
-        <div className={`w-3 h-3 rounded-full ${isCustomer ? 'bg-green-500' : (item.contacted ? 'bg-green-500' : 'bg-red-500')}`}></div>
-        <div className="flex-1 min-w-0">
-          <h3 className="text-white font-semibold text-sm truncate">{item.name}</h3>
-          <p className="text-slate-400 text-xs truncate">{item.contact} • {item.title}</p>
+  const Card = ({ item, index, isCustomer, expanded, toggle }) => {
+    const isEditing = editingProspect === item.id;
+
+    if (isEditing && !isCustomer) {
+      return (
+        <div className="bg-slate-800/50 rounded-lg border-2 border-blue-500 p-4">
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-slate-400 text-xs mb-1 block">Organization Name</label>
+                <input
+                  type="text"
+                  value={editForm.name || ''}
+                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                />
+              </div>
+              <div>
+                <label className="text-slate-400 text-xs mb-1 block">Contact Name</label>
+                <input
+                  type="text"
+                  value={editForm.contact || ''}
+                  onChange={(e) => setEditForm({ ...editForm, contact: e.target.value })}
+                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                />
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-slate-400 text-xs mb-1 block">Title</label>
+                <input
+                  type="text"
+                  value={editForm.title || ''}
+                  onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                />
+              </div>
+              <div>
+                <label className="text-slate-400 text-xs mb-1 block">Email</label>
+                <input
+                  type="email"
+                  value={editForm.email || ''}
+                  onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                />
+              </div>
+            </div>
+
+            {(editForm.contact2 || editForm.email2) && (
+              <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700">
+                <div>
+                  <label className="text-slate-400 text-xs mb-1 block">Contact 2 Name</label>
+                  <input
+                    type="text"
+                    value={editForm.contact2 || ''}
+                    onChange={(e) => setEditForm({ ...editForm, contact2: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-400 text-xs mb-1 block">Title 2</label>
+                  <input
+                    type="text"
+                    value={editForm.title2 || ''}
+                    onChange={(e) => setEditForm({ ...editForm, title2: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div className="col-span-2">
+                  <label className="text-slate-400 text-xs mb-1 block">Email 2</label>
+                  <input
+                    type="email"
+                    value={editForm.email2 || ''}
+                    onChange={(e) => setEditForm({ ...editForm, email2: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+            )}
+
+            {(editForm.contact3 || editForm.email3) && (
+              <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700">
+                <div>
+                  <label className="text-slate-400 text-xs mb-1 block">Contact 3 Name</label>
+                  <input
+                    type="text"
+                    value={editForm.contact3 || ''}
+                    onChange={(e) => setEditForm({ ...editForm, contact3: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-400 text-xs mb-1 block">Title 3</label>
+                  <input
+                    type="text"
+                    value={editForm.title3 || ''}
+                    onChange={(e) => setEditForm({ ...editForm, title3: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div className="col-span-2">
+                  <label className="text-slate-400 text-xs mb-1 block">Email 3</label>
+                  <input
+                    type="email"
+                    value={editForm.email3 || ''}
+                    onChange={(e) => setEditForm({ ...editForm, email3: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+            )}
+            
+            <div>
+              <label className="text-slate-400 text-xs mb-1 block">Contacted Status</label>
+              <select
+                value={editForm.contacted ? 'true' : 'false'}
+                onChange={(e) => setEditForm({ ...editForm, contacted: e.target.value === 'true' })}
+                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+              >
+                <option value="false">Not Contacted</option>
+                <option value="true">Contacted</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="text-slate-400 text-xs mb-1 block">Notes</label>
+              <textarea
+                value={editForm.notes || ''}
+                onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
+                rows={3}
+                className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            
+            <div className="flex gap-2 pt-2">
+              <button
+                onClick={saveEdit}
+                className="flex-1 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all"
+              >
+                Save Changes
+              </button>
+              <button
+                onClick={cancelEdit}
+                className="flex-1 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg font-semibold transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => deleteProspect(item.id, item.vertical)}
+                className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg font-semibold transition-all"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
-        <span className={`text-xs font-medium ${isCustomer ? 'text-green-400 bg-green-900/30' : 'text-blue-400 bg-blue-900/30'} px-2 py-1 rounded-full`}>{item.vertical}</span>
-        {isCustomer && <span className="text-xs font-semibold text-emerald-400">{formatCurrency(item.bookingAmount)}</span>}
-        <svg className={`w-4 h-4 text-slate-400 transition-transform ${expanded === item.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+      );
+    }
+
+    return (
+      <div className="bg-slate-800/50 rounded-lg border border-slate-700 hover:border-slate-600 transition-all">
+        <div className="p-3 flex items-center gap-3 cursor-pointer" onClick={() => toggle(item.id)}>
+          <span className="text-slate-400 font-semibold text-sm w-6">{index + 1}</span>
+          <div className={`w-3 h-3 rounded-full ${isCustomer ? 'bg-green-500' : (item.contacted ? 'bg-green-500' : 'bg-red-500')}`}></div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-white font-semibold text-sm truncate">{item.name}</h3>
+            <p className="text-slate-400 text-xs truncate">{item.contact} • {item.title}</p>
+          </div>
+          <span className={`text-xs font-medium ${isCustomer ? 'text-green-400 bg-green-900/30' : 'text-blue-400 bg-blue-900/30'} px-2 py-1 rounded-full`}>{item.vertical}</span>
+          {isCustomer && <span className="text-xs font-semibold text-emerald-400">{formatCurrency(item.bookingAmount)}</span>}
+          {!isCustomer && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                startEdit(item);
+              }}
+              className="p-1.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 rounded text-blue-400 transition-all"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+            </button>
+          )}
+          <svg className={`w-4 h-4 text-slate-400 transition-transform ${expanded === item.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+        </div>
+        {expanded === item.id && (
+          <div className="px-3 pb-3 border-t border-slate-700 pt-3 space-y-1 text-xs">
+            <div className="text-slate-300"><span className="text-slate-500">Contact:</span> {item.contact}</div>
+            <div className="text-slate-300"><span className="text-slate-500">Title:</span> {item.title}</div>
+            <div className="text-slate-300"><span className="text-slate-500">Email:</span> {item.email}</div>
+            {item.contact2 && <><div className="text-slate-300 mt-2 pt-2 border-t border-slate-700/50"><span className="text-slate-500">Contact 2:</span> {item.contact2}</div><div className="text-slate-300"><span className="text-slate-500">Title:</span> {item.title2}</div><div className="text-slate-300"><span className="text-slate-500">Email:</span> {item.email2}</div></>}
+            {item.contact3 && <><div className="text-slate-300 mt-2 pt-2 border-t border-slate-700/50"><span className="text-slate-500">Contact 3:</span> {item.contact3}</div><div className="text-slate-300"><span className="text-slate-500">Title:</span> {item.title3}</div><div className="text-slate-300"><span className="text-slate-500">Email:</span> {item.email3}</div></>}
+            <div className="text-slate-300 mt-2 pt-2 border-t border-slate-700/50"><span className="text-slate-500">Vertical:</span> {item.vertical}</div>
+            {!isCustomer ? <><div className="text-slate-300"><span className="text-slate-500">Status:</span> <span className={item.contacted ? 'text-green-400' : 'text-red-400'}>{item.contacted ? 'Contacted' : 'Not Contacted'}</span></div></> : <><div className="text-slate-300"><span className="text-slate-500">Booking:</span> <span className="text-emerald-400">{formatCurrency(item.bookingAmount)}</span></div><div className="text-slate-300"><span className="text-slate-500">Customer Since:</span> <span className="text-green-400">{item.startDate}</span></div></>}
+            <div className="text-slate-300"><span className="text-slate-500">Notes:</span> <span className="text-slate-400 italic">{item.notes}</span></div>
+          </div>
+        )}
       </div>
-      {expanded === item.id && (
-        <div className="px-3 pb-3 border-t border-slate-700 pt-3 space-y-1 text-xs">
-          <div className="text-slate-300"><span className="text-slate-500">Contact:</span> {item.contact}</div>
-          <div className="text-slate-300"><span className="text-slate-500">Title:</span> {item.title}</div>
-          <div className="text-slate-300"><span className="text-slate-500">Email:</span> {item.email}</div>
-          {item.contact2 && <><div className="text-slate-300 mt-2 pt-2 border-t border-slate-700/50"><span className="text-slate-500">Contact 2:</span> {item.contact2}</div><div className="text-slate-300"><span className="text-slate-500">Title:</span> {item.title2}</div><div className="text-slate-300"><span className="text-slate-500">Email:</span> {item.email2}</div></>}
-          {item.contact3 && <><div className="text-slate-300 mt-2 pt-2 border-t border-slate-700/50"><span className="text-slate-500">Contact 3:</span> {item.contact3}</div><div className="text-slate-300"><span className="text-slate-500">Title:</span> {item.title3}</div><div className="text-slate-300"><span className="text-slate-500">Email:</span> {item.email3}</div></>}
-          <div className="text-slate-300 mt-2 pt-2 border-t border-slate-700/50"><span className="text-slate-500">Vertical:</span> {item.vertical}</div>
-          {!isCustomer ? <><div className="text-slate-300"><span className="text-slate-500">Status:</span> <span className={item.contacted ? 'text-green-400' : 'text-red-400'}>{item.contacted ? 'Contacted' : 'Not Contacted'}</span></div></> : <><div className="text-slate-300"><span className="text-slate-500">Booking:</span> <span className="text-emerald-400">{formatCurrency(item.bookingAmount)}</span></div><div className="text-slate-300"><span className="text-slate-500">Customer Since:</span> <span className="text-green-400">{item.startDate}</span></div></>}
-          <div className="text-slate-300"><span className="text-slate-500">Notes:</span> <span className="text-slate-400 italic">{item.notes}</span></div>
-        </div>
-      )}
-    </div>
-  );
+    );
+  };
 
   const totalProspects = prospectsK12.length + prospectsCities.length + prospectsHigherEd.length + manualContacts.length;
   const totalCustomers = customersCities.length + customersTransit.length;
