@@ -1,17 +1,7 @@
 import React, { useState } from 'react';
 
 const SalesProspectsList = () => {
-  const prospects = [
-    { 
-      id: 1, 
-      name: "Pinellas County School District", 
-      contact: "John Smith",
-      title: "Director of IT",
-      email: "jsmith@pcsb.org",
-      contacted: true,
-      notes: "Interested in Q1 demo. Follow up next week.",
-      vertical: "K-12"
-    },
+  const prospectsPublicSector = [
     { 
       id: 2, 
       name: "City of St. Petersburg", 
@@ -134,6 +124,62 @@ const SalesProspectsList = () => {
     }
   ];
 
+  const prospectsK12 = [
+    { 
+      id: 1, 
+      name: "Pinellas County School District", 
+      contact: "John Smith",
+      title: "Director of IT",
+      email: "jsmith@pcsb.org",
+      contacted: true,
+      notes: "Interested in Q1 demo. Follow up next week.",
+      vertical: "K-12"
+    }
+  ];
+
+  const prospectsHigherEd = [
+    { 
+      id: 16, 
+      name: "Eckerd College", 
+      contact: "TBD",
+      title: "TBD",
+      email: "contact@eckerd.edu",
+      contacted: false,
+      notes: "New prospect - need to identify contact.",
+      vertical: "Higher Education"
+    },
+    { 
+      id: 17, 
+      name: "St. Petersburg College", 
+      contact: "TBD",
+      title: "TBD",
+      email: "contact@spcollege.edu",
+      contacted: false,
+      notes: "New prospect - need to identify contact.",
+      vertical: "Higher Education"
+    },
+    { 
+      id: 18, 
+      name: "St. Pete Technical College", 
+      contact: "TBD",
+      title: "TBD",
+      email: "contact@sptech.edu",
+      contacted: false,
+      notes: "New prospect - need to identify contact.",
+      vertical: "Higher Education"
+    },
+    { 
+      id: 19, 
+      name: "Polk State College", 
+      contact: "TBD",
+      title: "TBD",
+      email: "contact@polk.edu",
+      contacted: false,
+      notes: "New prospect - need to identify contact.",
+      vertical: "Higher Education"
+    }
+  ];
+
   const customers = [
     {
       id: 101,
@@ -178,6 +224,79 @@ const SalesProspectsList = () => {
     setExpandedCustomer(expandedCustomer === id ? null : id);
   };
 
+  const ProspectCard = ({ prospect, index }) => (
+    <div
+      key={prospect.id}
+      className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 hover:border-slate-600 transition-all cursor-pointer"
+      onClick={() => toggleProspect(prospect.id)}
+    >
+      <div className="p-4 flex items-center gap-4">
+        <div className="flex-shrink-0 w-8 text-center">
+          <span className="text-slate-400 font-semibold">{index + 1}</span>
+        </div>
+        
+        <div className="flex-shrink-0">
+          <div className={`w-4 h-4 rounded-full ${prospect.contacted ? 'bg-green-500' : 'bg-red-500'}`}></div>
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <h3 className="text-white font-semibold text-base truncate">{prospect.name}</h3>
+          <p className="text-slate-400 text-sm truncate">{prospect.contact} • {prospect.title}</p>
+        </div>
+
+        <div className="flex-shrink-0">
+          <span className="text-xs font-medium text-blue-400 bg-blue-900/30 px-3 py-1 rounded-full">
+            {prospect.vertical}
+          </span>
+        </div>
+
+        <div className="flex-shrink-0 text-slate-400">
+          <svg 
+            className={`w-5 h-5 transition-transform ${expandedProspect === prospect.id ? 'rotate-180' : ''}`} 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+
+      {expandedProspect === prospect.id && (
+        <div className="px-4 pb-4 border-t border-slate-700 pt-4 space-y-2">
+          <div className="text-slate-300">
+            <span className="text-slate-500 text-sm">Contact:</span>
+            <span className="ml-2">{prospect.contact}</span>
+          </div>
+          <div className="text-slate-300">
+            <span className="text-slate-500 text-sm">Title:</span>
+            <span className="ml-2">{prospect.title}</span>
+          </div>
+          <div className="text-slate-300">
+            <span className="text-slate-500 text-sm">Email:</span>
+            <span className="ml-2">{prospect.email}</span>
+          </div>
+          <div className="text-slate-300">
+            <span className="text-slate-500 text-sm">Vertical:</span>
+            <span className="ml-2">{prospect.vertical}</span>
+          </div>
+          <div className="text-slate-300">
+            <span className="text-slate-500 text-sm">Status:</span>
+            <span className={`ml-2 font-semibold ${prospect.contacted ? 'text-green-400' : 'text-red-400'}`}>
+              {prospect.contacted ? 'Contacted' : 'Not Contacted'}
+            </span>
+          </div>
+          <div className="text-slate-300">
+            <span className="text-slate-500 text-sm">Notes:</span>
+            <p className="ml-2 mt-1 text-slate-400 italic">{prospect.notes}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  const totalProspects = prospectsPublicSector.length + prospectsK12.length + prospectsHigherEd.length;
+
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8">
       <div className="max-w-7xl mx-auto">
@@ -191,80 +310,39 @@ const SalesProspectsList = () => {
           <div>
             <div className="mb-4 bg-blue-900/30 rounded-lg p-4 border border-blue-700/50">
               <h2 className="text-2xl font-bold text-white mb-1">Current Prospects</h2>
-              <p className="text-blue-300">{prospects.length} active prospects</p>
+              <p className="text-blue-300">{totalProspects} active prospects</p>
             </div>
 
-            <div className="space-y-3 max-h-[calc(100vh-250px)] overflow-y-auto pr-2">
-              {prospects.map((prospect, index) => (
-                <div
-                  key={prospect.id}
-                  className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 hover:border-slate-600 transition-all cursor-pointer"
-                  onClick={() => toggleProspect(prospect.id)}
-                >
-                  <div className="p-4 flex items-center gap-4">
-                    <div className="flex-shrink-0 w-8 text-center">
-                      <span className="text-slate-400 font-semibold">{index + 1}</span>
-                    </div>
-                    
-                    <div className="flex-shrink-0">
-                      <div className={`w-4 h-4 rounded-full ${prospect.contacted ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-white font-semibold text-base truncate">{prospect.name}</h3>
-                      <p className="text-slate-400 text-sm truncate">{prospect.contact} • {prospect.title}</p>
-                    </div>
-
-                    <div className="flex-shrink-0">
-                      <span className="text-xs font-medium text-blue-400 bg-blue-900/30 px-3 py-1 rounded-full">
-                        {prospect.vertical}
-                      </span>
-                    </div>
-
-                    <div className="flex-shrink-0 text-slate-400">
-                      <svg 
-                        className={`w-5 h-5 transition-transform ${expandedProspect === prospect.id ? 'rotate-180' : ''}`} 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </div>
-
-                  {expandedProspect === prospect.id && (
-                    <div className="px-4 pb-4 border-t border-slate-700 pt-4 space-y-2">
-                      <div className="text-slate-300">
-                        <span className="text-slate-500 text-sm">Contact:</span>
-                        <span className="ml-2">{prospect.contact}</span>
-                      </div>
-                      <div className="text-slate-300">
-                        <span className="text-slate-500 text-sm">Title:</span>
-                        <span className="ml-2">{prospect.title}</span>
-                      </div>
-                      <div className="text-slate-300">
-                        <span className="text-slate-500 text-sm">Email:</span>
-                        <span className="ml-2">{prospect.email}</span>
-                      </div>
-                      <div className="text-slate-300">
-                        <span className="text-slate-500 text-sm">Vertical:</span>
-                        <span className="ml-2">{prospect.vertical}</span>
-                      </div>
-                      <div className="text-slate-300">
-                        <span className="text-slate-500 text-sm">Status:</span>
-                        <span className={`ml-2 font-semibold ${prospect.contacted ? 'text-green-400' : 'text-red-400'}`}>
-                          {prospect.contacted ? 'Contacted' : 'Not Contacted'}
-                        </span>
-                      </div>
-                      <div className="text-slate-300">
-                        <span className="text-slate-500 text-sm">Notes:</span>
-                        <p className="ml-2 mt-1 text-slate-400 italic">{prospect.notes}</p>
-                      </div>
-                    </div>
-                  )}
+            <div className="space-y-6 max-h-[calc(100vh-250px)] overflow-y-auto pr-2">
+              {/* PUBLIC SECTOR SECTION */}
+              <div>
+                <h3 className="text-lg font-semibold text-slate-300 mb-3 px-2">Public Sector</h3>
+                <div className="space-y-3">
+                  {prospectsPublicSector.map((prospect, index) => (
+                    <ProspectCard key={prospect.id} prospect={prospect} index={index} />
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              {/* K-12 SECTION */}
+              <div>
+                <h3 className="text-lg font-semibold text-slate-300 mb-3 px-2">K-12 Education</h3>
+                <div className="space-y-3">
+                  {prospectsK12.map((prospect, index) => (
+                    <ProspectCard key={prospect.id} prospect={prospect} index={index} />
+                  ))}
+                </div>
+              </div>
+
+              {/* HIGHER EDUCATION SECTION */}
+              <div>
+                <h3 className="text-lg font-semibold text-slate-300 mb-3 px-2">Higher Education</h3>
+                <div className="space-y-3">
+                  {prospectsHigherEd.map((prospect, index) => (
+                    <ProspectCard key={prospect.id} prospect={prospect} index={index} />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
