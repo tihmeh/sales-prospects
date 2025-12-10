@@ -499,21 +499,21 @@ const SalesProspectsList = () => {
               <div>
                 <h3 className="text-xl font-bold text-white mb-4 px-2 border-b border-slate-600 pb-2">Public Sector</h3>
                 
-                {/* CITIES/MUNICIPALITIES SUBSECTION */}
+                {/* TRANSIT SUBSECTION - NOW FIRST */}
                 <div className="mb-4">
-                  <h4 className="text-md font-semibold text-slate-300 mb-3 px-2 pl-4">Cities & Municipalities</h4>
+                  <h4 className="text-md font-semibold text-slate-300 mb-3 px-2 pl-4">Transit</h4>
                   <div className="space-y-3">
-                    {customersCities.map((customer, index) => (
+                    {customersTransit.map((customer, index) => (
                       <CustomerCard key={customer.id} customer={customer} index={index} />
                     ))}
                   </div>
                 </div>
 
-                {/* TRANSIT SUBSECTION */}
+                {/* CITIES/MUNICIPALITIES SUBSECTION - NOW SECOND */}
                 <div>
-                  <h4 className="text-md font-semibold text-slate-300 mb-3 px-2 pl-4">Transit</h4>
+                  <h4 className="text-md font-semibold text-slate-300 mb-3 px-2 pl-4">Cities & Municipalities</h4>
                   <div className="space-y-3">
-                    {customersTransit.map((customer, index) => (
+                    {customersCities.map((customer, index) => (
                       <CustomerCard key={customer.id} customer={customer} index={index} />
                     ))}
                   </div>
