@@ -5,11 +5,11 @@ const SalesProspectsList = () => {
     { 
       id: 1, 
       name: "Pinellas County School District", 
-      contact: "John Smith",
-      title: "Director of IT",
-      email: "jsmith@pcsb.org",
+      contact: "Sean Jowell",
+      title: "Director of Safety & Security",
+      email: "jowells@pcsb.org",
       contacted: true,
-      notes: "Interested in Q1 demo. Follow up next week."
+      notes: "Attending Utilities Unite Event in Clearwater."
     },
     { 
       id: 2, 
@@ -125,10 +125,10 @@ const SalesProspectsList = () => {
     {
       id: 101,
       name: "PSTA - Pinellas Suncoast Transit Authority",
-      contact: "TBD",
-      title: "TBD",
-      email: "contact@psta.net",
-      startDate: "2024-01-15",
+      contact: "Missy Nevitt",
+      title: "Superintendent of Facilities",
+      email: "mnevitt@psta.org",
+      startDate: "12-20-2024",
       notes: "Current customer"
     },
     {
@@ -144,6 +144,8 @@ const SalesProspectsList = () => {
       id: 103,
       name: "City of Largo",
       contact: "TBD",
+      title: "TBD",
+      contact2: "TBD",
       title: "TBD",
       email: "contact@largo.com",
       startDate: "2024-03-20",
