@@ -4,70 +4,54 @@ const SalesProspectsList = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [shake, setShake] = useState(false);
+  const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard' or 'map'
 
   const prospectsK12 = [
-    { id: 1, name: "Pinellas County School District", contact: "Sean Jowell", title: "Director Safety & Security", email: "jowells@pcsb.org", contacted: true, notes: "Attending Utilities Unite Event in Clearwater", vertical: "K-12" },
-    { id: 20, name: "Sumter County Public Schools", contact: "Philip Martin", title: "Director of Safety & Security", email: "philip.martin@sumter.k12.fl.us", contacted: false, notes: "New prospect - need to make initial contact.", vertical: "K-12" }
+    { id: 1, name: "Pinellas County School District", contact: "Sean Jowell", title: "Director Safety & Security", email: "jowells@pcsb.org", contacted: true, notes: "Attending Utilities Unite Event in Clearwater", vertical: "K-12", address: "301 4th Street SW, Largo, FL 33770" },
+    { id: 20, name: "Sumter County Public Schools", contact: "Philip Martin", title: "Director of Safety & Security", email: "philip.martin@sumter.k12.fl.us", contacted: false, notes: "New prospect - need to make initial contact.", vertical: "K-12", address: "2680 W County Rd 476, Bushnell, FL 33513" }
   ];
 
   const prospectsCities = [
-    { id: 2, name: "City of St. Petersburg", contact: "Sarah Johnson", title: "IT Manager", email: "sjohnson@stpete.org", contacted: false, notes: "Left voicemail on 12/5. Awaiting callback.", vertical: "Public Sector" },
-    { id: 3, name: "City of Dunedin", contact: "Michael Nagy", title: "Director of IT", email: "mwilliams@dunedinfl.gov", contact2: "Ronbert Ignacio", title2: "IT Specialist", email2: "ronbert.ignacio@dunedin.gov", contacted: true, notes: "Reachout out through email, no response", vertical: "Public Sector" },
-    { id: 5, name: "City of Gulfport", contact: "David Mather", title: "Director of IT", email: "dmather@mygulfport.us", contacted: true, notes: "Visited in person, followed up over email", vertical: "Public Sector" },
-    { id: 6, name: "City of Treasure Island", contact: "Chris Pagan", title: "Director of IT", email: "cpagan@mytreasureisland.org", contacted: true, notes: "Visited in person, followed up over email", vertical: "Public Sector" },
-    { id: 7, name: "Belleair Beach City", contact: "TBD", title: "TBD", email: "contact@belleairbeach.com", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
-    { id: 8, name: "Belleair Bluffs City", contact: "TBD", title: "TBD", email: "contact@belleairbluffs.org", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
-    { id: 9, name: "City of Belleair", contact: "TBD", title: "TBD", email: "contact@belleair.net", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
-    { id: 11, name: "City of Oldsmar", contact: "TBD", title: "TBD", email: "contact@oldsmar.com", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
-    { id: 12, name: "City of Seminole", contact: "Matthew Sabella", title: "Director of IT", email: "msabella@myseminole.com", contacted: true, notes: "reached out over email. Plan to stop by in person soon", vertical: "Public Sector" },
-    { id: 13, name: "City of S. Pasadena", contact: "Alex Britton-Kant", title: "Director of IT", email: "abrittonkant@mysouthpasadena.com", contacted: true, notes: "Stopped by in person and reached out over email. no response", vertical: "Public Sector" },
-    { id: 14, name: "City of St. Pete Beach", contact: "TBD", title: "TBD", email: "contact@stpetebeach.org", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector" },
-    { id: 15, name: "City of Tarpon Springs", contact: "Suzanne Linton", title: "Director of IT", email: "slinton@ctsfl.us", contacted: true, notes: "Connected on linked in. Preparing email to send this week 12/9/25", vertical: "Public Sector" }
+    { id: 2, name: "City of St. Petersburg", contact: "Sarah Johnson", title: "IT Manager", email: "sjohnson@stpete.org", contacted: false, notes: "Left voicemail on 12/5. Awaiting callback.", vertical: "Public Sector", address: "175 5th St N, St. Petersburg, FL 33701" },
+    { id: 3, name: "City of Dunedin", contact: "Michael Nagy", title: "Director of IT", email: "mwilliams@dunedinfl.gov", contact2: "Ronbert Ignacio", title2: "IT Specialist", email2: "ronbert.ignacio@dunedin.gov", contacted: true, notes: "Reachout out through email, no response", vertical: "Public Sector", address: "542 Main St, Dunedin, FL 34698" },
+    { id: 5, name: "City of Gulfport", contact: "David Mather", title: "Director of IT", email: "dmather@mygulfport.us", contacted: true, notes: "Visited in person, followed up over email", vertical: "Public Sector", address: "2401 53rd St S, Gulfport, FL 33707" },
+    { id: 6, name: "City of Treasure Island", contact: "Chris Pagan", title: "Director of IT", email: "cpagan@mytreasureisland.org", contacted: true, notes: "Visited in person, followed up over email", vertical: "Public Sector", address: "120 108th Ave, Treasure Island, FL 33706" },
+    { id: 7, name: "Belleair Beach City", contact: "TBD", title: "TBD", email: "contact@belleairbeach.com", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector", address: "2747 Sunset Blvd, Belleair Beach, FL 33786" },
+    { id: 8, name: "Belleair Bluffs City", contact: "TBD", title: "TBD", email: "contact@belleairbluffs.org", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector", address: "2747 Sunset Blvd, Belleair Bluffs, FL 33770" },
+    { id: 9, name: "City of Belleair", contact: "TBD", title: "TBD", email: "contact@belleair.net", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector", address: "901 Ponce de Leon Blvd, Belleair, FL 33756" },
+    { id: 11, name: "City of Oldsmar", contact: "TBD", title: "TBD", email: "contact@oldsmar.com", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector", address: "100 State St W, Oldsmar, FL 34677" },
+    { id: 12, name: "City of Seminole", contact: "Matthew Sabella", title: "Director of IT", email: "msabella@myseminole.com", contacted: true, notes: "reached out over email. Plan to stop by in person soon", vertical: "Public Sector", address: "9199 113th St N, Seminole, FL 33772" },
+    { id: 13, name: "City of S. Pasadena", contact: "Alex Britton-Kant", title: "Director of IT", email: "abrittonkant@mysouthpasadena.com", contacted: true, notes: "Stopped by in person and reached out over email. no response", vertical: "Public Sector", address: "7047 Sunset Dr S, South Pasadena, FL 33707" },
+    { id: 14, name: "City of St. Pete Beach", contact: "TBD", title: "TBD", email: "contact@stpetebeach.org", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Public Sector", address: "155 Corey Ave, St. Pete Beach, FL 33706" },
+    { id: 15, name: "City of Tarpon Springs", contact: "Suzanne Linton", title: "Director of IT", email: "slinton@ctsfl.us", contacted: true, notes: "Connected on linked in. Preparing email to send this week 12/9/25", vertical: "Public Sector", address: "324 E Pine St, Tarpon Springs, FL 34689" }
   ];
 
   const prospectsHigherEd = [
-    { id: 16, name: "Eckerd College", contact: "Jessica Cinney", title: "Director of Campus Safety & Security", email: "cinneyj@eckerd.edu", contact2: "Walter Moore", title2: "Director of IT", email2: "moorewr@eckerd.edu", contact3: "Tonya Womack", title3: "Risk Management & Safety", email3: "womacktm@eckerd.edu", contacted: true, notes: "Old customer that has bad experience with Convergint", vertical: "Higher Education" },
-    { id: 17, name: "St. Petersburg College", contact: "TBD", title: "TBD", email: "contact@spcollege.edu", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Higher Education" },
-    { id: 18, name: "St. Pete Technical College", contact: "TBD", title: "TBD", email: "contact@sptech.edu", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Higher Education" },
-    { id: 19, name: "Polk State College", contact: "Emmett Andrews", title: "Director of Safety & Security", email: "eandrews@polk.edu", contact2: "Martin Gang", title2: "Director of Technology and IT", email2: "mgang@polk.edu", contacted: true, notes: "Reached out over email", vertical: "Higher Education" }
+    { id: 16, name: "Eckerd College", contact: "Jessica Cinney", title: "Director of Campus Safety & Security", email: "cinneyj@eckerd.edu", contact2: "Walter Moore", title2: "Director of IT", email2: "moorewr@eckerd.edu", contact3: "Tonya Womack", title3: "Risk Management & Safety", email3: "womacktm@eckerd.edu", contacted: true, notes: "Old customer that has bad experience with Convergint", vertical: "Higher Education", address: "4200 54th Ave S, St. Petersburg, FL 33711" },
+    { id: 17, name: "St. Petersburg College", contact: "TBD", title: "TBD", email: "contact@spcollege.edu", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Higher Education", address: "6605 5th Ave N, St. Petersburg, FL 33710" },
+    { id: 18, name: "St. Pete Technical College", contact: "TBD", title: "TBD", email: "contact@sptech.edu", contacted: false, notes: "New prospect - need to identify contact.", vertical: "Higher Education", address: "901 34th St S, St. Petersburg, FL 33711" },
+    { id: 19, name: "Polk State College", contact: "Emmett Andrews", title: "Director of Safety & Security", email: "eandrews@polk.edu", contact2: "Martin Gang", title2: "Director of Technology and IT", email2: "mgang@polk.edu", contacted: true, notes: "Reached out over email", vertical: "Higher Education", address: "999 Ave H NE, Winter Haven, FL 33881" }
   ];
 
   const customersCities = [
-    { id: 102, name: "Town of Indian Shores", contact: "Jennifer Angelo", title: "Admin Assistant", email: "jangelo@myindianshores.com", startDate: "2024-06-10", notes: "Current customer", vertical: "Public Sector", bookingAmount: 0 },
-    { id: 103, name: "City of Largo", contact: "Hansel Roush", title: "Director of IT", email: "hroush@largo.com", contact2: "Tim Clark", title2: "IT Admin", email2: "tclark@largo.com", startDate: "2024-03-20", notes: "Current customer", vertical: "Public Sector", bookingAmount: 0 }
+    { id: 102, name: "Town of Indian Shores", contact: "Jennifer Angelo", title: "Admin Assistant", email: "jangelo@myindianshores.com", startDate: "2024-06-10", notes: "Current customer", vertical: "Public Sector", bookingAmount: 0, address: "19305 Gulf Blvd, Indian Shores, FL 33785" },
+    { id: 103, name: "City of Largo", contact: "Hansel Roush", title: "Director of IT", email: "hroush@largo.com", contact2: "Tim Clark", title2: "IT Admin", email2: "tclark@largo.com", startDate: "2024-03-20", notes: "Current customer", vertical: "Public Sector", bookingAmount: 0, address: "201 Highland Ave, Largo, FL 33770" }
   ];
 
   const customersTransit = [
-    { id: 101, name: "PSTA - Pinellas Suncoast Transit Authority", contact: "Missy Nevitt", title: "Superintendant of Facilities", email: "mnevitt@psta.net", startDate: "12/20/2024", notes: "Current customer", vertical: "Transit", bookingAmount: 124560 }
+    { id: 101, name: "PSTA - Pinellas Suncoast Transit Authority", contact: "Missy Nevitt", title: "Superintendant of Facilities", email: "mnevitt@psta.net", startDate: "12/20/2024", notes: "Current customer", vertical: "Transit", bookingAmount: 124560, address: "14840 49th St N, Clearwater, FL 33762" }
   ];
 
   const [expandedProspect, setExpandedProspect] = useState(null);
   const [expandedCustomer, setExpandedCustomer] = useState(null);
-  const [dailyActivity, setDailyActivity] = useState(() => {
-    const saved = localStorage.getItem('dailyActivity');
-    return saved ? JSON.parse(saved) : { calls: 0, emails: 0, linkedin: 0 };
+  const [weeklyContacts, setWeeklyContacts] = useState(() => {
+    const saved = localStorage.getItem('weeklyContacts');
+    return saved ? parseInt(saved) : 0;
   });
-  const [weeklyActivity, setWeeklyActivity] = useState(() => {
-    const saved = localStorage.getItem('weeklyActivity');
-    return saved ? JSON.parse(saved) : { calls: 0, emails: 0, linkedin: 0 };
-  });
-  const [monthlyActivity, setMonthlyActivity] = useState(() => {
-    const saved = localStorage.getItem('monthlyActivity');
-    return saved ? JSON.parse(saved) : { calls: 0, emails: 0, linkedin: 0 };
-  });
-  const [expandedActivity, setExpandedActivity] = useState({ daily: false, weekly: false, monthly: false });
 
   useEffect(() => {
-    localStorage.setItem('dailyActivity', JSON.stringify(dailyActivity));
-  }, [dailyActivity]);
-
-  useEffect(() => {
-    localStorage.setItem('weeklyActivity', JSON.stringify(weeklyActivity));
-  }, [weeklyActivity]);
-
-  useEffect(() => {
-    localStorage.setItem('monthlyActivity', JSON.stringify(monthlyActivity));
-  }, [monthlyActivity]);
+    localStorage.setItem('weeklyContacts', weeklyContacts.toString());
+  }, [weeklyContacts]);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -81,28 +65,13 @@ const SalesProspectsList = () => {
   };
 
   const handleReset = () => {
-    if (window.confirm('Are you sure you want to reset all activity counters to zero?')) {
-      setDailyActivity({ calls: 0, emails: 0, linkedin: 0 });
-      setWeeklyActivity({ calls: 0, emails: 0, linkedin: 0 });
-      setMonthlyActivity({ calls: 0, emails: 0, linkedin: 0 });
-      localStorage.removeItem('dailyActivity');
-      localStorage.removeItem('weeklyActivity');
-      localStorage.removeItem('monthlyActivity');
+    if (window.confirm('Are you sure you want to reset the weekly contact counter to zero?')) {
+      setWeeklyContacts(0);
+      localStorage.removeItem('weeklyContacts');
     }
   };
 
   const formatCurrency = (amount) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(amount);
-
-  const handleActivityChange = (period, type, value) => {
-    const numValue = parseInt(value) || 0;
-    if (period === 'daily') setDailyActivity({ ...dailyActivity, [type]: numValue });
-    else if (period === 'weekly') setWeeklyActivity({ ...weeklyActivity, [type]: numValue });
-    else if (period === 'monthly') setMonthlyActivity({ ...monthlyActivity, [type]: numValue });
-  };
-
-  const toggleActivity = (period) => {
-    setExpandedActivity({ ...expandedActivity, [period]: !expandedActivity[period] });
-  };
 
   const Card = ({ item, index, isCustomer, expanded, toggle }) => (
     <div className="bg-slate-800/50 rounded-lg border border-slate-700 hover:border-slate-600 transition-all cursor-pointer" onClick={() => toggle(item.id)}>
@@ -132,110 +101,38 @@ const SalesProspectsList = () => {
     </div>
   );
 
-  const ActivityCard = ({ title, goals, activity, period, isExpanded }) => {
-    const getPercentage = (current, goal) => Math.min((current / goal) * 100, 100);
-    const totalCurrent = activity.calls + activity.emails + activity.linkedin;
-    const totalGoal = goals.calls + goals.emails + goals.linkedin;
-    
-    return (
-      <div className="bg-slate-800/50 rounded-lg border border-slate-700">
-        <div className="p-3 flex items-center justify-between cursor-pointer hover:bg-slate-700/30 transition-all" onClick={() => toggleActivity(period)}>
-          <div>
-            <h3 className="text-sm font-semibold text-white">{title} Goals</h3>
-            <p className="text-xs text-slate-400">{totalCurrent} / {totalGoal}</p>
-          </div>
-          <svg className={`w-4 h-4 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-        </div>
-        {isExpanded && (
-          <div className="px-3 pb-3 border-t border-slate-700 pt-3 space-y-2">
-            {['calls', 'emails', 'linkedin'].map((type, i) => (
-              <div key={type}>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-slate-300 text-xs">{type === 'linkedin' ? 'LinkedIn' : type.charAt(0).toUpperCase() + type.slice(1)}</span>
-                  <div className="flex items-center gap-1">
-                    <input type="number" value={activity[type]} onChange={(e) => handleActivityChange(period, type, e.target.value)} className="w-12 px-1 py-0.5 bg-slate-700 border border-slate-600 rounded text-white text-xs text-center" onClick={(e) => e.stopPropagation()} />
-                    <span className="text-slate-400 text-xs">/{goals[type]}</span>
-                  </div>
-                </div>
-                <div className="w-full bg-slate-700 rounded-full h-1.5">
-                  <div className={`h-1.5 rounded-full transition-all ${i === 0 ? 'bg-blue-500' : i === 1 ? 'bg-purple-500' : 'bg-cyan-500'}`} style={{ width: `${getPercentage(activity[type], goals[type])}%` }} />
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  };
-
   const totalProspects = prospectsK12.length + prospectsCities.length + prospectsHigherEd.length;
   const totalCustomers = customersCities.length + customersTransit.length;
+  const allProspects = [...prospectsK12, ...prospectsCities, ...prospectsHigherEd];
+  const allLocations = [...allProspects, ...customersCities, ...customersTransit];
 
   // Login Screen
   if (!isAuthenticated) {
     return (
-      <div className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 flex items-center justify-center relative overflow-hidden">
-        {/* Animated background effect */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        </div>
-
-        {/* Floating Orb with Electricity */}
-        <div className="relative z-10 flex flex-col items-center gap-8">
-          <div className="relative">
-            {/* Main Orb */}
-            <div className="w-40 h-40 rounded-full bg-gradient-to-br from-blue-400 via-cyan-300 to-blue-500 animate-pulse shadow-2xl shadow-blue-500/50 flex items-center justify-center">
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-300 via-white to-cyan-200 animate-spin-slow shadow-inner"></div>
-            </div>
-            
-            {/* Electric rings */}
-            <div className="absolute inset-0 rounded-full border-2 border-blue-400/30 animate-ping"></div>
-            <div className="absolute inset-0 rounded-full border-2 border-cyan-400/20 animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-            
-            {/* Lightning bolts */}
-            <svg className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full w-1 h-16 opacity-70 animate-pulse" viewBox="0 0 10 100">
-              <path d="M5 0 L5 40 L8 40 L3 100 L7 60 L5 60 Z" fill="url(#electric-gradient)" />
-              <defs>
-                <linearGradient id="electric-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" style={{ stopColor: '#60A5FA', stopOpacity: 0 }} />
-                  <stop offset="50%" style={{ stopColor: '#60A5FA', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: '#60A5FA', stopOpacity: 0 }} />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-
-          {/* Login Form */}
-          <form onSubmit={handleLogin} className={`flex flex-col items-center gap-4 ${shake ? 'animate-shake' : ''}`}>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter access code"
-              className="px-6 py-3 bg-slate-800/50 border-2 border-blue-500/30 rounded-lg text-white text-center text-lg focus:outline-none focus:border-blue-400 transition-all backdrop-blur-sm"
-              autoFocus
-            />
-            <button
-              type="submit"
-              className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg shadow-blue-500/50"
-            >
-              Enter
-            </button>
-          </form>
-        </div>
+      <div className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 flex items-center justify-center">
+        <form onSubmit={handleLogin} className={`flex flex-col items-center gap-4 bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl border border-slate-700 ${shake ? 'animate-shake' : ''}`}>
+          <h1 className="text-3xl font-bold text-white mb-4">Sales Dashboard</h1>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter access code"
+            className="px-6 py-3 bg-slate-900/50 border-2 border-blue-500/30 rounded-lg text-white text-center text-lg focus:outline-none focus:border-blue-400 transition-all w-64"
+            autoFocus
+          />
+          <button
+            type="submit"
+            className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg shadow-blue-500/50 w-64"
+          >
+            Enter
+          </button>
+        </form>
 
         <style jsx>{`
-          @keyframes spin-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
           @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
             75% { transform: translateX(10px); }
-          }
-          .animate-spin-slow {
-            animation: spin-slow 3s linear infinite;
           }
           .animate-shake {
             animation: shake 0.3s ease-in-out;
@@ -245,35 +142,131 @@ const SalesProspectsList = () => {
     );
   }
 
-  // Main Dashboard (after login)
+  // Map View
+  if (currentView === 'map') {
+    const mapUrl = `https://www.google.com/maps/d/embed?mid=1VYb_KqvQnOCyXxUyZgLW8hVqQpE&ehbc=2E312F`;
+    
+    return (
+      <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-1">Prospect Map</h1>
+              <p className="text-slate-300 text-sm">Pinellas County, Florida</p>
+            </div>
+            <button
+              onClick={() => setCurrentView('dashboard')}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all"
+            >
+              Back to Dashboard
+            </button>
+          </div>
+          
+          <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4 mb-4">
+            <h3 className="text-white font-semibold mb-3">All Locations ({allLocations.length})</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 max-h-40 overflow-y-auto">
+              {allLocations.map((loc) => (
+                <div key={loc.id} className="text-xs">
+                  <span className={`inline-block w-2 h-2 rounded-full mr-2 ${loc.startDate ? 'bg-green-500' : loc.contacted ? 'bg-blue-500' : 'bg-red-500'}`}></span>
+                  <span className="text-slate-300">{loc.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 rounded-lg border border-slate-700 overflow-hidden" style={{ height: 'calc(100vh - 300px)' }}>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d226669.5813558107!2d-82.83385243359375!3d27.86926400000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88c2e663693aaa41%3A0x4cc4003bcd48bff!2sPinellas%20County%2C%20FL!5e0!3m2!1sen!2sus!4v1702405920000!5m2!1sen!2sus"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Main Dashboard
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-6 flex items-start justify-between">
-          <div><h1 className="text-3xl font-bold text-white mb-1">Sales Dashboard</h1><p className="text-slate-300 text-sm">Pipeline Overview</p></div>
-          <button 
-            onClick={handleReset}
-            className="bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 hover:border-red-500 rounded-lg px-4 py-2 transition-all"
-          >
-            <div className="text-red-300 text-xs font-medium">Reset Activity</div>
-            <div className="text-red-400 text-sm font-semibold">Clear Counters</div>
-          </button>
-          <div className="flex flex-col gap-2">
-            <div className="bg-slate-700/30 border border-slate-600/50 rounded-lg px-3 py-1 text-center">
-              <p className="text-slate-400 text-xs italic">"This is a new skill that requires training,</p>
-              <p className="text-slate-400 text-xs italic">practice and guidance." - Joe Morone</p>
-            </div>
-            <div className="bg-amber-500/20 border border-amber-500/50 rounded-lg px-4 py-2">
-              <div className="text-amber-300 text-xs font-medium">2026 Sales Goal</div>
-              <div className="text-amber-400 text-xl font-bold">{formatCurrency(3000000)}</div>
+          <div>
+            <h1 className="text-3xl font-bold text-white mb-1">Sales Dashboard</h1>
+            <p className="text-slate-300 text-sm">Pipeline Overview</p>
+          </div>
+          <div className="flex gap-3 items-start">
+            <button
+              onClick={() => setCurrentView('map')}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-all flex items-center gap-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              </svg>
+              Map View
+            </button>
+            <div className="flex flex-col gap-2">
+              <div className="bg-slate-700/30 border border-slate-600/50 rounded-lg px-3 py-1 text-center">
+                <p className="text-slate-400 text-xs italic">"This is a new skill that requires training,</p>
+                <p className="text-slate-400 text-xs italic">practice and guidance." - Joe Morone</p>
+              </div>
+              <div className="bg-amber-500/20 border border-amber-500/50 rounded-lg px-4 py-2">
+                <div className="text-amber-300 text-xs font-medium">2026 Sales Goal</div>
+                <div className="text-amber-400 text-xl font-bold">{formatCurrency(3000000)}</div>
+              </div>
             </div>
           </div>
         </div>
-        <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-          <ActivityCard title="Daily" goals={{ calls: 20, emails: 100, linkedin: 400 }} activity={dailyActivity} period="daily" isExpanded={expandedActivity.daily} />
-          <ActivityCard title="Weekly" goals={{ calls: 100, emails: 500, linkedin: 2000 }} activity={weeklyActivity} period="weekly" isExpanded={expandedActivity.weekly} />
-          <ActivityCard title="Monthly" goals={{ calls: 400, emails: 2000, linkedin: 8000 }} activity={monthlyActivity} period="monthly" isExpanded={expandedActivity.monthly} />
+
+        {/* Weekly Contacts Progress Bar */}
+        <div className="mb-4 bg-slate-800/50 rounded-lg border border-slate-700 p-4">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <h3 className="text-lg font-semibold text-white">Weekly Contacts</h3>
+              <p className="text-sm text-slate-400">Track your outreach progress</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setWeeklyContacts(Math.max(0, weeklyContacts - 1))}
+                className="px-3 py-1 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded text-red-400 font-bold"
+              >
+                -
+              </button>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white">{weeklyContacts}</div>
+                <div className="text-xs text-slate-400">/ 100 goal</div>
+              </div>
+              <button
+                onClick={() => setWeeklyContacts(weeklyContacts + 1)}
+                className="px-3 py-1 bg-green-500/20 hover:bg-green-500/30 border border-green-500/50 rounded text-green-400 font-bold"
+              >
+                +
+              </button>
+              <button
+                onClick={handleReset}
+                className="px-3 py-2 bg-slate-700 hover:bg-slate-600 border border-slate-600 rounded text-slate-300 text-sm font-medium"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+          <div className="w-full bg-slate-700 rounded-full h-4">
+            <div 
+              className="h-4 rounded-full transition-all duration-500 bg-gradient-to-r from-blue-500 via-purple-500 to-green-500"
+              style={{ width: `${Math.min((weeklyContacts / 100) * 100, 100)}%` }}
+            ></div>
+          </div>
+          <div className="mt-2 text-center text-sm">
+            <span className={`font-semibold ${weeklyContacts >= 100 ? 'text-green-400' : weeklyContacts >= 50 ? 'text-yellow-400' : 'text-blue-400'}`}>
+              {Math.round((weeklyContacts / 100) * 100)}% Complete
+            </span>
+          </div>
         </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
             <div className="mb-3 bg-blue-900/30 rounded-lg p-3 border border-blue-700/50">
