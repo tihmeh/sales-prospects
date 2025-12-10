@@ -211,7 +211,8 @@ const SalesProspectsList = () => {
       email: "jangelo@myindianshores.com",
       startDate: "2024-06-10",
       notes: "Current customer",
-      vertical: "Public Sector"
+      vertical: "Public Sector",
+      bookingAmount: 0
     },
     {
       id: 103,
@@ -224,7 +225,8 @@ const SalesProspectsList = () => {
       email2: "tclark@largo.com",
       startDate: "2024-03-20",
       notes: "Current customer",
-      vertical: "Public Sector"
+      vertical: "Public Sector",
+      bookingAmount: 0
     }
   ];
 
@@ -237,7 +239,8 @@ const SalesProspectsList = () => {
       email: "mnevitt@psta.net",
       startDate: "12/20/2024",
       notes: "Current customer",
-      vertical: "Transit"
+      vertical: "Transit",
+      bookingAmount: 124560
     }
   ];
 
@@ -250,6 +253,15 @@ const SalesProspectsList = () => {
 
   const toggleCustomer = (id) => {
     setExpandedCustomer(expandedCustomer === id ? null : id);
+  };
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
   };
 
   const ProspectCard = ({ prospect, index }) => (
@@ -381,6 +393,12 @@ const SalesProspectsList = () => {
           </span>
         </div>
 
+        <div className="flex-shrink-0">
+          <span className="text-sm font-semibold text-emerald-400">
+            {formatCurrency(customer.bookingAmount)}
+          </span>
+        </div>
+
         <div className="flex-shrink-0 text-slate-400">
           <svg 
             className={`w-5 h-5 transition-transform ${expandedCustomer === customer.id ? 'rotate-180' : ''}`} 
@@ -426,6 +444,10 @@ const SalesProspectsList = () => {
           <div className="text-slate-300 mt-3 pt-2 border-t border-slate-700/50">
             <span className="text-slate-500 text-sm">Vertical:</span>
             <span className="ml-2">{customer.vertical}</span>
+          </div>
+          <div className="text-slate-300">
+            <span className="text-slate-500 text-sm">Booking Amount:</span>
+            <span className="ml-2 text-emerald-400 font-semibold">{formatCurrency(customer.bookingAmount)}</span>
           </div>
           <div className="text-slate-300">
             <span className="text-slate-500 text-sm">Customer Since:</span>
