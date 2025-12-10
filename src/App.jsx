@@ -7,6 +7,8 @@ const SalesBubbles = () => {
       name: "Pinellas County School District", 
       contact: "Sean Jowell",
       email: "jowells@pcsb.org",
+      contacted: true,
+      notes: "Will be attending Utilities Unite",
       color: "from-blue-400 to-blue-600" 
     },
     { 
@@ -14,6 +16,8 @@ const SalesBubbles = () => {
       name: "City of St. Petersburg", 
       contact: "Sarah Johnson",
       email: "sjohnson@stpete.org",
+      contacted: false,
+      notes: "Left voicemail on 12/5. Awaiting callback.",
       color: "from-purple-400 to-purple-600" 
     },
     { 
@@ -21,6 +25,8 @@ const SalesBubbles = () => {
       name: "City of Dunedin", 
       contact: "Mike Williams",
       email: "mwilliams@dunedinfl.gov",
+      contacted: true,
+      notes: "Meeting scheduled for 12/15 at 2pm.",
       color: "from-teal-400 to-teal-600" 
     }
   ];
@@ -39,45 +45,4 @@ const SalesBubbles = () => {
   }, []);
 
   return (
-    <div className="w-full h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
-      <div className="absolute top-8 left-8 z-10">
-        <h1 className="text-4xl font-bold text-white mb-2">Sales Prospects</h1>
-        <p className="text-slate-300">Active Pipeline</p>
-      </div>
-
-      {bubbles.map(bubble => (
-        <div
-          key={bubble.id}
-          className={`absolute rounded-full bg-gradient-to-br ${bubble.color} shadow-2xl flex items-center justify-center transition-all duration-100 ease-linear cursor-pointer hover:scale-110 backdrop-blur-sm bg-opacity-90`}
-          style={{
-            left: `${bubble.x}%`,
-            top: `${bubble.y}%`,
-            width: `${bubble.size}px`,
-            height: `${bubble.size}px`,
-            transform: 'translate(-50%, -50%)'
-          }}
-          onMouseEnter={() => setHoveredBubble(bubble.id)}
-          onMouseLeave={() => setHoveredBubble(null)}
-        >
-          {hoveredBubble === bubble.id ? (
-            <div className="text-white text-center px-4">
-              <div className="font-bold text-sm mb-2">{bubble.name}</div>
-              <div className="text-xs opacity-90 mb-1">{bubble.contact}</div>
-              <div className="text-xs opacity-90">{bubble.email}</div>
-            </div>
-          ) : (
-            <span className="text-white font-semibold text-center px-4 text-sm">
-              {bubble.name}
-            </span>
-          )}
-        </div>
-      ))}
-
-      <div className="absolute bottom-8 right-8 text-slate-400 text-sm">
-        {bubbles.length} Active Prospects
-      </div>
-    </div>
-  );
-};
-
-export default SalesBubbles;
+    <div className="w-full h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hi
