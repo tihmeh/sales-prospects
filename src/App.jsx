@@ -74,7 +74,6 @@ const SalesProspectsList = () => {
 
   const formatCurrency = (amount) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(amount);
 
-  // Collect all emails
   const getAllEmails = () => {
     const allProspects = [...prospectsK12, ...prospectsCities, ...prospectsHigherEd];
     const emails = [];
@@ -109,13 +108,6 @@ const SalesProspectsList = () => {
     } else {
       setSelectedEmails(allEmails.map(e => e.email));
     }
-  };
-
-  const handleSendEmail = () => {
-    const bccList = selectedEmails.join(',');
-    const subject = encodeURIComponent('');
-    const body = encodeURIComponent('');
-    window.location.href = `mailto:?bcc=${bccList}&subject=${subject}&body=${body}`;
   };
 
   const handleCopyEmails = () => {
@@ -202,7 +194,7 @@ const SalesProspectsList = () => {
           <div className="mb-6 flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-white mb-1">Email Blast</h1>
-              <p className="text-slate-300 text-sm">Send emails to multiple prospects at once</p>
+              <p className="text-slate-300 text-sm">Select and copy prospect email addresses</p>
             </div>
             <button
               onClick={() => setCurrentView('dashboard')}
@@ -273,26 +265,11 @@ const SalesProspectsList = () => {
                   </div>
 
                   <button
-                    onClick={handleSendEmail}
-                    disabled={selectedEmails.length === 0}
-                    className={`w-full py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
-                      selectedEmails.length > 0
-                        ? 'bg-green-600 hover:bg-green-500 text-white'
-                        : 'bg-slate-700 text-slate-500 cursor-not-allowed'
-                    }`}
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    Open in Email Client
-                  </button>
-
-                  <button
                     onClick={handleCopyEmails}
                     disabled={selectedEmails.length === 0}
                     className={`w-full py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
                       selectedEmails.length > 0
-                        ? 'bg-blue-600 hover:bg-blue-500 text-white'
+                        ? 'bg-green-600 hover:bg-green-500 text-white'
                         : 'bg-slate-700 text-slate-500 cursor-not-allowed'
                     }`}
                   >
@@ -304,7 +281,7 @@ const SalesProspectsList = () => {
 
                   <div className="bg-slate-700/30 rounded-lg p-3 border border-slate-600">
                     <div className="text-slate-400 text-xs mb-2">Email Preview:</div>
-                    <div className="text-white text-xs font-mono bg-slate-900/50 p-2 rounded max-h-40 overflow-y-auto break-all">
+                    <div className="text-white text-xs font-mono bg-slate-900/50 p-2 rounded max-h-64 overflow-y-auto break-all">
                       {selectedEmails.length > 0 ? selectedEmails.join('; ') : 'No emails selected'}
                     </div>
                   </div>
@@ -319,8 +296,6 @@ const SalesProspectsList = () => {
 
   // Map View
   if (currentView === 'map') {
-    const mapUrl = `https://www.google.com/maps/d/embed?mid=1VYb_KqvQnOCyXxUyZgLW8hVqQpE&ehbc=2E312F`;
-    
     return (
       <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
         <div className="max-w-7xl mx-auto">
