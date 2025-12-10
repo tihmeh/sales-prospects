@@ -8,7 +8,7 @@ const SalesBubbles = () => {
       contact: "John Smith",
       email: "jsmith@pcsb.org",
       contacted: true,
-      notes: "Interested in Q1 demo. Follow up next week.",
+      notes: "Attending Utilities Unite Event.",
       color: "from-blue-400 to-blue-600" 
     },
     { 
