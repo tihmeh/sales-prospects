@@ -59,6 +59,7 @@ const SalesProspectsList = () => {
   const [newContact, setNewContact] = useState({
     name: '',
     org: '',
+    title: '',
     email: ''
   });
   const [randomProspect, setRandomProspect] = useState(null);
@@ -149,7 +150,7 @@ const SalesProspectsList = () => {
       if (prospect.email3) emails.push({ email: prospect.email3, name: prospect.contact3, org: prospect.name });
     });
     manualContacts.forEach(contact => {
-      emails.push({ email: contact.email, name: contact.name, org: contact.org });
+      emails.push({ email: contact.email, name: contact.contact, org: contact.name });
     });
     return emails;
   };
@@ -203,17 +204,17 @@ const SalesProspectsList = () => {
   const handleAddContact = () => {
     if (newContact.name && newContact.email) {
       const newContactWithDefaults = {
-        ...newContact,
         id: Date.now(),
         contact: newContact.name,
         name: newContact.org || 'Manual Contact',
-        title: 'Manual Entry',
+        title: newContact.title || 'Not Specified',
+        email: newContact.email,
         vertical: 'Manual',
         contacted: false,
         notes: 'Manually added contact'
       };
       setManualContacts([...manualContacts, newContactWithDefaults]);
-      setNewContact({ name: '', org: '', email: '' });
+      setNewContact({ name: '', org: '', title: '', email: '' });
       setShowAddContact(false);
     } else {
       alert('Please fill in at least name and email fields');
@@ -529,8 +530,8 @@ const SalesProspectsList = () => {
               </div>
               <div className="bg-slate-800/50 rounded-lg border border-slate-700 p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-lg font-bold text-white">Manual Contacts</h2>
-                  <span className="text-xs text-slate-400">{manualContacts.length} added</span>
+                  <h2 className="text-lg font-bold text-white">Add New Contact</h2>
+                  <span className="text-xs text-slate-400">{manualContacts.length} total</span>
                 </div>
                 {!showAddContact ? (
                   <button onClick={() => setShowAddContact(true)} className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2">
@@ -546,6 +547,10 @@ const SalesProspectsList = () => {
                       <input type="text" value={newContact.name} onChange={(e) => setNewContact({ ...newContact, name: e.target.value })} placeholder="John Doe" className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all" />
                     </div>
                     <div>
+                      <label className="text-slate-400 text-xs mb-1 block">Title</label>
+                      <input type="text" value={newContact.title} onChange={(e) => setNewContact({ ...newContact, title: e.target.value })} placeholder="Director of IT" className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all" />
+                    </div>
+                    <div>
                       <label className="text-slate-400 text-xs mb-1 block">Organization</label>
                       <input type="text" value={newContact.org} onChange={(e) => setNewContact({ ...newContact, org: e.target.value })} placeholder="Company Name" className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-all" />
                     </div>
@@ -555,7 +560,7 @@ const SalesProspectsList = () => {
                     </div>
                     <div className="flex gap-2">
                       <button onClick={handleAddContact} className="flex-1 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-all text-sm">Save</button>
-                      <button onClick={() => { setShowAddContact(false); setNewContact({ name: '', org: '', email: '' }); }} className="flex-1 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all text-sm">Cancel</button>
+                      <button onClick={() => { setShowAddContact(false); setNewContact({ name: '', org: '', title: '', email: '' }); }} className="flex-1 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all text-sm">Cancel</button>
                     </div>
                   </div>
                 )}
@@ -663,7 +668,7 @@ const SalesProspectsList = () => {
               </div>
               {manualContacts.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 px-2 border-b border-gray-200 pb-1">Manual Contacts</h3>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 px-2 border-b border-gray-200 pb-1">Other Contacts</h3>
                   <div className="space-y-2">{manualContacts.map((p, i) => <Card key={p.id} item={p} index={i} isCustomer={false} expanded={expandedProspect} toggle={setExpandedProspect} />)}</div>
                 </div>
               )}
